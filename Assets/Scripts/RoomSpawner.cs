@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.Universal.Internal;
 
 public class RoomSpawner : MonoBehaviour
 {
+    private string[] spawnerNames = { "RoomSpawnerTop", "RoomSpawnerBottom", "RoomSpawnerRight", "RoomSpawnerLeft" };
+    private string[] doorNames = { "Bottom", "Top", "Left", "Right" };
     public GameObject room;
     public Transform[] spawners;
     public Transform[] doors;
     public MapManager manager;
     public int maxRooms = 20;
-    bool existRoom;
 
     // 1-Top 2-Bottom 3-Right 4-Left
 
@@ -26,22 +28,26 @@ public class RoomSpawner : MonoBehaviour
 
     void TrySpawnRoom(int direction) // Auto explicativo
     {
-        string[] spawnerNames = { "RoomSpawnerTop", "RoomSpawnerBottom", "RoomSpawnerRight", "RoomSpawnerLeft" };
-        string[] doorNames = { "Bottom", "Top", "Left", "Right" };
-        int spawnerIndex = direction;
-        existRoom = Physics2D.OverlapCircle(spawners[direction].position, 1f, LayerMask.GetMask("Room"));
-        Debug.Log(existRoom);
+        bool existRoom = Physics2D.OverlapCircle(spawners[direction].position, 1f, LayerMask.GetMask("Room"));
 
-        if (this.gameObject.transform.Find(spawnerNames[direction]).gameObject.activeSelf && !existRoom)
+        bool canSpawnRoom = this.gameObject.transform.Find(spawnerNames[direction]).gameObject.activeSelf && !existRoom;
+        if (!canSpawnRoom)
         {
-            GameObject newRoom = Instantiate(room, spawners[spawnerIndex].position, Quaternion.identity);
-            doors[direction].gameObject.SetActive(false);
-            SetupRoom(newRoom, doorNames[direction]);
-            DisableOppositeSpawner(spawnerIndex);
-            manager.numberOfRooms++;
-        }else{
-            TrySpawnRoom(Random.Range(0,4)); //Tenta de novo se não der certo
+            TrySpawnRoom(Random.Range(0, 4)); //Tenta de novo se não der certo
+            return;
         }
+
+        spawnRoom(direction);
+    }
+
+    void spawnRoom(int direction)
+    {
+        GameObject newRoom = Instantiate(room, spawners[direction].position, Quaternion.identity);
+        newRoom.name = "Room" + manager.numberOfRooms;
+        doors[direction].gameObject.SetActive(false);
+        SetupRoom(newRoom, doorNames[direction]);
+        DisableOppositeSpawner(direction);
+        manager.numberOfRooms++;
     }
 
     void SetupRoom(GameObject room, string doorName)
@@ -58,7 +64,6 @@ public class RoomSpawner : MonoBehaviour
     void DisableOppositeSpawner(int direction)
     {
         int oppositeDirection = (direction + 2) % 4; // Calcula a direcao oposta
-        string[] spawnerNames = { "RoomSpawnerTop", "RoomSpawnerBottom", "RoomSpawnerRight", "RoomSpawnerLeft" };
         this.gameObject.transform.Find(spawnerNames[oppositeDirection]).gameObject.SetActive(false);
     }
     
