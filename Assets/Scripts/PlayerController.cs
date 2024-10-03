@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Numerics;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class PlayerController : MonoBehaviour
+
 {
     public float speed;
     Rigidbody2D rb;
     float inputX;
     float inputY;
-
+    public Animator anim;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        
-
+        anim  = GetComponent<Animator>();
     }
     void Update()
     {  
@@ -29,6 +30,12 @@ public class PlayerController : MonoBehaviour
         if(inputX != 0 && inputY !=0){
             inputX *= 0.7f;
             inputY *= 0.7f;
+            
+        }
+        if(inputX != 0 || inputY !=0){ //Activate walking animation if player is moving.
+            anim.SetBool("isMoving", true);
+        }else{
+            anim.SetBool("isMoving", false);
         }
         Move(inputX, inputY);
     }
