@@ -3,7 +3,7 @@
 Projeto Semestre Ifsc 2024.2
 
 ## Premissa
-Capetalismo é um jogo roguelike de ação cooperativo, onde os jogadores que são dois demonios devem escapar do inferno passando atrávez dos sete circulos, para isso, terão a sua disposição diversas armas e reliquias. Nesses mundos sera necessário uma comunicação clara com seu parceiro para resolver os quebra-cabeças para enfim matar lúcifer e poderem escapar. Conseguiria você chegar ao final desse labirinto?
+Capetalismo é um jogo roguelike de ação cooperativo, onde os jogadores que são dois demonios devem escapar do inferno passando atrávez dos sete circulos, para isso, terão a sua disposição diversas armas e reliquias. Nesses circulos sera necessário uma comunicação clara com seu parceiro para resolver os quebra-cabeças para enfim matar lúcifer e poderem escapar. Conseguiria você chegar ao final desse inferno?
 
 ## Universo
 O jogo se passa no inferno, onde os demonios possuem pessimas condições de trabalho, nesse cenario dois diabretes decidem se rebelar e para isso devem atravessar os 7 circulos do inferno para derrotar o CEO (Lucifer) e acabar com a escala 6x1.
