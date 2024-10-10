@@ -15,6 +15,17 @@ class NeighborRoom
     }
 }
 
+public class NeighborRoom 
+{
+    public GameObject RoomObj { get; set; }
+    public int Direction { get; set; }
+    public NeighborRoom(GameObject roomObj, int direction)
+    {
+        RoomObj = roomObj;
+        Direction = direction;
+    }
+}
+
 public class RoomSpawner : MonoBehaviour
 {
     private string[] spawnerNames = { "RoomSpawnerTop", "RoomSpawnerBottom", "RoomSpawnerRight", "RoomSpawnerLeft" };
@@ -24,6 +35,7 @@ public class RoomSpawner : MonoBehaviour
     public Transform[] doors;
     public MapManager manager;
     public int maxRooms = 20;
+    public neighboorRoom
 
     void Start()
     {
@@ -99,6 +111,33 @@ public class RoomSpawner : MonoBehaviour
     void SetupNeighborDoors(){
         foreach(NeighborRoom n in neighborRooms()){
             SetupRoom(n.RoomObj, doorNames[n.Direction]);
+        }
+    }
+
+    bool ExistRoom(direction){ // Verifica se já existe uma sala na direcao escolhida
+        return(Physics2D.OverlapCircle(spawners[direction].position, 1f, LayerMask.GetMask("Room"))); 
+    }
+    //---------------------------------------Configura_Portas---------------------------------------------------------
+    NeighborRoom[] neighborRooms(){ // Verifica a existencia de salas vizinhas
+        List<NeighborRoom> neighbors = new List<NeighborRoom>();
+        for(int i = 0; i<=3, i++){
+            Transform spawner = spawners[i];
+            if(!spawner.gameObject.activeSelf){
+                continue;
+            }
+            if(!ExistRoom(i)){
+                continue
+            }
+            GameObject roomObj = Physics2D.OverlapCircle(spawner.position, 1f, LayerMask.GetMask("Room")).gameObject;
+            NeighborRoom neighbor = new NeighborRoom(roomObj, i);
+            neighbors.Add(neighbor);
+        }
+        return(neighbors.ToArray());
+    }
+
+    void SetupNeighborDoors(){
+        foreach(NeighborRoom n in neighborRooms){
+            SetupRoom(n.RoomObj, n.Direction);
         }
     }
 }
