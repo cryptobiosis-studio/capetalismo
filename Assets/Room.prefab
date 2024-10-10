@@ -1427,11 +1427,6 @@ MonoBehaviour:
   - {fileID: 4427060819457509302}
   - {fileID: 7168056585156128858}
   - {fileID: 3475391056590905944}
-  checkers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   manager: {fileID: 0}
   maxRooms: 15
 --- !u!61 &1691432627072779526
