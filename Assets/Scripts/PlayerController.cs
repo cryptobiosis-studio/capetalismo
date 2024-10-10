@@ -22,7 +22,8 @@ public class PlayerController : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
     }
     void Update()
-    {  
+    {   
+        // Verifica os inputs
         inputX = Input.GetAxis("Horizontal");
         inputY = Input.GetAxis("Vertical");
         
@@ -30,7 +31,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {   
-        if(inputX != 0 && inputY !=0){
+        if(inputX != 0 && inputY !=0){ // Corrige a aceleracao na diagonal
             inputX *= 0.7f;
             inputY *= 0.7f;   
         }
@@ -48,12 +49,12 @@ public class PlayerController : MonoBehaviour
         Move(inputX, inputY);
     }
 
-    void Move(float x, float y){
+    void Move(float x, float y){ // Move o jogador
         rb.velocity = new UnityEngine.Vector2(x * speed, y * speed);
     }
     void OnTriggerEnter2D(Collider2D other)
     { 
-        if (other.gameObject.layer == LayerMask.NameToLayer("Room")) {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Room")) { //Posiciona a camera na sala em que o jogador se encontra
         Debug.Log(other.gameObject.name);
         Camera.main.transform.position = new UnityEngine.Vector3(other.transform.position.x, other.transform.position.y, -10);
         }
