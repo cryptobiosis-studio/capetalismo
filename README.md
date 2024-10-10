@@ -1,4 +1,8 @@
-![Game Logo](Assets/logotransparente384.png)\
+<div style="background-color:rgba(212, 33, 39, 1">
+<img src="./Assets/logo576.png" style="display: block;
+  margin-left: auto;
+  margin-right: auto;"/>
+</div>
 Projeto Semestre Ifsc 2024.2
 
 ## Premissa
