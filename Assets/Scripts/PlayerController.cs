@@ -26,6 +26,14 @@ public class PlayerController : MonoBehaviour
         // Verifica os inputs
         inputX = Input.GetAxis("Horizontal");
         inputY = Input.GetAxis("Vertical");
+        if(inputX != 0 || inputY !=0){ //Activate walking animation if player is moving.
+            anim.SetBool("isMoving", true);
+        }else{
+            anim.SetBool("isMoving", false);
+        }
+        if(inputX < 0){ //Auto Explicativo (character sprite face the side you are walking.)
+            sprite.flipX = true;
+        }else if(inputX > 0){sprite.flipX = false;}
         
     }
 
@@ -35,17 +43,7 @@ public class PlayerController : MonoBehaviour
             inputX *= 0.7f;
             inputY *= 0.7f;   
         }
-
-        if(inputX != 0 || inputY !=0){ //Activate walking animation if player is moving.
-            anim.SetBool("isMoving", true);
-        }else{
-            anim.SetBool("isMoving", false);
-        }
-        if(inputX < 0){ //Auto Explicativo (character sprite face the side you are walking.)
-            sprite.flipX = true;
-        }else{
-            sprite.flipX = false;
-        }
+        
         Move(inputX, inputY);
     }
 

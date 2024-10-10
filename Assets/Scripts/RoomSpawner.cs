@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal.Internal;
 
-class NeighborRoom
+public class NeighborRoom
 {
     public GameObject RoomObj { get; set; }
     public int Direction { get; set; }
@@ -76,10 +76,10 @@ public class RoomSpawner : MonoBehaviour
     }
 
     bool ExistRoom(int direction){ // Verifica se já existe uma sala na direcao escolhida
-        return(Physics2D.OverlapCircle(spawners[direction].position, 1f, LayerMask.GetMask("Room"))); 
+        return Physics2D.OverlapCircle(spawners[direction].position, 1f, LayerMask.GetMask("Room")); 
     }
     //---------------------------------------Configura_Portas---------------------------------------------------------
-    NeighborRoom[] neighborRooms(){ // Verifica a existencia de salas vizinhas
+    public NeighborRoom[] NeighborRooms(){ // Verifica a existencia de salas vizinhas
         List<NeighborRoom> neighbors = new List<NeighborRoom>();
         for(int i = 0; i<=3; i++){
             Transform spawner = spawners[i];
@@ -93,13 +93,19 @@ public class RoomSpawner : MonoBehaviour
             NeighborRoom neighbor = new NeighborRoom(roomObj, i);
             neighbors.Add(neighbor);
         }
-        return(neighbors.ToArray());
+        return neighbors.ToArray();
     }
 
-    void SetupNeighborDoors(){
-        foreach(NeighborRoom n in neighborRooms()){
-            SetupRoom(n.RoomObj, doorNames[n.Direction]);
+    public void SetupNeighborDoors(NeighborRoom[] neighborRooms){
+        foreach(NeighborRoom n in neighborRooms){
+            SetupNeighborRoom(n.RoomObj, doorNames[n.Direction]);
+            doors[n.Direction].gameObject.SetActive(false);
         }
+    }
+    void SetupNeighborRoom(GameObject room, string doorName) // Configura a sala
+    {   
+        // Posiciona as portas
+        room.transform.Find(doorName).gameObject.SetActive(false);
     }
 
 }
