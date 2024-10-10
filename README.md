@@ -1,5 +1,4 @@
-# Capetalismo
-
+![Game Logo](Assets/logotransparente384.png)\
 Projeto Semestre Ifsc 2024.2
 
 ## Premissa
