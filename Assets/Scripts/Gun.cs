@@ -28,10 +28,10 @@ public class GunRotate : MonoBehaviour
       transform.rotation = Quaternion.Euler(0f, 0f, rotZ + offset);
 
       if (rotZ < 89 && rotZ > -89){ //Check rotation and flips gun sprite, so it doesn't stay upside down.
-          sprRen.flipY = false;
+          sprRen.flipY = true;
       }
       else{
-          sprRen.flipY = true;
+          sprRen.flipY = false;
       }
   }
 }
