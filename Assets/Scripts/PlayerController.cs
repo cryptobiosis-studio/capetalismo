@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     { 
         if (other.gameObject.layer == LayerMask.NameToLayer("Room")) { //Posiciona a camera na sala em que o jogador se encontra
         Debug.Log(other.gameObject.name);
-        Camera.main.transform.position = new UnityEngine.Vector3(other.transform.position.x, other.transform.position.y, -10);
+        Camera.main.transform.position = new UnityEngine.Vector3(other.transform.position.x - 0.53f, other.transform.position.y, -10);
         }
     }
 }
