@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     float inputY;
     public Animator anim;
     public SpriteRenderer sprite;
+
+    public SpriteRenderer fade;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -54,8 +56,36 @@ public class PlayerController : MonoBehaviour
     { 
         if (other.gameObject.layer == LayerMask.NameToLayer("Room")) { //Posiciona a camera na sala em que o jogador se encontra
         Debug.Log(other.gameObject.name);
+        StartCoroutine("FadeImage", false);
         Camera.main.transform.position = new UnityEngine.Vector3(other.transform.position.x - 0.53f, other.transform.position.y, -10);
+         StartCoroutine("FadeImage", true);
         }
     }
+    IEnumerator FadeImage(bool fadeAway)
+    {
+        // fade from opaque to transparent
+        if (fadeAway)
+        {
+            // loop over 1 second backwards
+            for (float i = 1; i >= 0; i -= Time.deltaTime*2.5f)
+            {
+                // set color with i as alpha
+                fade.color = new Color(0, 0, 0, i);
+                yield return null;
+            }
+        }
+        // fade from transparent to opaque
+        else
+        {
+            // loop over 1 second
+            for (float i = 0; i <= 1; i += Time.deltaTime*2.5f)
+            {
+                // set color with i as alpha
+                fade.color = new Color(0, 0, 0, i);
+                yield return null;
+            }
+        }
+    }
+
 }
 
