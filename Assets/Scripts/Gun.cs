@@ -102,4 +102,8 @@ public class Gun : MonoBehaviour
         }
     }
 
+    public void Change(){
+      sprRen.sprite = gunSettings.gunSprite;
+    }
+
 }

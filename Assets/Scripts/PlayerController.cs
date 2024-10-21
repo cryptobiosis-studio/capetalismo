@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
         if(inputX < 0){ //Auto Explicativo (character sprite face the side you are walking.)
             sprite.flipX = true;
         }else if(inputX > 0){sprite.flipX = false;}
+        InteractableArea();
         
     }
 
@@ -64,11 +65,29 @@ public class PlayerController : MonoBehaviour
          StartCoroutine("FadeImage", true);
         }
     }
+    void InteractableArea(){
+        bool canInteract = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("Interactable")); 
+        DroppedGun droppedGun = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("Interactable")).gameObject.GetComponent<DroppedGun>();
+        if(droppedGun != null){
+            if(Input.GetKeyDown(KeyCode.E)){
+                GunObj previousGun = equippedGun;
+                ChangeGun(droppedGun.gun);
+                droppedGun.gun = previousGun;
+                droppedGun.Change();
+            }
+        }
+    }
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, 1.5f);
+    }
      void ChangeGun(GunObj gun){
       equippedGun = gun;
       GetComponentInChildren<Gun>().gunSettings = gun;
-
+      GetComponentInChildren<Gun>().Change();
     }
+
     IEnumerator FadeImage(bool fadeAway)
     {
         // fade from opaque to transparent
