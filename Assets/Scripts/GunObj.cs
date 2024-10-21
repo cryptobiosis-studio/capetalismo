@@ -21,6 +21,8 @@ public class GunObj : ScriptableObject
 
     public float bulletSpeed;
 
+    public int numberOfBullets;
+
     public shootingStyles shootingStyle;
     public Sprite gunSprite;
     public Sprite bulletSprite;

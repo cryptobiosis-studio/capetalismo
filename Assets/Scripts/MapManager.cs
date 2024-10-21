@@ -17,7 +17,6 @@ public class MapManager : MonoBehaviour
         if(numberOfRooms >= startRoom.GetComponent<RoomSpawner>().maxRooms){
             for(int i = 0; i <= numberOfRooms; i++){
                 GameObject targetRoom = GameObject.Find("Room" + i);
-                Debug.Log(targetRoom);
                 RoomSpawner targetRoomSpawner = targetRoom.GetComponent<RoomSpawner>();
                 targetRoomSpawner.NeighborRooms();
                 targetRoomSpawner.SetupNeighborDoors(targetRoomSpawner.NeighborRooms());

@@ -3542,7 +3542,7 @@ MonoBehaviour:
   - {fileID: 7168056585156128858}
   - {fileID: 3475391056590905944}
   manager: {fileID: 0}
-  maxRooms: 15
+  maxRooms: 12
 --- !u!61 &1691432627072779526
 BoxCollider2D:
   m_ObjectHideFlags: 0

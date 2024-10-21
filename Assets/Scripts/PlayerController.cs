@@ -17,11 +17,14 @@ public class PlayerController : MonoBehaviour
     public SpriteRenderer sprite;
 
     public SpriteRenderer fade;
+
+    public GunObj equippedGun;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim  = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
+        equippedGun = GetComponentInChildren<Gun>().gunSettings;
     }
     void Update()
     {   
@@ -61,6 +64,11 @@ public class PlayerController : MonoBehaviour
          StartCoroutine("FadeImage", true);
         }
     }
+     void ChangeGun(GunObj gun){
+      equippedGun = gun;
+      GetComponentInChildren<Gun>().gunSettings = gun;
+
+    }
     IEnumerator FadeImage(bool fadeAway)
     {
         // fade from opaque to transparent
@@ -69,7 +77,6 @@ public class PlayerController : MonoBehaviour
             // loop over 1 second backwards
             for (float i = 1; i >= 0; i -= Time.deltaTime*2.5f)
             {
-                // set color with i as alpha
                 fade.color = new Color(0, 0, 0, i);
                 yield return null;
             }
@@ -77,10 +84,8 @@ public class PlayerController : MonoBehaviour
         // fade from transparent to opaque
         else
         {
-            // loop over 1 second
             for (float i = 0; i <= 1; i += Time.deltaTime*2.5f)
             {
-                // set color with i as alpha
                 fade.color = new Color(0, 0, 0, i);
                 yield return null;
             }
