@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-         Destroy(this.gameObject, 1f);
+        Destroy(this.gameObject, 1f);
 
     }
     void OnTriggerEnter2D(Collider2D other)
@@ -24,7 +24,12 @@ public class Bullet : MonoBehaviour
         if(other.gameObject.tag == "Enemy"){
             Debug.Log("Enemy shooted!");
             other.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+            Destroy(this.gameObject);
         }
+        if(other.gameObject.tag == "Wall"){
+            Destroy(this.gameObject);
+        }
+        
     }
     
 }

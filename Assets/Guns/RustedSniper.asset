@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b9743174d1884d169fdb776a7693f5b, type: 3}
+  m_Name: RustedSniper
+  m_EditorClassIdentifier: 
+  gunName: RustSniper
+  desciption: 
+  damage: 5
+  firerate: 0
+  bulletSpeed: 2
+  numberOfBullets: 1
+  shootingStyle: 0
+  gunSprite: {fileID: -1508347291, guid: 5db3d3fd1d9c5a142b802573aa13bfbc, type: 3}
+  bulletSprite: {fileID: 21300000, guid: aed62541af04945ad854ee393816f1e7, type: 3}
