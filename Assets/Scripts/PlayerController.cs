@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
 
 {
     public float speed;
+    public float life;
     Rigidbody2D rb;
     float inputX;
     float inputY;
@@ -88,6 +89,9 @@ public class PlayerController : MonoBehaviour
       GetComponentInChildren<Gun>().Change();
     }
 
+    public void TakeDamage(float damage){
+        life -= damage;
+    }
     IEnumerator FadeImage(bool fadeAway)
     {
         // fade from opaque to transparent
