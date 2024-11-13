@@ -10,7 +10,7 @@ public class Gun : MonoBehaviour
     public GunObj gunSettings; // Configurações da arma
     public GameObject bullet; // Prefab da bala
     public Transform pointer; // Ponto de saída da bala
-
+    private float fireTimer;
     List<GameObject> firedBullets = new List<GameObject> { };
 
     void Start(){
@@ -22,9 +22,11 @@ public class Gun : MonoBehaviour
     void Update(){
         RotateGun();
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            StartCoroutine(Fire());
+        if (Input.GetKeyDown(KeyCode.Mouse0) && fireTimer <= 0f ){
+            StartCoroutine("Fire");
+            fireTimer = gunSettings.firerate;
+        }   else{
+            fireTimer -= Time.deltaTime;
         }
     }
 
