@@ -24,7 +24,7 @@ public class Bullet : MonoBehaviour
         if(other.gameObject.tag == "Enemy"){
             Debug.Log("Enemy shooted!");
             other.gameObject.GetComponent<Enemy>().TakeDamage(damage);
-            Destroy(this.gameObject);
+            Destroy(this.gameObject, 0.05f);
         }
         if(other.gameObject.tag == "Wall"){
             Destroy(this.gameObject);
