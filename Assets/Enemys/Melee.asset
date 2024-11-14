@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: 
   desciption: 
-  enemySprite: {fileID: 0}
+  enemySprite: {fileID: -1735064985, guid: 63777fbaf17aa41b2992d4a2794fe2cd, type: 3}
   enemyTypes: 1
   life: 20
   damage: 5
-  speed: 2
+  speed: 3

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunName: Shotgun
   desciption: 
-  damage: 3
+  damage: 1.5
   firerate: 0.5
   bulletSpeed: 20
   numberOfBullets: 5

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814f49f4129ff4f6f8eeeb607c26ae3b, type: 3}
   m_Name: Ranged
   m_EditorClassIdentifier: 
-  enemyName: 
+  enemyName: Ranged
   desciption: 
-  enemySprite: {fileID: 0}
+  enemySprite: {fileID: -359660775, guid: 848f47a4551174dae941a0134bb767d9, type: 3}
   enemyTypes: 0
-  life: 0
-  damage: 0
+  life: 25
+  damage: 5
   speed: 0

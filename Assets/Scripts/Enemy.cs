@@ -1,3 +1,4 @@
+using System.Globalization;
 using System;
 using System.Threading;
 using System.Collections;
@@ -20,7 +21,7 @@ public class Enemy : MonoBehaviour
     public GameObject gun;  
     public GameObject projectilePrefab; 
     public Transform shootPoint;  
-    public float shootingInterval = 2f; 
+    public float shootingInterval = 1.5f; 
     private float lastShotTime;
     void Start()
     {
@@ -28,18 +29,18 @@ public class Enemy : MonoBehaviour
         room = GetComponentInParent<Room>();
         enemyAnim = GetComponentInChildren<Animator>();
         atkCol = GetComponent<CircleCollider2D>();
-
+        this.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = enemySettings.enemySprite;
         lastShotTime = Time.time;
     }
 
     void Update(){
         PlayerController player;
         if (room.hasPlayerIn)
-        {
+        {   
+            player = room.player;
+            playerPosition = player.gameObject.transform;
             if (enemySettings.enemyTypes == EnemyTypes.Melee)
             {
-                player = room.player;
-                playerPosition = player.gameObject.transform;
                 if (UnityEngine.Vector3.Distance(transform.position, playerPosition.position) > 0.9f && canWalk)
                 {
                     transform.position = UnityEngine.Vector2.MoveTowards(transform.position, playerPosition.position, enemySettings.speed * Time.deltaTime);
@@ -55,9 +56,14 @@ public class Enemy : MonoBehaviour
                     }
                 }
             }else if (enemySettings.enemyTypes == EnemyTypes.Turret)  {
-                player = room.player;
-                playerPosition = player.gameObject.transform;
                 UnityEngine.Vector2 direction = (playerPosition.position - transform.position).normalized;
+                if(direction.x > 0){
+                    transform.localScale = new UnityEngine.Vector3(-1, 1, 1);
+                    gun.transform.localScale = new UnityEngine.Vector3(-0.8f, 0.8f, 1);
+                }else{
+                    transform.localScale = new UnityEngine.Vector3(1, 1, 1);
+                    gun.transform.localScale = new UnityEngine.Vector3(0.8f, -0.8f, 1);
+                }
                 if (gun != null){
                     gun.transform.right = direction; 
                 }
@@ -72,10 +78,10 @@ public class Enemy : MonoBehaviour
     void ShootAtPlayer(UnityEngine.Vector2 direction) {
         if (projectilePrefab != null && shootPoint != null){
             GameObject projectile = Instantiate(projectilePrefab, shootPoint.position, UnityEngine.Quaternion.identity);
+            projectile.GetComponent<EnemyBullet>().damage = enemySettings.damage;
             Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                rb.velocity = direction * enemySettings.speed;
+            if (rb != null){
+                rb.velocity = direction * 15;
             }
         }
     }

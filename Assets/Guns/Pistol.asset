@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunName: 
   desciption: 
-  damage: 0
+  damage: 0.5
   firerate: 0
   bulletSpeed: 0
   numberOfBullets: 0

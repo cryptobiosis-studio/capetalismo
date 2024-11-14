@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunName: UZI
   desciption: 
-  damage: 2
+  damage: 1
   firerate: 0.1
   bulletSpeed: 30
   numberOfBullets: 0
