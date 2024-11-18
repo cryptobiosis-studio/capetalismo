@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3949344663000572349}
   - component: {fileID: 2183873755875631702}
   - component: {fileID: 9001771280547972960}
+  - component: {fileID: 7966088091730875854}
   m_Layer: 0
   m_Name: EnemySpr
   m_TagString: Untagged
@@ -119,6 +120,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c134c126230aa485ca0b35c06d7e2864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!70 &7966088091730875854
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4564436428557710794}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.08804941, y: -0.19194676}
+  m_Size: {x: 0.63416004, y: 1.2298603}
+  m_Direction: 0
 --- !u!1 &4841999586705352161
 GameObject:
   m_ObjectHideFlags: 0
