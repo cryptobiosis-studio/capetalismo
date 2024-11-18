@@ -81,7 +81,7 @@ public class Enemy : MonoBehaviour
             projectile.GetComponent<EnemyBullet>().damage = enemySettings.damage;
             Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
             if (rb != null){
-                rb.velocity = direction * 15;
+                rb.velocity = direction * 10;
             }
         }
     }

@@ -18,4 +18,4 @@ MonoBehaviour:
   enemyTypes: 1
   life: 20
   damage: 5
-  speed: 3
+  speed: 2
