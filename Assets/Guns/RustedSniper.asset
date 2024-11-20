@@ -15,8 +15,8 @@ MonoBehaviour:
   gunName: RustSniper
   desciption: 
   damage: 5
-  firerate: 0
-  bulletSpeed: 2
+  firerate: 0.7
+  bulletSpeed: 25
   numberOfBullets: 1
   shootingStyle: 0
   gunSprite: {fileID: -1508347291, guid: 5db3d3fd1d9c5a142b802573aa13bfbc, type: 3}

@@ -68,14 +68,19 @@ public class PlayerController : MonoBehaviour
     void InteractableArea(){
         bool canInteract = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("Interactable")); 
         DroppedGun droppedGun = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("Interactable")).gameObject.GetComponent<DroppedGun>();
-        if(droppedGun != null){
-            if(Input.GetKeyDown(KeyCode.E)){
-                GunObj previousGun = equippedGun;
-                ChangeGun(droppedGun.gun);
-                droppedGun.gun = previousGun;
-                droppedGun.Change();
-            }
+        Chest chest = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("Interactable")).gameObject.GetComponent<Chest>();
+        if(Input.GetKeyDown(KeyCode.E)){
+            if(droppedGun != null){
+            GunObj previousGun = equippedGun;
+            ChangeGun(droppedGun.gun);
+            droppedGun.gun = previousGun;
+            droppedGun.Change();
+            }else if(chest != null && chest.isActiveAndEnabled && !chest.opened){
+                chest.openChest();
+            
         }
+        }
+        
     }
     void OnDrawGizmosSelected()
     {

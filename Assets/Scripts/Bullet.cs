@@ -8,6 +8,8 @@ public class Bullet : MonoBehaviour
     public Sprite bulSprite;
     public float speed;
     public float damage;
+
+    public GameObject boom;
     void Start()
     {
         GetComponent<SpriteRenderer>().sprite = bulSprite;
@@ -24,9 +26,11 @@ public class Bullet : MonoBehaviour
         if(other.gameObject.tag == "Enemy"){
             Debug.Log("Enemy shooted!");
             other.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+            Instantiate(boom, transform.position, Quaternion.identity);
             Destroy(this.gameObject, 0.05f);
         }
         if(other.gameObject.tag == "Wall"){
+            Instantiate(boom, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
         
