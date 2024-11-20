@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
 {
@@ -22,14 +23,19 @@ public class MapManager : MonoBehaviour
             for(int i = 0; i <= numberOfRooms; i++){
                 GameObject targetRoom = GameObject.Find("Room" + i);
                 if(targetRoom != null){
-                    int layoutN = Random.Range(0, roomLayouts.Length);
-                    Instantiate(roomLayouts[layoutN], targetRoom.transform);
                     RoomSpawner targetRoomSpawner = targetRoom.GetComponent<RoomSpawner>();
                     targetRoomSpawner.NeighborRooms();
                     targetRoomSpawner.SetupNeighborDoors(targetRoomSpawner.NeighborRooms());
+                    if(i != 12){
+                        int layoutN = Random.Range(0, roomLayouts.Length);
+                        Instantiate(roomLayouts[layoutN], targetRoom.transform);
+                    }
                 }
             }
             canWork = false;
+        }
+        if(canWork == false && numberOfRooms != startRoom.GetComponent<RoomSpawner>().maxRooms+1){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }

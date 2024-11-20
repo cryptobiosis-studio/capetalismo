@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal.Internal;
+using UnityEngine.SceneManagement;
 
 public class NeighborRoom
 {
@@ -36,17 +37,25 @@ public class RoomSpawner : MonoBehaviour
     }
 
     //-----------------------------------------Gera_Salas-------------------------------------------------------------
-    void TrySpawnRoom(int direction) // Tenta gerar uma sala
+    void TrySpawnRoom(int direction, int attemptCount = 0) // Adiciona um contador de tentativas
+{
+    if (attemptCount > 3) // Limita as tentativas para 3
     {
-        bool canSpawnRoom = this.gameObject.transform.Find(spawnerNames[direction]).gameObject.activeSelf && !ExistRoom(direction); // Verifica se é possivel gerar uma sala na direcao escolhida
-        if (!canSpawnRoom)
-        {
-            TrySpawnRoom(Random.Range(0, 4)); // Tenta de novo se não der certo
-            return;
-        }
-
-        spawnRoom(direction); 
+        Debug.LogWarning("Limite de tentativas atingido. Não foi possível gerar uma sala.");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        return;
     }
+
+    bool canSpawnRoom = this.gameObject.transform.Find(spawnerNames[direction]).gameObject.activeSelf && !ExistRoom(direction);
+
+    if (!canSpawnRoom)
+    {
+        TrySpawnRoom(Random.Range(0, 4), attemptCount + 1); // Passa o contador para a próxima tentativa
+        return;
+    }
+
+    spawnRoom(direction); 
+}
 
     void spawnRoom(int direction) // Gera uma sala
     {

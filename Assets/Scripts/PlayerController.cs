@@ -1,15 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using JetBrains.Annotations;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 
 {
     public float speed;
     public float life;
+    public float MaxLife;
     Rigidbody2D rb;
     float inputX;
     float inputY;
@@ -19,12 +23,21 @@ public class PlayerController : MonoBehaviour
     public SpriteRenderer fade;
 
     public GunObj equippedGun;
+
+    public  bool invincibility;
+    public float invincibilityTime;
+    public float maxInvincibilityTime;
+
+    public Slider lifeSlider;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim  = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
         equippedGun = GetComponentInChildren<Gun>().gunSettings;
+        invincibility = false;
+        life = MaxLife;
+        SetLifeSlider();
     }
     void Update()
     {   
@@ -39,7 +52,18 @@ public class PlayerController : MonoBehaviour
         if(inputX < 0){ //Auto Explicativo (character sprite face the side you are walking.)
             sprite.flipX = true;
         }else if(inputX > 0){sprite.flipX = false;}
+        Math.Clamp(life, 0, MaxLife);
+        Math.Clamp(invincibilityTime, 0, maxInvincibilityTime);
+        if (invincibility) {
+            invincibilityTime -= Time.deltaTime;
+            if (invincibilityTime <= 0f) {
+                invincibility = false;
+                invincibilityTime = 0f;
+            }
+        }
         InteractableArea();
+
+        
         
     }
 
@@ -59,16 +83,21 @@ public class PlayerController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     { 
         if (other.gameObject.layer == LayerMask.NameToLayer("Room")) { //Posiciona a camera na sala em que o jogador se encontra
-        Debug.Log(other.gameObject.name);
-        StartCoroutine("FadeImage", false);
-        Camera.main.transform.position = new UnityEngine.Vector3(other.transform.position.x - 0.53f, other.transform.position.y, -10);
-         StartCoroutine("FadeImage", true);
+            if (invincibilityTime <= 0f) {
+                invincibility = true; 
+                invincibilityTime = maxInvincibilityTime;
+            } 
+            Debug.Log(other.gameObject.name);
+            StartCoroutine("FadeImage", false);
+            Camera.main.transform.position = new UnityEngine.Vector3(other.transform.position.x - 0.53f, other.transform.position.y, -10);
+            StartCoroutine("FadeImage", true);
         }
     }
     void InteractableArea(){
         bool canInteract = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("Interactable")); 
         DroppedGun droppedGun = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("Interactable")).gameObject.GetComponent<DroppedGun>();
         Chest chest = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("Interactable")).gameObject.GetComponent<Chest>();
+        GameObject genericInteractable = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("Interactable")).gameObject;
         if(Input.GetKeyDown(KeyCode.E)){
             if(droppedGun != null){
             GunObj previousGun = equippedGun;
@@ -77,8 +106,12 @@ public class PlayerController : MonoBehaviour
             droppedGun.Change();
             }else if(chest != null && chest.isActiveAndEnabled && !chest.opened){
                 chest.openChest();
-            
-        }
+            }else if(genericInteractable.tag == "Bobona" && life != MaxLife){
+                life = MaxLife;
+                SetLifeSlider();
+                genericInteractable.GetComponent<SpriteRenderer>().color = HexToColor("#505050");
+                genericInteractable.tag = "Untagged";
+            }
         }
         
     }
@@ -94,7 +127,11 @@ public class PlayerController : MonoBehaviour
     }
 
     public void TakeDamage(float damage){
-        life -= damage;
+        if(invincibility == false){
+            life -= damage;
+            lifeSlider.value = life;
+        }
+        
     }
     IEnumerator FadeImage(bool fadeAway)
     {
@@ -119,5 +156,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void SetLifeSlider(){
+        lifeSlider.maxValue = MaxLife;
+        lifeSlider.value = life;
+    }
+
+    Color HexToColor(string hex)
+    {
+        if (hex.StartsWith("#")){
+            hex = hex.Substring(1);
+        }
+        byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+        byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+        byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+        return new Color(r / 255f, g / 255f, b / 255f);
+    }
 }
 
