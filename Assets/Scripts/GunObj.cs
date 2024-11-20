@@ -13,7 +13,7 @@ public class GunObj : ScriptableObject
 {
     public string gunName;
 
-    [TextArea]public string desciption;
+    [TextArea]public string description;
 
     public float damage;
 

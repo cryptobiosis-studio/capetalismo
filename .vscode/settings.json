@@ -56,5 +56,8 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Untitled Project.sln"
+    "dotnet.defaultSolution": "Untitled Project.sln",
+    "cSpell.words": [
+        "Firerate"
+    ]
 }

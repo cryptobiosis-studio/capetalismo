@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -13,10 +14,13 @@ public class Gun : MonoBehaviour
     private float fireTimer;
     List<GameObject> firedBullets = new List<GameObject> { };
 
+    public PlayerController player;
+
     void Start(){
         sprRen = GetComponent<SpriteRenderer>();
         sprRen.sprite = gunSettings.gunSprite;
         sprRen.flipX = false; // Manter a orientação da arma
+        player = GetComponentInParent<PlayerController>();
     }
 
     void Update(){
@@ -24,7 +28,7 @@ public class Gun : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && fireTimer <= 0f ){
             StartCoroutine("Fire");
-            fireTimer = gunSettings.firerate;
+            fireTimer = gunSettings.firerate*player.fireRateMultiplier;
         }   else{
             fireTimer -= Time.deltaTime;
         }
@@ -45,7 +49,6 @@ public class Gun : MonoBehaviour
     }
 
     IEnumerator Fire(){
-        yield return new WaitForSeconds(gunSettings.firerate);
         if (gunSettings.shootingStyle == shootingStyles.Spread)
         {
             Debug.Log("Spread");
@@ -100,7 +103,7 @@ public class Gun : MonoBehaviour
         {
             Bullet bulScr = b.GetComponent<Bullet>();
             bulScr.bulSprite = gunSettings.bulletSprite;
-            bulScr.damage = gunSettings.damage;
+            bulScr.damage = gunSettings.damage*player.damageMultiplier;
         }
     }
 

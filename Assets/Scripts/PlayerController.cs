@@ -5,6 +5,7 @@ using System.Numerics;
 using JetBrains.Annotations;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
@@ -28,7 +29,12 @@ public class PlayerController : MonoBehaviour
     public float invincibilityTime;
     public float maxInvincibilityTime;
 
+    GameObject choiceText;
+
     public Slider lifeSlider;
+
+    public float damageMultiplier;
+    public float fireRateMultiplier;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -38,6 +44,10 @@ public class PlayerController : MonoBehaviour
         invincibility = false;
         life = MaxLife;
         SetLifeSlider();
+        choiceText = GameObject.Find("CurriculumChoice");
+        choiceText.SetActive(false);
+        fireRateMultiplier = 1f;
+        damageMultiplier = 1f;
     }
     void Update()
     {   
@@ -62,8 +72,6 @@ public class PlayerController : MonoBehaviour
             }
         }
         InteractableArea();
-
-        
         
     }
 
@@ -83,6 +91,7 @@ public class PlayerController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     { 
         if (other.gameObject.layer == LayerMask.NameToLayer("Room")) { //Posiciona a camera na sala em que o jogador se encontra
+        choiceText.SetActive(false);
             if (invincibilityTime <= 0f) {
                 invincibility = true; 
                 invincibilityTime = maxInvincibilityTime;
@@ -111,6 +120,33 @@ public class PlayerController : MonoBehaviour
                 SetLifeSlider();
                 genericInteractable.GetComponent<SpriteRenderer>().color = HexToColor("#505050");
                 genericInteractable.tag = "Untagged";
+            }else if(genericInteractable.tag == "RH"){
+                choiceText.SetActive(true);
+                HumanResources rh = genericInteractable.GetComponent<HumanResources>();
+                if(rh.enabled){
+                    rh.Interacted();
+                }
+                genericInteractable.tag = "Untagged";
+            }
+            else if(genericInteractable.tag == "Relic"){
+                choiceText.SetActive(true);
+                DroppedRelic relic = genericInteractable.GetComponent<DroppedRelic>();
+                relic.Pick();
+                if(relic.relic.relicType == relicType.Life){
+                    MaxLife+=10;
+                    if(life == MaxLife-10){
+                        life = MaxLife;
+                    }
+                    SetLifeSlider();
+                }else if(relic.relic.relicType == relicType.Speed){
+                    speed+=3;
+                }else if(relic.relic.relicType == relicType.Damage){
+                    damageMultiplier=1.5f;
+                }else if(relic.relic.relicType == relicType.Invincibility){
+                    invincibilityTime=0.65f;
+                }else if(relic.relic.relicType == relicType.Firerate){
+                    fireRateMultiplier=0.85f;
+                }
             }
         }
         
@@ -130,6 +166,9 @@ public class PlayerController : MonoBehaviour
         if(invincibility == false){
             life -= damage;
             lifeSlider.value = life;
+            if(life<=0){
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
         }
         
     }
