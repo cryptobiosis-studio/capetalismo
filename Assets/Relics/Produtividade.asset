@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Produtividade
   m_EditorClassIdentifier: 
   relicName: Produtividade
-  description: Diminui seu firerate em 15%
+  description: Diminui sua velocidade de disparo em 15%
   relicType: 2
   relicSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
