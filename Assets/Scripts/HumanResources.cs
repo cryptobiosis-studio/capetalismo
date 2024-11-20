@@ -16,20 +16,30 @@ public class HumanResources : MonoBehaviour
 
     public GameObject relic;
 
-    void Start()
+    GameObject choiceText;
+
+    bool alreadyInteracted;
+
+
+
+    void Awake()
     {
-        
+        alreadyInteracted = false;
     }
 
-    public void Interacted(){
-        relic = Instantiate(DroppedRelic, spawn.position, Quaternion.identity);
-        relic.GetComponentInChildren<DroppedRelic>().relic = relics[Random.Range(0, relics.Length)];
-        relic1Title = GameObject.Find("TextChoice1").GetComponent<TextMeshProUGUI>();
-        relic1Description = GameObject.Find("TextChoice1Description").GetComponent<TextMeshProUGUI>();
-        relic1Title.text = relic.GetComponentInChildren<DroppedRelic>().relic.relicName;
-        relic1Description.text = relic.GetComponentInChildren<DroppedRelic>().relic.description;
-        this.enabled = false;
-        relic.GetComponentInChildren<DroppedRelic>().Change();
+    public void Interacted(){  
+        if(!alreadyInteracted){
+            relic = Instantiate(DroppedRelic, spawn.position, Quaternion.identity);
+            relic.GetComponentInChildren<DroppedRelic>().relic = relics[Random.Range(0, relics.Length)];
+            relic1Title = GameObject.Find("TextChoice1").GetComponent<TextMeshProUGUI>();
+            relic1Description = GameObject.Find("TextChoice1Description").GetComponent<TextMeshProUGUI>();
+            relic1Title.text = relic.GetComponentInChildren<DroppedRelic>().relic.relicName;
+            relic1Description.text = relic.GetComponentInChildren<DroppedRelic>().relic.description;
+            alreadyInteracted = true;
+            this.enabled = false;
+            relic.GetComponentInChildren<DroppedRelic>().Change();
+        }
+        
         
     }
 }

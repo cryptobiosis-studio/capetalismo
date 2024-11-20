@@ -121,15 +121,14 @@ public class PlayerController : MonoBehaviour
                 genericInteractable.GetComponent<SpriteRenderer>().color = HexToColor("#505050");
                 genericInteractable.tag = "Untagged";
             }else if(genericInteractable.tag == "RH"){
-                choiceText.SetActive(true);
                 HumanResources rh = genericInteractable.GetComponent<HumanResources>();
                 if(rh.enabled){
+                    choiceText.SetActive(true);
                     rh.Interacted();
                 }
                 genericInteractable.tag = "Untagged";
             }
             else if(genericInteractable.tag == "Relic"){
-                choiceText.SetActive(true);
                 DroppedRelic relic = genericInteractable.GetComponent<DroppedRelic>();
                 relic.Pick();
                 if(relic.relic.relicType == relicType.Life){
