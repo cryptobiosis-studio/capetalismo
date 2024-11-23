@@ -206,6 +206,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1f3f801671e904083a24a54c47ead3ff, type: 2}
   - {fileID: 11400000, guid: 4a8684833ab6b4d81a26b5d7210b0996, type: 2}
   - {fileID: 11400000, guid: 8f66f6055e65a436293e81818d3b71d0, type: 2}
+  - {fileID: 11400000, guid: c715199d787764741a19c4e637356ef3, type: 2}
+  - {fileID: 11400000, guid: 71d52eaf5fd654b8aba219f249a2c780, type: 2}
   relic1Title: {fileID: 0}
   relic1Description: {fileID: 0}
   relic: {fileID: 0}

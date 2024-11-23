@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da1cc0748df0c4facbace06e984e3d71, type: 3}
+  m_Name: Supervisor
+  m_EditorClassIdentifier: 
+  relicName: Supervisor
+  description: "Seu pr\xF3prio supervisor de olho em voc\xEA 24/7, pelo menos ele
+    bloquei ALGUMAS balas inimigas"
+  relicType: 6
+  relicSprite: {fileID: 2038281772, guid: 44769fd7f7fb7472db7d7230bf220bce, type: 3}

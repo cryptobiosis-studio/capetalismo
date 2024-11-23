@@ -10,6 +10,7 @@ TagManager:
   - Bobona
   - RH
   - Relic
+  - EyeRelic
   layers:
   - Default
   - TransparentFX
@@ -21,8 +22,8 @@ TagManager:
   - Room
   - Bullet
   - Interactable
-  - 
-  - 
+  - EnemyBullet
+  - Wall
   - 
   - 
   - 

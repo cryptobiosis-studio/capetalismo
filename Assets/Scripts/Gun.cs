@@ -16,6 +16,9 @@ public class Gun : MonoBehaviour
 
     public PlayerController player;
 
+    public AudioSource audioSource;
+    public AudioClip shootSound;
+
     void Start(){
         sprRen = GetComponent<SpriteRenderer>();
         sprRen.sprite = gunSettings.gunSprite;
@@ -49,6 +52,8 @@ public class Gun : MonoBehaviour
     }
 
     IEnumerator Fire(){
+        audioSource.clip = shootSound;
+        audioSource.Play();
         if (gunSettings.shootingStyle == shootingStyles.Spread)
         {
             Debug.Log("Spread");

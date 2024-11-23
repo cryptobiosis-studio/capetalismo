@@ -56,6 +56,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 1203025863489772142, guid: ac0979c520a3d4b3e8c87d4eaa1d9db9, type: 3}
   shootPoint: {fileID: 7161079437842324086}
   shootingInterval: 2
+  enemyDestroyClip: {fileID: 8300000, guid: 2f74ced2202de4aab819ab767ab9620d, type: 3}
 --- !u!61 &7030150513047505456
 BoxCollider2D:
   m_ObjectHideFlags: 0

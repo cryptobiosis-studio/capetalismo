@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
     public Transform shootPoint;  
     public float shootingInterval = 1.5f; 
     private float lastShotTime;
+    public AudioClip enemyDestroyClip;
     void Start()
     {
         life = enemySettings.life;
@@ -88,6 +89,8 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage){
         life-=damage;
         if(life <= 0){
+            room.player.audioSource.clip = enemyDestroyClip;
+            room.player.audioSource.Play(); 
             Destroy(this.gameObject, 0f);
         }
     }

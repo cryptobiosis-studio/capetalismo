@@ -35,12 +35,22 @@ public class PlayerController : MonoBehaviour
 
     public float damageMultiplier;
     public float fireRateMultiplier;
+
+    public GameObject eyeRelic;
+    public AudioSource audioSource;
+    public AudioClip relicClip;
+    public AudioClip gunClip;
+    public AudioClip hitClip;
+    public AudioClip waterClip;
+    public AudioClip interactClip;
+    public AudioClip deathClip;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim  = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
         equippedGun = GetComponentInChildren<Gun>().gunSettings;
+        eyeRelic.SetActive(false);
         invincibility = false;
         life = MaxLife;
         SetLifeSlider();
@@ -98,7 +108,7 @@ public class PlayerController : MonoBehaviour
             } 
             Debug.Log(other.gameObject.name);
             StartCoroutine("FadeImage", false);
-            Camera.main.transform.position = new UnityEngine.Vector3(other.transform.position.x - 0.53f, other.transform.position.y, -10);
+            Camera.main.transform.position = new UnityEngine.Vector3(other.transform.position.x - 0.33f, other.transform.position.y, -10);
             StartCoroutine("FadeImage", true);
         }
     }
@@ -107,8 +117,14 @@ public class PlayerController : MonoBehaviour
         DroppedGun droppedGun = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("Interactable")).gameObject.GetComponent<DroppedGun>();
         Chest chest = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("Interactable")).gameObject.GetComponent<Chest>();
         GameObject genericInteractable = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("Interactable")).gameObject;
+        AudioClip audioClip;
         if(Input.GetKeyDown(KeyCode.E)){
+            audioSource.clip = interactClip;
+            audioSource.Play();
             if(droppedGun != null){
+            audioClip = gunClip;
+            audioSource.clip = audioClip;
+            audioSource.Play();
             GunObj previousGun = equippedGun;
             ChangeGun(droppedGun.gun);
             droppedGun.gun = previousGun;
@@ -117,6 +133,9 @@ public class PlayerController : MonoBehaviour
                 chest.openChest();
             }else if(genericInteractable.tag == "Bobona" && life != MaxLife){
                 life = MaxLife;
+                audioClip = waterClip;
+                audioSource.clip = audioClip;
+                audioSource.Play();
                 SetLifeSlider();
                 genericInteractable.GetComponent<SpriteRenderer>().color = HexToColor("#505050");
                 genericInteractable.tag = "Untagged";
@@ -129,8 +148,11 @@ public class PlayerController : MonoBehaviour
                 genericInteractable.tag = "Untagged";
             }
             else if(genericInteractable.tag == "Relic"){
+                audioClip = relicClip;
                 DroppedRelic relic = genericInteractable.GetComponent<DroppedRelic>();
                 relic.Pick();
+                audioSource.clip = audioClip;
+                audioSource.Play();
                 if(relic.relic.relicType == relicType.Life){
                     MaxLife+=10;
                     if(life == MaxLife-10){
@@ -145,6 +167,10 @@ public class PlayerController : MonoBehaviour
                     invincibilityTime=0.65f;
                 }else if(relic.relic.relicType == relicType.Firerate){
                     fireRateMultiplier=0.85f;
+                }else if(relic.relic.relicType == relicType.Size){
+                    transform.localScale = new UnityEngine.Vector3(0.60f,0.60f,0f);
+                }else if(relic.relic.relicType == relicType.Eye){
+                    eyeRelic.SetActive(true);
                 }
             }
         }
@@ -165,7 +191,11 @@ public class PlayerController : MonoBehaviour
         if(invincibility == false){
             life -= damage;
             lifeSlider.value = life;
+            audioSource.clip = hitClip;
+            audioSource.Play();
             if(life<=0){
+                audioSource.clip = deathClip;
+                audioSource.Play();
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }

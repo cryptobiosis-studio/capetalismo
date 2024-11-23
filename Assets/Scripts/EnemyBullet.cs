@@ -24,8 +24,13 @@ public class EnemyBullet : MonoBehaviour
         if(other.gameObject.tag == "Player"){
             Debug.Log("Player shooted!");
             other.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
+        }if(other.gameObject.tag == "Wall"){
+            Destroy(this.gameObject);
         }
-        if(other.gameObject.tag == "Wall"){
+        if(other.gameObject.tag == "EyeRelic"){
+            Destroy(this.gameObject);
+        }
+        if(other.gameObject.layer == LayerMask.GetMask("Wall")){
             Destroy(this.gameObject);
         }
         
