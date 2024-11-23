@@ -44,7 +44,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -203,7 +203,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -414,7 +414,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 7
   life: 0
-  MaxLife: 30
+  MaxLife: 25
   anim: {fileID: 0}
   sprite: {fileID: 0}
   fade: {fileID: 0}
@@ -431,6 +431,8 @@ MonoBehaviour:
   gunClip: {fileID: 8300000, guid: e6b5c85bc0d3b44d78e5f063c93d7f47, type: 3}
   hitClip: {fileID: 8300000, guid: 30e039c9908c648bda5bec77d936894c, type: 3}
   waterClip: {fileID: 8300000, guid: 4af7a8d079c8c44498eec6eda1aecdc8, type: 3}
+  interactClip: {fileID: 0}
+  deathClip: {fileID: 0}
 --- !u!212 &6379909349712740583
 SpriteRenderer:
   m_ObjectHideFlags: 0

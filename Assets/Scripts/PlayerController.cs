@@ -196,7 +196,10 @@ public class PlayerController : MonoBehaviour
             if(life<=0){
                 audioSource.clip = deathClip;
                 audioSource.Play();
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                if(!audioSource.isPlaying){
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                }
+                
             }
         }
         

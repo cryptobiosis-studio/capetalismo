@@ -1702,7 +1702,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 94738c24b3b2048b2985f6cab6af1191, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.251
+  m_Volume: 0.15
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1799,9 +1799,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 213874372}
     - target: {fileID: 1249756205018577489, guid: 970df0fad94524428b743042743de78e, type: 3}
+      propertyPath: deathClip
+      value: 
+      objectReference: {fileID: 8300000, guid: b63708dc500284b5991472ff7f731213, type: 3}
+    - target: {fileID: 1249756205018577489, guid: 970df0fad94524428b743042743de78e, type: 3}
       propertyPath: lifeSlider
       value: 
       objectReference: {fileID: 2058387210}
+    - target: {fileID: 1249756205018577489, guid: 970df0fad94524428b743042743de78e, type: 3}
+      propertyPath: interactClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 87876a52f455749168b56fff8002f079, type: 3}
+    - target: {fileID: 2074155422005013117, guid: 970df0fad94524428b743042743de78e, type: 3}
+      propertyPath: m_Volume
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 3816929853998941401, guid: 970df0fad94524428b743042743de78e, type: 3}
       propertyPath: m_Name
       value: PlayerObj
@@ -1845,6 +1857,22 @@ PrefabInstance:
     - target: {fileID: 6142339448050440945, guid: 970df0fad94524428b743042743de78e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8425473439116808217, guid: 970df0fad94524428b743042743de78e, type: 3}
+      propertyPath: m_Radius
+      value: 0.28378564
+      objectReference: {fileID: 0}
+    - target: {fileID: 8425473439116808217, guid: 970df0fad94524428b743042743de78e, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.012864014
+      objectReference: {fileID: 0}
+    - target: {fileID: 8425473439116808217, guid: 970df0fad94524428b743042743de78e, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.00000007012311
+      objectReference: {fileID: 0}
+    - target: {fileID: 8780614342569412031, guid: 970df0fad94524428b743042743de78e, type: 3}
+      propertyPath: m_Volume
+      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
