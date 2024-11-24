@@ -107,9 +107,7 @@ public class PlayerController : MonoBehaviour
                 invincibilityTime = maxInvincibilityTime;
             } 
             Debug.Log(other.gameObject.name);
-            StartCoroutine("FadeImage", false);
-            Camera.main.transform.position = new UnityEngine.Vector3(other.transform.position.x - 0.33f, other.transform.position.y, -10);
-            StartCoroutine("FadeImage", true);
+            StartCoroutine(FadeAndMoveCamera(other.transform.position));
         }
     }
     void InteractableArea(){
@@ -202,6 +200,14 @@ public class PlayerController : MonoBehaviour
         }
         
     }
+    IEnumerator FadeAndMoveCamera(UnityEngine.Vector3 newCameraPosition)
+{
+    yield return StartCoroutine(FadeImage(false));
+
+    Camera.main.transform.position = new UnityEngine.Vector3(newCameraPosition.x - 0.33f, newCameraPosition.y, -10);
+
+    yield return StartCoroutine(FadeImage(true));
+}
     IEnumerator FadeImage(bool fadeAway)
     {
         // fade from opaque to transparent
