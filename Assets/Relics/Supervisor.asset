@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Supervisor
   m_EditorClassIdentifier: 
   relicName: Supervisor
-  description: "Seu pr\xF3prio supervisor de olho em voc\xEA 24/7, pelo menos ele
-    bloquei ALGUMAS balas inimigas"
+  description: "Seu pr\xF3prio supervisor de olho em voc\xEA 24/7"
   relicType: 6
   relicSprite: {fileID: 2038281772, guid: 44769fd7f7fb7472db7d7230bf220bce, type: 3}
