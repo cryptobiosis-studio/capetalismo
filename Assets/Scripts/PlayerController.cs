@@ -73,7 +73,9 @@ public class PlayerController : MonoBehaviour
             sprite.flipX = true;
         }else if(inputX > 0){sprite.flipX = false;}
         Math.Clamp(life, 0, MaxLife);
-        Math.Clamp(invincibilityTime, 0, maxInvincibilityTime);
+        Math.Clamp(invincibilityTime, 0f, maxInvincibilityTime);
+        Math.Clamp(damageMultiplier, 1f, 3f);
+        Math.Clamp(fireRateMultiplier, 0.15f, 1f);
         if (invincibility) {
             invincibilityTime -= Time.deltaTime;
             if (invincibilityTime <= 0f) {
@@ -160,11 +162,11 @@ public class PlayerController : MonoBehaviour
                 }else if(relic.relic.relicType == relicType.Speed){
                     speed+=3;
                 }else if(relic.relic.relicType == relicType.Damage){
-                    damageMultiplier=1.5f;
+                    damageMultiplier+=1.5f;
                 }else if(relic.relic.relicType == relicType.Invincibility){
-                    invincibilityTime=0.65f;
+                    invincibilityTime+=0.65f;
                 }else if(relic.relic.relicType == relicType.Firerate){
-                    fireRateMultiplier=0.85f;
+                    fireRateMultiplier-=0.15f;
                 }else if(relic.relic.relicType == relicType.Size){
                     transform.localScale = new UnityEngine.Vector3(0.60f,0.60f,0f);
                 }else if(relic.relic.relicType == relicType.Eye){
@@ -214,7 +216,7 @@ public class PlayerController : MonoBehaviour
         if (fadeAway)
         {
             // loop over 1 second backwards
-            for (float i = 1; i >= 0; i -= Time.deltaTime*2.5f)
+            for (float i = 1; i >= 0; i -= Time.deltaTime*3.5f)
             {
                 fade.color = new Color(0, 0, 0, i);
                 yield return null;
@@ -223,7 +225,7 @@ public class PlayerController : MonoBehaviour
         // fade from transparent to opaque
         else
         {
-            for (float i = 0; i <= 1; i += Time.deltaTime*2.5f)
+            for (float i = 0; i <= 1; i += Time.deltaTime*3.5f)
             {
                 fade.color = new Color(0, 0, 0, i);
                 yield return null;
