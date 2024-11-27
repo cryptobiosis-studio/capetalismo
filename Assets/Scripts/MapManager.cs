@@ -12,10 +12,24 @@ public class MapManager : MonoBehaviour
     public GameObject[] roomLayouts;
     public bool canWork;
 
+    public int rdCounter;
+    public int waterCounter;
+    public int chestCounter;
+
+    public int rdIndex;
+    public int waterIndex;
+    public int chestIndex;
+
     void Start()
     {
         startRoom = GameObject.Find("Room");
         canWork = true;
+        rdCounter = 0;
+        waterCounter = 0;
+        chestCounter = 0;
+        Mathf.Clamp(chestCounter, 0, 2);  
+        Mathf.Clamp(waterCounter, 0, 2);      
+        Mathf.Clamp(rdCounter, 0, 2);             
     }
 
     void Update(){
@@ -28,13 +42,34 @@ public class MapManager : MonoBehaviour
                     targetRoomSpawner.SetupNeighborDoors(targetRoomSpawner.NeighborRooms());
                     if(i != 12){
                         int layoutN = Random.Range(0, roomLayouts.Length);
+                        switch(layoutN){
+                            case var value when value == rdIndex:
+                                rdCounter+=1;
+                                break;
+                            case var value when value == waterIndex:
+                                waterCounter+=1;
+                                break;
+                            case var value when value == chestIndex:
+                                chestCounter+=1;
+                                break;
+
+                        }
+                        if(layoutN == rdIndex && rdCounter >=2){
+                            layoutN = Random.Range(0, roomLayouts.Length);
+                        }else if(layoutN == waterIndex && waterCounter >=2){
+                            layoutN = Random.Range(0, roomLayouts.Length);
+                        }else if(layoutN == chestIndex && chestCounter >=2){
+                            layoutN = Random.Range(0, roomLayouts.Length);
+                        }else{
+
+                        }
                         Instantiate(roomLayouts[layoutN], targetRoom.transform);
                     }
                 }
             }
             canWork = false;
         }
-        if(canWork == false && numberOfRooms != startRoom.GetComponent<RoomSpawner>().maxRooms+1){
+        if(canWork == false && numberOfRooms != startRoom.GetComponent<RoomSpawner>().maxRooms+1 || chestCounter == 0 && !canWork|| rdCounter == 0 && !canWork || waterCounter == 0 && !canWork){
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }

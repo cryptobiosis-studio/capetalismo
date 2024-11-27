@@ -24,7 +24,7 @@ public class RoomSpawner : MonoBehaviour
     public Transform[] spawners;
     public Transform[] doors;
     public MapManager manager;
-    public int maxRooms = 20;
+    public int maxRooms = 16;
 
     void Start()
     {

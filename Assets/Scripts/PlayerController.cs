@@ -171,6 +171,10 @@ public class PlayerController : MonoBehaviour
                     transform.localScale = new UnityEngine.Vector3(0.60f,0.60f,0f);
                 }else if(relic.relic.relicType == relicType.Eye){
                     eyeRelic.SetActive(true);
+                }else if(relic.relic.relicType == relicType.Gun){
+                    equippedGun.shootingStyle = shootingStyles.Spread;
+                    equippedGun.numberOfBullets = equippedGun.numberOfBullets*2;
+                    ChangeGun(equippedGun);
                 }
             }
         }
@@ -216,18 +220,18 @@ public class PlayerController : MonoBehaviour
         if (fadeAway)
         {
             // loop over 1 second backwards
-            for (float i = 1; i >= 0; i -= Time.deltaTime*3.5f)
+            for (float i = 1; i >= 0; i -= Time.deltaTime*5f)
             {
-                fade.color = new Color(0, 0, 0, i);
+                fade.color = new Color(0, 0, 0, i*1.5f);
                 yield return null;
             }
         }
         // fade from transparent to opaque
         else
         {
-            for (float i = 0; i <= 1; i += Time.deltaTime*3.5f)
+            for (float i = 0; i <= 1; i += Time.deltaTime*5f)
             {
-                fade.color = new Color(0, 0, 0, i);
+                fade.color = new Color(0, 0, 0, i*1.5f);
                 yield return null;
             }
         }

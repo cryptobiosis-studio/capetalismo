@@ -9,7 +9,8 @@ public enum relicType{
     Damage,
     Invincibility,
     Size,
-    Eye
+    Eye,
+    Gun
 }
 [CreateAssetMenu(fileName = "Relic", menuName = "Relic/New Relic", order = 1)]
 public class Relic : ScriptableObject
