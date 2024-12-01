@@ -19,11 +19,16 @@ public class Gun : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip shootSound;
 
+    public shootingStyles gunShootingStyle;
+    public int nBullets;
+
     void Start(){
         sprRen = GetComponent<SpriteRenderer>();
         sprRen.sprite = gunSettings.gunSprite;
         sprRen.flipX = false; // Manter a orientação da arma
         player = GetComponentInParent<PlayerController>();
+        gunShootingStyle = gunSettings.shootingStyle;
+        nBullets = gunSettings.numberOfBullets;
     }
 
     void Update(){
@@ -54,7 +59,7 @@ public class Gun : MonoBehaviour
     IEnumerator Fire(){
         audioSource.clip = shootSound;
         audioSource.Play();
-        if (gunSettings.shootingStyle == shootingStyles.Spread)
+        if (gunShootingStyle == shootingStyles.Spread)
         {
             Debug.Log("Spread");
             FireSpread();
@@ -73,7 +78,7 @@ public class Gun : MonoBehaviour
     Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     Vector3 directionToMouse = (mousePosition - pointer.position).normalized;
 
-    int numberOfBullets = gunSettings.numberOfBullets;
+    int numberOfBullets = nBullets;
     float spreadAngle = 35f; 
     float angleIncrement = spreadAngle / (numberOfBullets - 1);
 
@@ -114,6 +119,16 @@ public class Gun : MonoBehaviour
 
     public void Change(){
       sprRen.sprite = gunSettings.gunSprite;
+      nBullets = gunSettings.numberOfBullets;
+      gunShootingStyle = gunSettings.shootingStyle;
+      if(player.gunRelic){
+        gunShootingStyle = shootingStyles.Spread;
+        if(nBullets != 1){
+            nBullets = nBullets*2;
+        }else{
+            nBullets = 3;
+        }
+      }
     }
 
 }

@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     public float damageMultiplier;
     public float fireRateMultiplier;
 
+    public bool gunRelic;
+
     public GameObject eyeRelic;
     public AudioSource audioSource;
     public AudioClip relicClip;
@@ -58,6 +60,7 @@ public class PlayerController : MonoBehaviour
         choiceText.SetActive(false);
         fireRateMultiplier = 1f;
         damageMultiplier = 1f;
+        gunRelic = false;
     }
     void Update()
     {   
@@ -72,10 +75,10 @@ public class PlayerController : MonoBehaviour
         if(inputX < 0){ //Auto Explicativo (character sprite face the side you are walking.)
             sprite.flipX = true;
         }else if(inputX > 0){sprite.flipX = false;}
-        Math.Clamp(life, 0, MaxLife);
-        Math.Clamp(invincibilityTime, 0f, maxInvincibilityTime);
-        Math.Clamp(damageMultiplier, 1f, 3f);
-        Math.Clamp(fireRateMultiplier, 0.15f, 1f);
+            Math.Clamp(life, 0, MaxLife);
+            Math.Clamp(invincibilityTime, 0f, maxInvincibilityTime);
+            Math.Clamp(damageMultiplier, 1f, 3f);
+            Math.Clamp(fireRateMultiplier, 0.15f, 1f);
         if (invincibility) {
             invincibilityTime -= Time.deltaTime;
             if (invincibilityTime <= 0f) {
@@ -103,13 +106,13 @@ public class PlayerController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     { 
         if (other.gameObject.layer == LayerMask.NameToLayer("Room")) { //Posiciona a camera na sala em que o jogador se encontra
-        choiceText.SetActive(false);
-            if (invincibilityTime <= 0f) {
-                invincibility = true; 
-                invincibilityTime = maxInvincibilityTime;
-            } 
-            Debug.Log(other.gameObject.name);
-            StartCoroutine(FadeAndMoveCamera(other.transform.position));
+            choiceText.SetActive(false);
+                if (invincibilityTime <= 0f) {
+                    invincibility = true; 
+                    invincibilityTime = maxInvincibilityTime;
+                } 
+                Debug.Log(other.gameObject.name);
+                StartCoroutine(FadeAndMoveCamera(other.transform.position));
         }
     }
     void InteractableArea(){
@@ -164,6 +167,7 @@ public class PlayerController : MonoBehaviour
                 }else if(relic.relic.relicType == relicType.Damage){
                     damageMultiplier+=1.5f;
                 }else if(relic.relic.relicType == relicType.Invincibility){
+                    maxInvincibilityTime+=0.65f;
                     invincibilityTime+=0.65f;
                 }else if(relic.relic.relicType == relicType.Firerate){
                     fireRateMultiplier-=0.15f;
@@ -172,9 +176,13 @@ public class PlayerController : MonoBehaviour
                 }else if(relic.relic.relicType == relicType.Eye){
                     eyeRelic.SetActive(true);
                 }else if(relic.relic.relicType == relicType.Gun){
-                    equippedGun.shootingStyle = shootingStyles.Spread;
-                    equippedGun.numberOfBullets = equippedGun.numberOfBullets*2;
-                    ChangeGun(equippedGun);
+                    GetComponentInChildren<Gun>().gunShootingStyle = shootingStyles.Spread; 
+                    gunRelic = true;
+                    if(GetComponentInChildren<Gun>().nBullets == 1){
+                        GetComponentInChildren<Gun>().nBullets=3;
+                    }else{
+                        GetComponentInChildren<Gun>().nBullets*=2;
+                    }
                 }
             }
         }

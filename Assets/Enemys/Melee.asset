@@ -16,6 +16,6 @@ MonoBehaviour:
   desciption: 
   enemySprite: {fileID: -1735064985, guid: 63777fbaf17aa41b2992d4a2794fe2cd, type: 3}
   enemyTypes: 1
-  life: 20
+  life: 30
   damage: 5
   speed: 2
