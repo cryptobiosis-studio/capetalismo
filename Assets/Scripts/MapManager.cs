@@ -31,7 +31,7 @@ public class MapManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             // Apenas o Master Client gera a semente
-            mapSeed = Random.Range(0, 10000); // Pode ser qualquer valor determinístico
+            mapSeed = Random.Range(0, 10000); // Gera uma semente aleatória para o mapa
             photonView.RPC("SetMapSeed_RPC", RpcTarget.All, mapSeed); // Envia a semente para todos os jogadores
         }
     }
@@ -46,6 +46,7 @@ public class MapManager : MonoBehaviourPunCallbacks
         }
     }
 
+    // RPC para sincronizar a semente com todos os jogadores
     [PunRPC]
     void SetMapSeed_RPC(int seed)
     {
@@ -54,6 +55,7 @@ public class MapManager : MonoBehaviourPunCallbacks
         Random.InitState(mapSeed);  // Inicializa o Random com a semente compartilhada
     }
 
+    // RPC para gerar o mapa em todos os jogadores
     [PunRPC]
     void GenerateMap_RPC()
     {
@@ -138,7 +140,7 @@ public class MapManager : MonoBehaviourPunCallbacks
     {
         for (int i = list.Count - 1; i > 0; i--)
         {
-            int randomIndex = Random.Range(0, i + 1);
+            int randomIndex = Random.Range(0, i + 1); // Usa a semente sincronizada
             int temp = list[i];
             list[i] = list[randomIndex];
             list[randomIndex] = temp;
