@@ -32,47 +32,52 @@ public class MapManager : MonoBehaviourPunCallbacks
         {
             // Apenas o Master Client gera a semente
             mapSeed = Random.Range(0, 10000); // Gera uma semente aleatória para o mapa
-            photonView.RPC("SetMapSeed_RPC", RpcTarget.All, mapSeed); // Envia a semente para todos os jogadores
+            GenerateMap(); // O Master Client gera o mapa
         }
     }
 
     void Update()
     {
-        if (canWork && numberOfRooms >= startRoom.GetComponent<RoomSpawner>().maxRooms)
+        // O Master Client não precisa fazer mais nada aqui, já que ele gerou o mapa na Start()
+        if (PhotonNetwork.IsMasterClient && !canWork)
         {
+            photonView.RPC("NotifyMapGenerated_RPC", RpcTarget.Others); // Notifica os outros jogadores que o mapa foi gerado
+        }
+    }
+
+    // Geração do mapa apenas para o Master Client
+    void GenerateMap()
+    {
+        if (canWork)
+        {
+            List<int> roomOrder = new List<int>();
+            for (int i = 0; i < numberOfRooms; i++)
+            {
+                roomOrder.Add(i);
+            }
+
+            ShuffleList(roomOrder);
+            PlaceMandatoryLayouts(roomOrder);
+            FillRemainingRooms(roomOrder);
+            ConfigureDoors();
+
             canWork = false;
-            // Gera o mapa agora que todos têm a mesma semente
-            photonView.RPC("GenerateMap_RPC", RpcTarget.All);
+            Debug.Log("Map Complete!");
+
+            photonView.RPC("NotifyMapGenerated_RPC", RpcTarget.All); // Notifica todos os jogadores que o mapa foi gerado
         }
     }
 
-    // RPC para sincronizar a semente com todos os jogadores
+    // RPC para notificar os outros jogadores que o mapa foi gerado
     [PunRPC]
-    void SetMapSeed_RPC(int seed)
+    void NotifyMapGenerated_RPC()
     {
-        // Todos os jogadores recebem a mesma semente
-        mapSeed = seed;
-        Random.InitState(mapSeed);  // Inicializa o Random com a semente compartilhada
+        // Os outros jogadores simplesmente esperam até que o mapa seja gerado pelo Master Client
+        Debug.Log("Map has been generated and is now synchronized!");
+        // Se necessário, aqui você pode incluir código para que os jogadores realizem alguma ação após o mapa ser gerado.
     }
 
-    // RPC para gerar o mapa em todos os jogadores
-    [PunRPC]
-    void GenerateMap_RPC()
-    {
-        List<int> roomOrder = new List<int>();
-        for (int i = 0; i < numberOfRooms; i++)
-        {
-            roomOrder.Add(i);
-        }
-
-        ShuffleList(roomOrder);
-        PlaceMandatoryLayouts(roomOrder);
-        FillRemainingRooms(roomOrder);
-        ConfigureDoors();
-
-        Debug.Log("Map Complete!");
-    }
-
+    // A lógica de colocar layouts obrigatórios nas salas (mandatórios)
     void PlaceMandatoryLayouts(List<int> roomOrder)
     {
         int[] mandatoryLayouts = { rdIndex, waterIndex, chestIndex };
@@ -94,6 +99,7 @@ public class MapManager : MonoBehaviourPunCallbacks
         }
     }
 
+    // Lógica para preencher as salas restantes com layouts não obrigatórios
     void FillRemainingRooms(List<int> roomOrder)
     {
         foreach (int roomIndex in roomOrder)
@@ -119,6 +125,7 @@ public class MapManager : MonoBehaviourPunCallbacks
         }
     }
 
+    // Configuração das portas entre as salas (se necessário)
     void ConfigureDoors()
     {
         for (int i = 0; i < numberOfRooms; i++)
@@ -136,6 +143,7 @@ public class MapManager : MonoBehaviourPunCallbacks
         }
     }
 
+    // Método para embaralhar a lista de salas
     void ShuffleList(List<int> list)
     {
         for (int i = list.Count - 1; i > 0; i--)
