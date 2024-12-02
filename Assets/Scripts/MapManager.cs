@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;  // Adicione o namespace do Photon PUN
+using Photon.Pun;
 
 public class MapManager : MonoBehaviourPunCallbacks
 {
@@ -19,17 +19,20 @@ public class MapManager : MonoBehaviourPunCallbacks
 
     public GameObject lastRoom;
 
+    private int mapSeed;  // Variável para armazenar a semente do mapa
+
     void Start()
     {
         startRoom = GameObject.Find("Room");
         canWork = true;
         usedRoomIndices = new HashSet<int>();
         generatedRooms = new List<int>();
-        
+
         if (PhotonNetwork.IsMasterClient)
         {
-            // Apenas o Master Client (servidor) gera o mapa
-            GenerateMap_RPC();
+            // Apenas o Master Client gera a semente
+            mapSeed = Random.Range(0, 10000); // Pode ser qualquer valor determinístico
+            photonView.RPC("SetMapSeed_RPC", RpcTarget.All, mapSeed); // Envia a semente para todos os jogadores
         }
     }
 
@@ -38,9 +41,17 @@ public class MapManager : MonoBehaviourPunCallbacks
         if (canWork && numberOfRooms >= startRoom.GetComponent<RoomSpawner>().maxRooms)
         {
             canWork = false;
-            // Sincronizar a geração do mapa entre os jogadores
+            // Gera o mapa agora que todos têm a mesma semente
             photonView.RPC("GenerateMap_RPC", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    void SetMapSeed_RPC(int seed)
+    {
+        // Todos os jogadores recebem a mesma semente
+        mapSeed = seed;
+        Random.InitState(mapSeed);  // Inicializa o Random com a semente compartilhada
     }
 
     [PunRPC]
@@ -75,7 +86,6 @@ public class MapManager : MonoBehaviourPunCallbacks
                 GameObject targetRoom = GameObject.Find("Room" + randomRoomIndex);
                 if (targetRoom != null && randomRoomIndex != startRoom.gameObject.GetComponent<RoomSpawner>().maxRooms)
                 {
-                    // Use PhotonNetwork.Instantiate para garantir que a instância seja sincronizada
                     PhotonNetwork.Instantiate(roomLayouts[layoutIndex].name, targetRoom.transform.position, targetRoom.transform.rotation);
                 }
             }
@@ -95,7 +105,6 @@ public class MapManager : MonoBehaviourPunCallbacks
                 nonMandatoryLayouts.RemoveAt(chestIndex - (rdIndex < chestIndex ? 1 : 0) - (waterIndex < chestIndex ? 1 : 0));
 
                 int randomLayout = Random.Range(0, nonMandatoryLayouts.Count);
-                // Use PhotonNetwork.Instantiate para garantir que a instância seja sincronizada
                 PhotonNetwork.Instantiate(nonMandatoryLayouts[randomLayout].name, targetRoom.transform.position, targetRoom.transform.rotation);
 
                 generatedRooms.Add(roomIndex);
