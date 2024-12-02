@@ -50,9 +50,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
         eyeRelic.SetActive(false);
         invincibility = false;
         life = MaxLife;
-        SetLifeSlider();
-        choiceText = GameObject.Find("CurriculumChoice");
-        choiceText.SetActive(false);
+        // SetLifeSlider();
+        // choiceText = GameObject.Find("CurriculumChoice");
+        // choiceText.SetActive(false);
         fireRateMultiplier = 1f;
         damageMultiplier = 1f;
         gunRelic = false;
@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 audioClip = waterClip;
                 audioSource.clip = audioClip;
                 audioSource.Play();
-                SetLifeSlider();
+                // SetLifeSlider();
                 genericInteractable.GetComponent<SpriteRenderer>().color = HexToColor("#505050");
                 genericInteractable.tag = "Untagged";
             }
@@ -202,7 +202,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 HumanResources rh = genericInteractable.GetComponent<HumanResources>();
                 if (rh.enabled)
                 {
-                    choiceText.SetActive(true);
+                    // choiceText.SetActive(true);
                     rh.Interacted();
                 }
                 genericInteractable.tag = "Untagged";
@@ -234,7 +234,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (!invincibility)
         {
             life -= damage;
-            lifeSlider.value = life;
+            // lifeSlider.value = life;
             audioSource.clip = hitClip;
             audioSource.Play();
 
@@ -250,38 +250,38 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     IEnumerator FadeAndMoveCamera(UnityEngine.Vector3 newCameraPosition)
     {
-        yield return StartCoroutine(FadeImage(false));
+       // yield return StartCoroutine(FadeImage(false));
 
         Camera.main.transform.position = new UnityEngine.Vector3(newCameraPosition.x - 0.33f, newCameraPosition.y, -10);
 
-        yield return StartCoroutine(FadeImage(true));
+       yield break;
     }
 
-    IEnumerator FadeImage(bool fadeAway)
-    {
-        if (fadeAway)
-        {
-            for (float i = 1; i >= 0; i -= Time.deltaTime * 5f)
-            {
-                fade.color = new Color(0, 0, 0, i * 1.5f);
-                yield return null;
-            }
-        }
-        else
-        {
-            for (float i = 0; i <= 1; i += Time.deltaTime * 5f)
-            {
-                fade.color = new Color(0, 0, 0, i * 1.5f);
-                yield return null;
-            }
-        }
-    }
+    // IEnumerator FadeImage(bool fadeAway)
+    // {
+    //     if (fadeAway)
+    //     {
+    //         for (float i = 1; i >= 0; i -= Time.deltaTime * 5f)
+    //         {
+    //             fade.color = new Color(0, 0, 0, i * 1.5f);
+    //             yield return null;
+    //         }
+    //     }
+    //     else
+    //     {
+    //         for (float i = 0; i <= 1; i += Time.deltaTime * 5f)
+    //         {
+    //             fade.color = new Color(0, 0, 0, i * 1.5f);
+    //             yield return null;
+    //         }
+    //     }
+    // }
 
-    void SetLifeSlider()
-    {
-        lifeSlider.maxValue = MaxLife;
-        lifeSlider.value = life;
-    }
+    // void SetLifeSlider()
+    // {
+    //     lifeSlider.maxValue = MaxLife;
+    //     lifeSlider.value = life;
+    // }
 
     Color HexToColor(string hex)
     {
@@ -304,7 +304,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 life = MaxLife;
             }
-            SetLifeSlider();
+            //SetLifeSlider();
         }
         else if (relic.relic.relicType == relicType.Speed)
         {
