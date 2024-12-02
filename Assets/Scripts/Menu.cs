@@ -10,6 +10,6 @@ public class Menu : MonoBehaviour
         SceneManager.LoadScene("SingleplayerRun");
     }
     public void MultiPlayer(){
-        SceneManager.LoadScene("ChooseRoom");
+        SceneManager.LoadScene("Loading");
     }
 }
