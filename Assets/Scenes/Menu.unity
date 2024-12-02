@@ -130,6 +130,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4062583065946259818, guid: 970df0fad94524428b743042743de78e, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1249756205018577489, guid: 970df0fad94524428b743042743de78e, type: 3}
       propertyPath: m_Enabled
       value: 0

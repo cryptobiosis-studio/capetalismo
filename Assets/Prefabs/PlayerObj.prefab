@@ -302,6 +302,7 @@ GameObject:
   - component: {fileID: 6379909349712740583}
   - component: {fileID: 679489900186976632}
   - component: {fileID: 1990602202431209507}
+  - component: {fileID: -4062583065946259818}
   m_Layer: 6
   m_Name: PlayerObj
   m_TagString: Player
@@ -425,6 +426,7 @@ MonoBehaviour:
   lifeSlider: {fileID: 0}
   damageMultiplier: 0
   fireRateMultiplier: 0
+  gunRelic: 0
   eyeRelic: {fileID: 5962650779717303172}
   audioSource: {fileID: 2074155422005013117}
   relicClip: {fileID: 8300000, guid: c79859339563d490a9c5e8e4d1df6eba, type: 3}
@@ -541,6 +543,28 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.74999994
+--- !u!114 &-4062583065946259818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3816929853998941401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &4282666247242412982
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,6 +672,8 @@ MonoBehaviour:
   player: {fileID: 0}
   audioSource: {fileID: 8780614342569412031}
   shootSound: {fileID: 8300000, guid: 96c424a57430743f78c42fee8ef604e1, type: 3}
+  gunShootingStyle: 0
+  nBullets: 0
 --- !u!1 &5074643524179424308
 GameObject:
   m_ObjectHideFlags: 0

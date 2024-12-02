@@ -1,10 +1,9 @@
-using System.Security.Cryptography.X509Certificates;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using Photon.Pun;
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+public class Gun : MonoBehaviourPunCallbacks
 {
     public float offset; // Ajuste da rotação da arma
     public SpriteRenderer sprRen; // Sprite da arma
@@ -34,15 +33,23 @@ public class Gun : MonoBehaviour
     void Update(){
         RotateGun();
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && fireTimer <= 0f ){
-            StartCoroutine("Fire");
-            fireTimer = gunSettings.firerate*player.fireRateMultiplier;
-        }   else{
+        // Verifica se o jogador pressionou o botão de disparo (Mouse0)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && fireTimer <= 0f)
+        {
+            if (photonView.IsMine)  // Verifique se o PhotonView é do jogador local
+            {
+                photonView.RPC("Fire", RpcTarget.AllBuffered);  // Chamando o RPC para todos os clientes
+                fireTimer = gunSettings.firerate * player.fireRateMultiplier;
+            }
+        }
+        else
+        {
             fireTimer -= Time.deltaTime;
         }
     }
 
-    void RotateGun(){
+    void RotateGun()
+    {
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = 5.23f; // Distância da câmera
 
@@ -56,51 +63,52 @@ public class Gun : MonoBehaviour
         sprRen.flipY = rotZ < 85 && rotZ > -85;
     }
 
-    IEnumerator Fire(){
+    [PunRPC]  // Certifique-se de que o método está marcado com [PunRPC]
+    void Fire()
+    {
         audioSource.clip = shootSound;
         audioSource.Play();
+
+        // Dispara de acordo com o estilo de tiro
         if (gunShootingStyle == shootingStyles.Spread)
         {
-            Debug.Log("Spread");
             FireSpread();
         }
         else
         {
-            Debug.Log("Simple");
             FireSimple();
         }
-
-        yield return new WaitForSeconds(gunSettings.firerate);
     }
 
-    void FireSpread(){
-    firedBullets.Clear();
-    Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    Vector3 directionToMouse = (mousePosition - pointer.position).normalized;
-
-    int numberOfBullets = nBullets;
-    float spreadAngle = 35f; 
-    float angleIncrement = spreadAngle / (numberOfBullets - 1);
-
-    for (int i = 0; i < numberOfBullets; i++)
+    void FireSpread()
     {
-        float angle = -spreadAngle / 2 + angleIncrement * i;
-        Quaternion bulletRotation = Quaternion.Euler(0, 0, Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg - 90 + angle);
-        GameObject _bullet = Instantiate(bullet, pointer.position, bulletRotation);
-        firedBullets.Add(_bullet);
-        Vector3 bulletDirection = _bullet.transform.up; 
-        _bullet.GetComponent<Rigidbody2D>().velocity = bulletDirection * gunSettings.bulletSpeed;
+        firedBullets.Clear();
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 directionToMouse = (mousePosition - pointer.position).normalized;
+
+        int numberOfBullets = nBullets;
+        float spreadAngle = 35f;
+        float angleIncrement = spreadAngle / (numberOfBullets - 1);
+
+        for (int i = 0; i < numberOfBullets; i++)
+        {
+            float angle = -spreadAngle / 2 + angleIncrement * i;
+            Quaternion bulletRotation = Quaternion.Euler(0, 0, Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg - 90 + angle);
+            GameObject _bullet = Instantiate(bullet, pointer.position, bulletRotation);
+            firedBullets.Add(_bullet);
+            Vector3 bulletDirection = _bullet.transform.up; 
+            _bullet.GetComponent<Rigidbody2D>().velocity = bulletDirection * gunSettings.bulletSpeed;
+        }
+        BulletSettings(firedBullets.ToArray());
     }
-    BulletSettings(firedBullets.ToArray());
-}
 
-
-    void FireSimple(){
+    void FireSimple()
+    {
         firedBullets.Clear();
         GameObject _bullet = Instantiate(bullet, pointer.position, Quaternion.identity);
         firedBullets.Add(_bullet);
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.z = 0; 
+        mousePosition.z = 0;
         Vector3 directionToMouse = (mousePosition - pointer.position).normalized;
 
         _bullet.GetComponent<Rigidbody2D>().velocity = directionToMouse * gunSettings.bulletSpeed;
@@ -113,22 +121,26 @@ public class Gun : MonoBehaviour
         {
             Bullet bulScr = b.GetComponent<Bullet>();
             bulScr.bulSprite = gunSettings.bulletSprite;
-            bulScr.damage = gunSettings.damage*player.damageMultiplier;
+            bulScr.damage = gunSettings.damage * player.damageMultiplier;
         }
     }
 
-    public void Change(){
-      sprRen.sprite = gunSettings.gunSprite;
-      nBullets = gunSettings.numberOfBullets;
-      gunShootingStyle = gunSettings.shootingStyle;
-      if(player.gunRelic){
-        gunShootingStyle = shootingStyles.Spread;
-        if(nBullets != 1){
-            nBullets = nBullets*2;
-        }else{
-            nBullets = 3;
+    public void Change()
+    {
+        sprRen.sprite = gunSettings.gunSprite;
+        nBullets = gunSettings.numberOfBullets;
+        gunShootingStyle = gunSettings.shootingStyle;
+        if (player.gunRelic)
+        {
+            gunShootingStyle = shootingStyles.Spread;
+            if (nBullets != 1)
+            {
+                nBullets = nBullets * 2;
+            }
+            else
+            {
+                nBullets = 3;
+            }
         }
-      }
     }
-
 }
