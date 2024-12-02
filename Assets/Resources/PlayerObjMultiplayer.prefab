@@ -581,7 +581,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
+  m_SynchronizeScale: 1
   m_UseLocal: 1
 --- !u!1 &4282666247242412982
 GameObject:
@@ -594,6 +594,8 @@ GameObject:
   - component: {fileID: 2829964879238735346}
   - component: {fileID: 1893189206462552240}
   - component: {fileID: 7524512048384324509}
+  - component: {fileID: 5208961930600253660}
+  - component: {fileID: 368277964241452106}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -692,6 +694,45 @@ MonoBehaviour:
   shootSound: {fileID: 8300000, guid: 96c424a57430743f78c42fee8ef604e1, type: 3}
   gunShootingStyle: 0
   nBullets: 0
+--- !u!114 &5208961930600253660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4282666247242412982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 368277964241452106}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &368277964241452106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4282666247242412982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 1
+  m_UseLocal: 1
 --- !u!1 &5074643524179424308
 GameObject:
   m_ObjectHideFlags: 0

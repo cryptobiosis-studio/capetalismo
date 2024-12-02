@@ -38,7 +38,7 @@ public class Gun : MonoBehaviourPunCallbacks
         {
             if (photonView.IsMine)  // Verifique se o PhotonView é do jogador local
             {
-                photonView.RPC("Fire", RpcTarget.AllBuffered);  // Chamando o RPC para todos os clientes
+                photonView.RPC("Fire", RpcTarget.All);  // Chamando o RPC para todos os clientes
                 fireTimer = gunSettings.firerate * player.fireRateMultiplier;
             }
         }
