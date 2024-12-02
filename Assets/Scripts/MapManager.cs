@@ -55,12 +55,12 @@ public class MapManager : MonoBehaviour
         int[] mandatoryLayouts = { rdIndex, waterIndex, chestIndex };
         foreach (int layoutIndex in mandatoryLayouts){
             for (int i = 0; i < 2; i++){
-                int randomRoomIndex = roomOrder[Random.Range(0, roomOrder.Count)];
+                int randomRoomIndex = roomOrder[Random.Range(0, roomOrder.Count-1)];
                 roomOrder.Remove(randomRoomIndex);  
                 usedRoomIndices.Add(randomRoomIndex);
                 generatedRooms.Add(randomRoomIndex);  
                 GameObject targetRoom = GameObject.Find("Room" + randomRoomIndex);
-                if (targetRoom != null && randomRoomIndex != emptyRoomIndex){
+                if (targetRoom != null && randomRoomIndex != startRoom.gameObject.GetComponent<RoomSpawner>().maxRooms){
                     Instantiate(roomLayouts[layoutIndex], targetRoom.transform);
                 }
             }
@@ -69,10 +69,9 @@ public class MapManager : MonoBehaviour
 
     void FillRemainingRooms(List<int> roomOrder){
         foreach (int roomIndex in roomOrder){
-            if (roomIndex == emptyRoomIndex) continue;
 
             GameObject targetRoom = GameObject.Find("Room" + roomIndex);
-            if (targetRoom != null && roomIndex != 24){
+            if (targetRoom != null && roomIndex != startRoom.gameObject.GetComponent<RoomSpawner>().maxRooms){
                 List<GameObject> nonMandatoryLayouts = new List<GameObject>(roomLayouts);
                 nonMandatoryLayouts.RemoveAt(rdIndex);
                 nonMandatoryLayouts.RemoveAt(waterIndex - (rdIndex < waterIndex ? 1 : 0)); 
@@ -82,7 +81,7 @@ public class MapManager : MonoBehaviour
                 Instantiate(nonMandatoryLayouts[randomLayout], targetRoom.transform);
 
                 generatedRooms.Add(roomIndex); 
-            }else if(targetRoom != null && roomIndex == 24){
+            }else if(targetRoom != null && roomIndex == startRoom.gameObject.GetComponent<RoomSpawner>().maxRooms){
                 generatedRooms.Add(roomIndex); 
                 lastRoom = targetRoom;
             }
