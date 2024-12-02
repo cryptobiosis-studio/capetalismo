@@ -64,6 +64,7 @@ public class MapManager : MonoBehaviourPunCallbacks
             canWork = false;
             Debug.Log("Map Complete!");
 
+            // Notifica os outros jogadores de que o mapa foi gerado
             photonView.RPC("NotifyMapGenerated_RPC", RpcTarget.All); // Notifica todos os jogadores que o mapa foi gerado
         }
     }
