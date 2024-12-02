@@ -15,7 +15,6 @@ public class MapManager : MonoBehaviour
 
     private HashSet<int> usedRoomIndices;  
     private List<int> generatedRooms;  
-    private int emptyRoomIndex = -1;  
 
     public GameObject lastRoom;
 
