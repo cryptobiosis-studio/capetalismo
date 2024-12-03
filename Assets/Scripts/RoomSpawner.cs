@@ -15,7 +15,8 @@ public class NeighborRoom
     }
 }
 
-public class RoomSpawner : MonoBehaviourPun
+
+public class RoomSpawner : MonoBehaviourPunCallbacks
 {
     private string[] spawnerNames = { "RoomSpawnerTop", "RoomSpawnerBottom", "RoomSpawnerRight", "RoomSpawnerLeft" };
     private string[] doorNames = { "Bottom", "Top", "Left", "Right" };
@@ -31,10 +32,62 @@ public class RoomSpawner : MonoBehaviourPun
 
         if (PhotonNetwork.IsMasterClient)
         {
-            TrySpawnRoom(Random.Range(0, 4));
+            // Gera o mapa e armazena o estado na propriedade da sala
+            GenerateAndSyncMap();
+        }
+        else
+        {
+            // Aqui você pode sincronizar o estado do mapa
+            SyncMapFromMasterClient();
         }
     }
 
+    void GenerateAndSyncMap()
+    {
+        // Exemplo de como gerar o mapa (o que você já fez antes)
+        if(manager.numberOfRooms <= maxRooms){
+             for (int i = 0; i < maxRooms; i++)
+            {
+            // Aqui você cria as salas conforme sua lógica (exemplo: Random.Range etc.)
+            TrySpawnRoom(Random.Range(0, 4));
+            }
+        }
+       
+
+        // Após a geração, envia o estado do mapa para os outros jogadores
+        SyncMapToOtherPlayers();
+    }
+
+    void SyncMapToOtherPlayers()
+    {
+        // Envia os dados do mapa (por exemplo, posições das salas) via Photon
+        // Usando uma propriedade customizada do Photon Room (PhotonNetwork.CurrentRoom.SetCustomProperties)
+        ExitGames.Client.Photon.Hashtable mapData = new ExitGames.Client.Photon.Hashtable
+        {
+            { "MapGenerated", true },
+            { "Rooms", manager.numberOfRooms }
+            // Você pode armazenar as posições das salas ou qualquer outra coisa necessária
+        };
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(mapData);
+    }
+
+    void SyncMapFromMasterClient()
+    {
+        // Sincroniza o mapa para jogadores que entram
+        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("MapGenerated"))
+        {
+            bool mapGenerated = (bool)PhotonNetwork.CurrentRoom.CustomProperties["MapGenerated"];
+            if (mapGenerated)
+            {
+                // Lógica para aplicar as modificações do mapa no cliente
+                // Isso pode incluir a reconstrução do mapa com base nos dados sincronizados
+                Debug.Log("Mapa gerado pelo Master Client está sendo sincronizado.");
+            }
+        }
+    }
+
+    //-----------------------------------------Gera_Salas-------------------------------------------------------------
     void TrySpawnRoom(int direction, int attemptCount = 0)
     {
         if (attemptCount > 3)

@@ -1969,8 +1969,16 @@ PrefabInstance:
       value: -15.5
       objectReference: {fileID: 0}
     - target: {fileID: 8000891994872738837, guid: 7ca8f0a7775b243f1ba8f3a62b5596eb, type: 3}
+      propertyPath: room
+      value: 
+      objectReference: {fileID: 3768072337175802960, guid: 6673fca0807704e85aa617b580e011eb, type: 3}
+    - target: {fileID: 8000891994872738837, guid: 7ca8f0a7775b243f1ba8f3a62b5596eb, type: 3}
+      propertyPath: manager
+      value: 
+      objectReference: {fileID: 704580852}
+    - target: {fileID: 8000891994872738837, guid: 7ca8f0a7775b243f1ba8f3a62b5596eb, type: 3}
       propertyPath: maxRooms
-      value: 24
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 8012261461246281060, guid: 7ca8f0a7775b243f1ba8f3a62b5596eb, type: 3}
       propertyPath: sceneViewId
