@@ -43,6 +43,8 @@ MonoBehaviour:
   - GenerateMap_RPC
   - SetMapSeed_RPC
   - NotifyMapGenerated_RPC
+  - SyncMapData
+  - SyncRoom
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
