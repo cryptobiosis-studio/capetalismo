@@ -31,7 +31,10 @@ public class Gun : MonoBehaviourPunCallbacks
     }
 
     void Update(){
-        RotateGun();
+        if(photonView.IsMine){
+             RotateGun();
+        }
+       
 
         // Verifica se o jogador pressionou o botão de disparo (Mouse0)
         if (Input.GetKeyDown(KeyCode.Mouse0) && fireTimer <= 0f)

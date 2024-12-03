@@ -27,17 +27,14 @@ public class RoomSpawner : MonoBehaviourPun
 
     void Start()
     {
-        if (!PhotonNetwork.IsMasterClient) return; // Apenas o MasterClient gera as salas
-
         manager = GameObject.Find("MapManager").GetComponent<MapManager>();
-        if (manager.numberOfRooms <= maxRooms)
+
+        if (PhotonNetwork.IsMasterClient)
         {
-            int spawnDirection = Random.Range(0, 4);
-            TrySpawnRoom(spawnDirection);
+            TrySpawnRoom(Random.Range(0, 4));
         }
     }
 
-    //-----------------------------------------Gera_Salas-------------------------------------------------------------
     void TrySpawnRoom(int direction, int attemptCount = 0)
     {
         if (attemptCount > 3)
@@ -46,9 +43,7 @@ public class RoomSpawner : MonoBehaviourPun
             return;
         }
 
-        bool canSpawnRoom = this.gameObject.transform.Find(spawnerNames[direction]).gameObject.activeSelf && !ExistRoom(direction);
-
-        if (!canSpawnRoom)
+        if (!this.gameObject.transform.Find(spawnerNames[direction]).gameObject.activeSelf || ExistRoom(direction))
         {
             TrySpawnRoom(Random.Range(0, 4), attemptCount + 1);
             return;
@@ -59,9 +54,10 @@ public class RoomSpawner : MonoBehaviourPun
 
     void SpawnRoom(int direction)
     {
-        // Instancia a sala no ambiente multiplayer
+        if (!PhotonNetwork.IsMasterClient) return;
+
         Vector3 spawnPosition = spawners[direction].position;
-        GameObject newRoom = PhotonNetwork.Instantiate("Room", spawnPosition, Quaternion.identity); // Instancia no Photon
+        GameObject newRoom = PhotonNetwork.Instantiate("Room", spawnPosition, Quaternion.identity);
         newRoom.name = "Room" + manager.numberOfRooms;
 
         // Configuração local no MasterClient
@@ -69,37 +65,26 @@ public class RoomSpawner : MonoBehaviourPun
         SetupRoom(newRoom, doorNames[direction]);
         DisableOppositeSpawner(direction);
 
-        // Incrementa o número de salas e notifica os outros jogadores
         manager.numberOfRooms++;
-        photonView.RPC("SyncRoom", RpcTarget.Others, newRoom.name, direction);
-    }
-
-    [PunRPC]
-    void SyncRoom(string roomName, int direction)
-    {
-        GameObject newRoom = GameObject.Find(roomName);
-        if (newRoom != null)
-        {
-            doors[direction].gameObject.SetActive(false);
-            SetupRoom(newRoom, doorNames[direction]);
-            DisableOppositeSpawner(direction);
-        }
     }
 
     void SetupRoom(GameObject room, string doorName)
     {
-        room.transform.Find(doorName).gameObject.SetActive(false);
-        foreach (Transform door in room.transform)
+        Transform door = room.transform.Find(doorName);
+        if (door != null) door.gameObject.SetActive(false);
+
+        foreach (Transform otherDoor in room.transform)
         {
-            if (door.name != doorName)
-                door.gameObject.SetActive(true);
+            if (otherDoor.name != doorName)
+                otherDoor.gameObject.SetActive(true);
         }
     }
 
     void DisableOppositeSpawner(int direction)
     {
         int oppositeDirection = (direction + 2) % 4;
-        this.gameObject.transform.Find(spawnerNames[oppositeDirection]).gameObject.SetActive(false);
+        Transform spawner = this.gameObject.transform.Find(spawnerNames[oppositeDirection]);
+        if (spawner != null) spawner.gameObject.SetActive(false);
     }
 
     bool ExistRoom(int direction)
@@ -107,19 +92,16 @@ public class RoomSpawner : MonoBehaviourPun
         return Physics2D.OverlapCircle(spawners[direction].position, 1f, LayerMask.GetMask("Room"));
     }
 
-    //---------------------------------------Configura_Portas---------------------------------------------------------
     public NeighborRoom[] NeighborRooms()
     {
         List<NeighborRoom> neighbors = new List<NeighborRoom>();
         for (int i = 0; i <= 3; i++)
         {
             Transform spawner = spawners[i];
-            if (!spawner.gameObject.activeSelf) continue;
-            if (!ExistRoom(i)) continue;
+            if (!spawner.gameObject.activeSelf || !ExistRoom(i)) continue;
 
             GameObject roomObj = Physics2D.OverlapCircle(spawner.position, 1f, LayerMask.GetMask("Room")).gameObject;
-            NeighborRoom neighbor = new NeighborRoom(roomObj, i);
-            neighbors.Add(neighbor);
+            neighbors.Add(new NeighborRoom(roomObj, i));
         }
         return neighbors.ToArray();
     }
@@ -135,6 +117,7 @@ public class RoomSpawner : MonoBehaviourPun
 
     void SetupNeighborRoom(GameObject room, string doorName)
     {
-        room.transform.Find(doorName).gameObject.SetActive(false);
+        Transform door = room.transform.Find(doorName);
+        if (door != null) door.gameObject.SetActive(false);
     }
 }
