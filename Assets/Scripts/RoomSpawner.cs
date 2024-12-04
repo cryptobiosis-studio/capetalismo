@@ -36,6 +36,7 @@ public class RoomSpawner : MonoBehaviourPunCallbacks
         {
             int spawnDirection = Random.Range(0, 4); // Roda uma direção aleatória
             TrySpawnRoom(spawnDirection);
+            PhotonNetwork.SendAllOutgoingCommands();
         }
     }
 
@@ -76,6 +77,7 @@ public class RoomSpawner : MonoBehaviourPunCallbacks
         {
             if (door.name != doorName)
                 door.gameObject.SetActive(true);
+                PhotonNetwork.SendAllOutgoingCommands();
         }
     }
 
@@ -105,6 +107,7 @@ public class RoomSpawner : MonoBehaviourPunCallbacks
             NeighborRoom neighbor = new NeighborRoom(roomObj, i);
             neighbors.Add(neighbor);
         }
+        PhotonNetwork.SendAllOutgoingCommands();
         return neighbors.ToArray();
     }
 
@@ -112,12 +115,14 @@ public class RoomSpawner : MonoBehaviourPunCallbacks
         foreach(NeighborRoom n in neighborRooms){
             SetupNeighborRoom(n.RoomObj, doorNames[n.Direction]);
             doors[n.Direction].gameObject.SetActive(false);
+            PhotonNetwork.SendAllOutgoingCommands();
         }
     }
     void SetupNeighborRoom(GameObject room, string doorName) // Configura a sala
     {   
         // Posiciona as portas
         room.transform.Find(doorName).gameObject.SetActive(false);
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
 }

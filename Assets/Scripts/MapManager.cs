@@ -76,12 +76,13 @@ public class MapManager : MonoBehaviourPunCallbacks
         PlaceMandatoryLayouts(roomOrder);
         FillRemainingRooms(roomOrder);
 
+        // Serializa o layout do mapa para todos os jogadores
         string serializedMap = SerializeMap();
         PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { "MapLayout", serializedMap } });
 
         ConfigureDoors();
         Debug.Log("Map Complete!");
-        
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     void PlaceMandatoryLayouts(List<int> roomOrder)
@@ -115,6 +116,7 @@ public class MapManager : MonoBehaviourPunCallbacks
 
                     // Opcional: Posicionar o layout corretamente dentro da sala (dependendo da sua lógica de layout)
                     layoutInstance.transform.localPosition = Vector3.zero; // Ajuste conforme necessário
+                    PhotonNetwork.SendAllOutgoingCommands();
                 }
             }
         }
@@ -162,6 +164,7 @@ public class MapManager : MonoBehaviourPunCallbacks
                 {
                     roomSpawner.NeighborRooms();
                     roomSpawner.SetupNeighborDoors(roomSpawner.NeighborRooms());
+                    PhotonNetwork.SendAllOutgoingCommands();
                 }
             }
         }
