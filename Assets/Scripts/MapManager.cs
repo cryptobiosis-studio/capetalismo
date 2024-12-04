@@ -1,16 +1,7 @@
 using System.Collections.Generic;
-using Photon.Pun;
 using UnityEngine;
-using ExitGames.Client.Photon;
 
-[System.Serializable]
-    public class MapData
-    {
-        public int numberOfRooms;
-        public List<int> generatedRooms;
-        public List<int> usedRoomIndices;
-    }
-public class MapManager : MonoBehaviourPunCallbacks
+public class MapManager : MonoBehaviour
 {
     public int numberOfRooms;
     public GameObject startRoom;
@@ -18,186 +9,96 @@ public class MapManager : MonoBehaviourPunCallbacks
     public GameObject[] roomLayouts;
     public bool canWork;
 
-    public int rdIndex;
-    public int waterIndex;
-    public int chestIndex;
+    public int rdIndex;  
+    public int waterIndex;  
+    public int chestIndex;  
 
-    private HashSet<int> usedRoomIndices;
-    private List<int> generatedRooms;
-    private int emptyRoomIndex = -1;
+    private HashSet<int> usedRoomIndices;  
+    private List<int> generatedRooms;  
+    private int emptyRoomIndex = -1;  
 
     public GameObject lastRoom;
 
-    void Start()
-    {
+
+    void Start(){
         startRoom = GameObject.Find("Room");
         canWork = true;
         usedRoomIndices = new HashSet<int>();
-        generatedRooms = new List<int>();
-
+        generatedRooms = new List<int>();  
     }
-    void Update()   
-    {
-        if (PhotonNetwork.IsMasterClient && canWork && numberOfRooms >= startRoom.GetComponent<RoomSpawner>().maxRooms)
-        {
+
+    void Update(){
+        if (canWork && numberOfRooms >= startRoom.GetComponent<RoomSpawner>().maxRooms){
             canWork = false;
-            Debug.Log("All rooms generated. Total rooms: " + numberOfRooms);
             GenerateMap();
         }
     }
 
-
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            string serializedMap = PhotonNetwork.CurrentRoom.CustomProperties["MapLayout"].ToString();
-            photonView.RPC("LoadMapOnJoin", newPlayer, serializedMap);
-        }
-    }
-
-    [PunRPC]
-    void LoadMapOnJoin(string serializedMap)
-    {
-        DeserializeMap(serializedMap);
-        RebuildMap();
-    }
-
-    void GenerateMap()
-    {
+    void GenerateMap(){
         List<int> roomOrder = new List<int>();
-        for (int i = 0; i < numberOfRooms; i++)
-        {
+        for (int i = 0; i < numberOfRooms; i++){
             roomOrder.Add(i);
-            Debug.Log("Added room"+i);
         }
 
         ShuffleList(roomOrder);
+
         PlaceMandatoryLayouts(roomOrder);
+
         FillRemainingRooms(roomOrder);
 
-        // Serializa o layout do mapa para todos os jogadores
-        string serializedMap = SerializeMap();
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { "MapLayout", serializedMap } });
-
         ConfigureDoors();
+
         Debug.Log("Map Complete!");
-        PhotonNetwork.SendAllOutgoingCommands();
     }
 
-    void PlaceMandatoryLayouts(List<int> roomOrder)
-    {
+    void PlaceMandatoryLayouts(List<int> roomOrder){
         int[] mandatoryLayouts = { rdIndex, waterIndex, chestIndex };
-        foreach (int layoutIndex in mandatoryLayouts)
-        {
-            for (int i = 0; i < 2; i++)
-            {
-                if (roomOrder.Count == 0)
-                {
-                    Debug.LogWarning("Não há mais salas disponíveis no roomOrder para posicionar layouts obrigatórios.");
-                    return;
-                }
-
-                int randomIndex = Random.Range(0, roomOrder.Count);
-                int randomRoomIndex = roomOrder[randomIndex];
-                roomOrder.RemoveAt(randomIndex);
-
+        foreach (int layoutIndex in mandatoryLayouts){
+            for (int i = 0; i < 2; i++){
+                int randomRoomIndex = roomOrder[Random.Range(0, roomOrder.Count-1)];
+                roomOrder.Remove(randomRoomIndex);  
                 usedRoomIndices.Add(randomRoomIndex);
-                generatedRooms.Add(randomRoomIndex);
-
+                generatedRooms.Add(randomRoomIndex);  
                 GameObject targetRoom = GameObject.Find("Room" + randomRoomIndex);
-                if (targetRoom != null && randomRoomIndex != startRoom.GetComponent<RoomSpawner>().maxRooms)
-                {
-                    // Instanciando o layout e configurando o transform
-                    GameObject layoutInstance = PhotonNetwork.Instantiate(roomLayouts[layoutIndex].name, targetRoom.transform.position, Quaternion.identity);
-                    
-                    // Definindo a sala como o pai do layout instanciado
-                    layoutInstance.transform.SetParent(targetRoom.transform);
-
-                    // Opcional: Posicionar o layout corretamente dentro da sala (dependendo da sua lógica de layout)
-                    layoutInstance.transform.localPosition = Vector3.zero; // Ajuste conforme necessário
-                    PhotonNetwork.SendAllOutgoingCommands();
+                if (targetRoom != null && randomRoomIndex != startRoom.gameObject.GetComponent<RoomSpawner>().maxRooms){
+                    Instantiate(roomLayouts[layoutIndex], targetRoom.transform);
                 }
             }
         }
     }
 
+    void FillRemainingRooms(List<int> roomOrder){
+        foreach (int roomIndex in roomOrder){
 
-    void FillRemainingRooms(List<int> roomOrder)
-    {
-        foreach (int roomIndex in roomOrder)
-        {
             GameObject targetRoom = GameObject.Find("Room" + roomIndex);
-            if (targetRoom != null)
-            {
-                // Cria uma lista de layouts não obrigatórios
+            if (targetRoom != null && roomIndex != startRoom.gameObject.GetComponent<RoomSpawner>().maxRooms){
                 List<GameObject> nonMandatoryLayouts = new List<GameObject>(roomLayouts);
-                
-                // Escolhe um layout aleatório
-                int randomLayout = Random.Range(0, nonMandatoryLayouts.Count);
-                
-                // Instancia o layout na posição da sala
-                GameObject layoutInstance = PhotonNetwork.Instantiate(nonMandatoryLayouts[randomLayout].name, targetRoom.transform.position, Quaternion.identity);
-                
-                // Definindo a sala como o pai do layout instanciado
-                layoutInstance.transform.SetParent(targetRoom.transform);
-                
-                // Opcional: Ajusta a posição local do layout dentro da sala
-                layoutInstance.transform.localPosition = Vector3.zero; // Ajuste conforme necessário
+                nonMandatoryLayouts.RemoveAt(rdIndex);
+                nonMandatoryLayouts.RemoveAt(waterIndex - (rdIndex < waterIndex ? 1 : 0)); 
+                nonMandatoryLayouts.RemoveAt(chestIndex - (rdIndex < chestIndex ? 1 : 0) - (waterIndex < chestIndex ? 1 : 0));
 
-                // Adiciona a sala ao conjunto de salas geradas
-                generatedRooms.Add(roomIndex);
+                int randomLayout = Random.Range(0, nonMandatoryLayouts.Count);
+                Instantiate(nonMandatoryLayouts[randomLayout], targetRoom.transform);
+
+                generatedRooms.Add(roomIndex); 
+            }else if(targetRoom != null && roomIndex == startRoom.gameObject.GetComponent<RoomSpawner>().maxRooms){
+                generatedRooms.Add(roomIndex); 
+                lastRoom = targetRoom;
             }
         }
     }
 
-
-    void ConfigureDoors()
-    {
-        for (int i = 0; i < numberOfRooms; i++)
-        {
+    void ConfigureDoors(){
+        for (int i = 0; i < numberOfRooms; i++){
             GameObject room = GameObject.Find("Room" + i);
-            if (room != null)
-            {
+            if (room != null){
                 RoomSpawner roomSpawner = room.GetComponent<RoomSpawner>();
-                if (roomSpawner != null)
-                {
+                if (roomSpawner != null){
                     roomSpawner.NeighborRooms();
                     roomSpawner.SetupNeighborDoors(roomSpawner.NeighborRooms());
-                    PhotonNetwork.SendAllOutgoingCommands();
                 }
             }
         }
-    }
-
-    string SerializeMap()
-    {
-        return JsonUtility.ToJson(new
-        {
-            numberOfRooms = this.numberOfRooms,
-            generatedRooms = this.generatedRooms,
-            usedRoomIndices = new List<int>(this.usedRoomIndices)
-        });
-    }
-
-    void DeserializeMap(string serializedMap)
-    {
-        var mapData = JsonUtility.FromJson<MapData>(serializedMap);
-        this.numberOfRooms = mapData.numberOfRooms;
-        this.generatedRooms = mapData.generatedRooms;
-        this.usedRoomIndices = new HashSet<int>(mapData.usedRoomIndices);
-    }
-    void RebuildMap()
-    {
-        foreach (int roomIndex in generatedRooms)
-        {
-            GameObject targetRoom = GameObject.Find("Room" + roomIndex);
-            if (targetRoom == null)
-            {
-                PhotonNetwork.Instantiate("Room", Vector3.zero, Quaternion.identity).name = "Room" + roomIndex;
-            }
-        }
-        Debug.Log("Map Rebuilt Successfully!");
     }
 
     void ShuffleList(List<int> list){

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3727405864858261082}
   - component: {fileID: 4512334067333250808}
   - component: {fileID: 5071858131837432550}
+  - component: {fileID: 5148373430190429897}
   m_Layer: 3
   m_Name: EnemyObj (1)
   m_TagString: Enemy
@@ -159,6 +160,8 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 5071858131837432550}
+  - {fileID: 0}
+  - {fileID: 5148373430190429897}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -178,6 +181,22 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &5148373430190429897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2348298513513709582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters: []
+  m_SynchronizeLayers: []
 --- !u!1 &5584967461928022618
 GameObject:
   m_ObjectHideFlags: 0
