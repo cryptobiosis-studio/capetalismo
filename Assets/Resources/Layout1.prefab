@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7586692683604838682}
   - component: {fileID: 877493146631468117}
   - component: {fileID: 792660771313497497}
-  - component: {fileID: -5440041785806390048}
   m_Layer: 0
   m_Name: Layout1
   m_TagString: Untagged
@@ -79,22 +78,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &-5440041785806390048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3538548749346869116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters: []
-  m_SynchronizeLayers: []
 --- !u!1001 &1204545173180198843
 PrefabInstance:
   m_ObjectHideFlags: 0
