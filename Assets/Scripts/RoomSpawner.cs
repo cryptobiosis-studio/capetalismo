@@ -45,6 +45,7 @@ public class RoomSpawner : MonoBehaviourPunCallbacks
         if (attemptCount > 3) // Limita as tentativas para 3
         {
             Debug.LogWarning("Limite de tentativas atingido. Não foi possível gerar uma sala.");
+            SceneManager.LoadScene("MultiplayerRun");
             return;
         }
 
