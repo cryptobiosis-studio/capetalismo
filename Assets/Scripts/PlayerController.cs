@@ -153,7 +153,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         transform.position = this.transform.position;
 
         // Mover a câmera para a nova posição
-        Camera.main.transform.position = new Vector3(newRoomPosition.x - 0.33f, newRoomPosition.y, -10);
+        Camera.main.transform.position = new Vector3(newRoomPosition.x - 0.5f, newRoomPosition.y +0.07f, -10);
     }
 
     void InteractableArea()
