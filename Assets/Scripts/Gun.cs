@@ -97,7 +97,7 @@ public class Gun : MonoBehaviourPunCallbacks
         {
             float angle = -spreadAngle / 2 + angleIncrement * i;
             Quaternion bulletRotation = Quaternion.Euler(0, 0, Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg - 90 + angle);
-            GameObject _bullet = Instantiate(bullet, pointer.position, bulletRotation);
+            GameObject _bullet = PhotonNetwork.Instantiate("bullet", pointer.position, bulletRotation);
             firedBullets.Add(_bullet);
             Vector3 bulletDirection = _bullet.transform.up; 
             _bullet.GetComponent<Rigidbody2D>().velocity = bulletDirection * gunSettings.bulletSpeed;
@@ -108,7 +108,7 @@ public class Gun : MonoBehaviourPunCallbacks
     void FireSimple()
     {
         firedBullets.Clear();
-        GameObject _bullet = Instantiate(bullet, pointer.position, Quaternion.identity);
+        GameObject _bullet = PhotonNetwork.Instantiate("bullet", pointer.position, Quaternion.identity);
         firedBullets.Add(_bullet);
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0;
