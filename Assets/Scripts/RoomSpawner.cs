@@ -73,7 +73,7 @@ public class RoomSpawner : MonoBehaviourPunCallbacks
     void SetupRoom(GameObject room, string doorName)
     {
         // Posiciona as portas
-        room.transform.Find(doorName).gameObject.SetActive(false);
+        room.GetComponent<PhotonView>().RPC("SyncDoorState", RpcTarget.All, doorNames, false);
         foreach (Transform door in room.transform)
         {
             if (door.name != doorName)
