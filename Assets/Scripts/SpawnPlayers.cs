@@ -7,10 +7,15 @@ public class SpawnPlayers : MonoBehaviour
 {   
     public GameObject playerPrefab;
    
-    void Start()
+    void Awake()
     {
+        DontDestroyOnLoad(this.gameObject);
+    }
+    void Start()
+    {   
+        DontDestroyOnLoad(this.gameObject);
+        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.Instantiate(playerPrefab.name, transform.position, Quaternion.identity);
-        GameObject.Find("CurriculumChoice").SetActive(false);
     }
 
   
