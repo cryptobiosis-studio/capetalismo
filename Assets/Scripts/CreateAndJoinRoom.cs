@@ -23,7 +23,6 @@ public class CreateAndJoinRoom : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedRoom(){
         PhotonNetwork.IsMessageQueueRunning = false;
-        PhotonNetwork.AutomaticallySyncScene = true;
         SceneManager.LoadScene("MultiplayerRun");
         PhotonNetwork.IsMessageQueueRunning = true;
     }
