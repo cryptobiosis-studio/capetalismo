@@ -36,6 +36,7 @@ public class RoomSpawner : MonoBehaviourPunCallbacks
         {
             int spawnDirection = Random.Range(0, 4); // Roda uma direção aleatória
             TrySpawnRoom(spawnDirection);
+            PhotonNetwork.SendAllOutgoingCommands();
         }
     }
 
@@ -44,6 +45,7 @@ public class RoomSpawner : MonoBehaviourPunCallbacks
         if (attemptCount > 3) // Limita as tentativas para 3
         {
             Debug.LogWarning("Limite de tentativas atingido. Não foi possível gerar uma sala.");
+            SceneManager.LoadScene("MultiplayerRun");
             return;
         }
 
@@ -59,13 +61,13 @@ public class RoomSpawner : MonoBehaviourPunCallbacks
     }
 
     void spawnRoom(int direction)
-    {
+    {   
+        manager.numberOfRooms++;
         GameObject newRoom = PhotonNetwork.Instantiate("Room", spawners[direction].position, Quaternion.identity); // Instancia o prefab da sala
         newRoom.name = "Room" + manager.numberOfRooms;
         doors[direction].gameObject.SetActive(false); // Desabilita a porta na direção da nova sala
         SetupRoom(newRoom, doorNames[direction]);
         DisableOppositeSpawner(direction);
-        manager.numberOfRooms++;
     }
 
     void SetupRoom(GameObject room, string doorName)
@@ -76,6 +78,7 @@ public class RoomSpawner : MonoBehaviourPunCallbacks
         {
             if (door.name != doorName)
                 door.gameObject.SetActive(true);
+                PhotonNetwork.SendAllOutgoingCommands();
         }
     }
 
@@ -105,19 +108,31 @@ public class RoomSpawner : MonoBehaviourPunCallbacks
             NeighborRoom neighbor = new NeighborRoom(roomObj, i);
             neighbors.Add(neighbor);
         }
+        PhotonNetwork.SendAllOutgoingCommands();
         return neighbors.ToArray();
     }
 
     public void SetupNeighborDoors(NeighborRoom[] neighborRooms){
         foreach(NeighborRoom n in neighborRooms){
             SetupNeighborRoom(n.RoomObj, doorNames[n.Direction]);
-            doors[n.Direction].gameObject.SetActive(false);
+            room.GetComponent<PhotonView>().RPC("SyncDoorState", RpcTarget.All, doorNames[n.Direction], false);
+            PhotonNetwork.SendAllOutgoingCommands();
         }
     }
     void SetupNeighborRoom(GameObject room, string doorName) // Configura a sala
     {   
         // Posiciona as portas
-        room.transform.Find(doorName).gameObject.SetActive(false);
+        room.GetComponent<PhotonView>().RPC("SyncDoorState", RpcTarget.All, doorName, false);
+        PhotonNetwork.SendAllOutgoingCommands();
+    }
+    [PunRPC]
+    void SyncDoorState(string doorName, bool isActive)
+    {
+        Transform door = transform.Find(doorName);
+        if (door != null)
+        {
+            door.gameObject.SetActive(isActive);
+        }
     }
 
 }
