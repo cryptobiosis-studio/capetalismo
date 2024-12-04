@@ -115,15 +115,24 @@ public class RoomSpawner : MonoBehaviourPunCallbacks
     public void SetupNeighborDoors(NeighborRoom[] neighborRooms){
         foreach(NeighborRoom n in neighborRooms){
             SetupNeighborRoom(n.RoomObj, doorNames[n.Direction]);
-            doors[n.Direction].gameObject.SetActive(false);
+            room.GetComponent<PhotonView>().RPC("SyncDoorState", RpcTarget.All, doorNames[n.Direction], false);
             PhotonNetwork.SendAllOutgoingCommands();
         }
     }
     void SetupNeighborRoom(GameObject room, string doorName) // Configura a sala
     {   
         // Posiciona as portas
-        room.transform.Find(doorName).gameObject.SetActive(false);
+        room.GetComponent<PhotonView>().RPC("SyncDoorState", RpcTarget.All, doorName, false);
         PhotonNetwork.SendAllOutgoingCommands();
+    }
+    [PunRPC]
+    void SyncDoorState(string doorName, bool isActive)
+    {
+        Transform door = transform.Find(doorName);
+        if (door != null)
+        {
+            door.gameObject.SetActive(isActive);
+        }
     }
 
 }

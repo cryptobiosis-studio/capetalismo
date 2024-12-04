@@ -14,7 +14,6 @@ public class SpawnPlayers : MonoBehaviour
     void Start()
     {   
         DontDestroyOnLoad(this.gameObject);
-        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.Instantiate(playerPrefab.name, transform.position, Quaternion.identity);
     }
 
