@@ -12,15 +12,18 @@ public class CreateAndJoinRoom : MonoBehaviourPunCallbacks
     public TMP_InputField createInput;
     public TMP_InputField joinInput;
     public void CreateRoom(){
+        PhotonNetwork.AutomaticallySyncScene = true;
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = 2;
         PhotonNetwork.CreateRoom(createInput.text, roomOptions);
     }
     public void JoinRoom(){
+        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.JoinRoom(joinInput.text);
     }
     public override void OnJoinedRoom(){
         PhotonNetwork.IsMessageQueueRunning = false;
+        PhotonNetwork.AutomaticallySyncScene = true;
         SceneManager.LoadScene("MultiplayerRun");
         PhotonNetwork.IsMessageQueueRunning = true;
     }
