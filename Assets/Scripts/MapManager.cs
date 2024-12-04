@@ -81,6 +81,7 @@ public class MapManager : MonoBehaviourPunCallbacks
 
         ConfigureDoors();
         Debug.Log("Map Complete!");
+        
     }
 
     void PlaceMandatoryLayouts(List<int> roomOrder)

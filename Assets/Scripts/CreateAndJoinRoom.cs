@@ -20,7 +20,9 @@ public class CreateAndJoinRoom : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(joinInput.text);
     }
     public override void OnJoinedRoom(){
+        PhotonNetwork.IsMessageQueueRunning = false;
         SceneManager.LoadScene("MultiplayerRun");
+        PhotonNetwork.IsMessageQueueRunning = true;
     }
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
