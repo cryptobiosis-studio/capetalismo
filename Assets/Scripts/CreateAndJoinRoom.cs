@@ -28,7 +28,7 @@ public class CreateAndJoinRoom : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
         Debug.Log("Player " + PhotonNetwork.LocalPlayer.NickName + " entrou na sala!");
         if (PhotonNetwork.IsMasterClient){
-            PhotonNetwork.LoadLevel("MyLevel");
+            PhotonNetwork.LoadLevel("Multiplayer Run");
         } 
         PhotonNetwork.IsMessageQueueRunning = true;
     }
