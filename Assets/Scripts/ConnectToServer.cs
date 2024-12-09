@@ -10,8 +10,6 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
     
     void Start()
     {   
-        PunVoiceClient.Instance.UsePunAppSettings = true;
-        PunVoiceClient.Instance.AutoConnectAndJoin = true;
         PhotonNetwork.ConnectUsingSettings();
     }
     public override void OnConnectedToMaster(){

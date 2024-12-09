@@ -22,12 +22,10 @@ public class CreateAndJoinRoom : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(joinInput.text);
     }
     public override void OnJoinedRoom(){
-        PunVoiceClient.Instance.UsePunAppSettings = true;
-        PunVoiceClient.Instance.AutoConnectAndJoin = true;
         PhotonNetwork.IsMessageQueueRunning = false;
         PhotonNetwork.AutomaticallySyncScene = true;
         Debug.Log("Player " + PhotonNetwork.LocalPlayer.NickName + " entrou na sala!");
-        PhotonNetwork.LoadLevel("Multiplayer Run");
+        PhotonNetwork.LoadLevel("MultiplayerRun");
         PhotonNetwork.IsMessageQueueRunning = true;
     }
     public override void OnJoinRoomFailed(short returnCode, string message){
