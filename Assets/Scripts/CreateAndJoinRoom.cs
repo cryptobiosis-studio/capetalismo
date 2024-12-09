@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Realtime;
+using Photon.Voice.PUN;
 
 public class CreateAndJoinRoom : MonoBehaviourPunCallbacks
 {   
@@ -21,7 +22,10 @@ public class CreateAndJoinRoom : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(joinInput.text);
     }
     public override void OnJoinedRoom(){
+        PunVoiceClient.Instance.UsePunAppSettings = true;
+        PunVoiceClient.Instance.AutoConnectAndJoin = true;
         PhotonNetwork.IsMessageQueueRunning = false;
+        PhotonNetwork.AutomaticallySyncScene = true;
         Debug.Log("Player " + PhotonNetwork.LocalPlayer.NickName + " entrou na sala!");
         PhotonNetwork.LoadLevel("MultiplayerRun");   
         PhotonNetwork.IsMessageQueueRunning = true;
