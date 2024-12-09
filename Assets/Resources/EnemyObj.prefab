@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 3949344663000572349}
   - component: {fileID: 2183873755875631702}
   - component: {fileID: 9001771280547972960}
+  - component: {fileID: 7254560220348922433}
+  - component: {fileID: 5152654064746196264}
   m_Layer: 0
   m_Name: EnemySpr
   m_TagString: Untagged
@@ -119,6 +121,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c134c126230aa485ca0b35c06d7e2864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7254560220348922433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4564436428557710794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters: []
+  m_SynchronizeLayers:
+  - SynchronizeType: 2
+    LayerIndex: 0
+--- !u!114 &5152654064746196264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4564436428557710794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 7254560220348922433}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &4841999586705352161
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +367,6 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 2565553900088632020}
-  - {fileID: 0}
   - {fileID: 3860496834448759234}
   sceneViewId: 0
   InstantiationId: 0

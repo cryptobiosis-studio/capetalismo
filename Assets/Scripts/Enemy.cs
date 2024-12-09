@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEditor.Rendering;
 using UnityEngine;
+using Photon.Pun;
 
 public class Enemy : MonoBehaviour
 {
@@ -91,7 +92,12 @@ public class Enemy : MonoBehaviour
         if(life <= 0){
             room.player.audioSource.clip = enemyDestroyClip;
             room.player.audioSource.Play(); 
-            Destroy(this.gameObject, 0f);
+            if(room.player.isSinglePlayer){
+                Destroy(this.gameObject, 0f);
+            }else{
+                PhotonNetwork.Destroy(this.gameObject);
+            }
+            
         }
     }
     public void MeleeDamage(){
