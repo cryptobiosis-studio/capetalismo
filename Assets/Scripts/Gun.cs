@@ -31,16 +31,19 @@ public class Gun : MonoBehaviourPunCallbacks
     }
 
     void Update(){
-        if(photonView.IsMine){
+        if(photonView.IsMine || player.isSinglePlayer){
              RotateGun();
         }
 
         // Verifica se o jogador pressionou o botão de disparo (Mouse0)
         if (Input.GetKeyDown(KeyCode.Mouse0) && fireTimer <= 0f)
         {
-            if (photonView.IsMine)  // Verifique se o PhotonView é do jogador local
-            {
-                photonView.RPC("Fire", RpcTarget.All);  // Chamando o RPC para todos os clientes
+            if (player.isSinglePlayer){
+                Fire(); // Execute o método localmente
+                fireTimer = gunSettings.firerate * player.fireRateMultiplier;
+            }
+            else if (photonView.IsMine){
+                photonView.RPC("Fire", RpcTarget.All); // Envie o RPC para todos os clientes
                 fireTimer = gunSettings.firerate * player.fireRateMultiplier;
             }
         }
@@ -92,11 +95,18 @@ public class Gun : MonoBehaviourPunCallbacks
         float spreadAngle = 35f;
         float angleIncrement = spreadAngle / (numberOfBullets - 1);
 
+        GameObject _bullet;
+
         for (int i = 0; i < numberOfBullets; i++)
         {
             float angle = -spreadAngle / 2 + angleIncrement * i;
             Quaternion bulletRotation = Quaternion.Euler(0, 0, Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg - 90 + angle);
-            GameObject _bullet = PhotonNetwork.Instantiate("bullet", pointer.position, bulletRotation);
+            if(!player.isSinglePlayer){
+                _bullet = PhotonNetwork.Instantiate("bullet", pointer.position, bulletRotation);
+            }else{
+                _bullet = Instantiate(bullet, pointer.position, bulletRotation);
+            }
+            
             firedBullets.Add(_bullet);
             Vector3 bulletDirection = _bullet.transform.up; 
             _bullet.GetComponent<Rigidbody2D>().velocity = bulletDirection * gunSettings.bulletSpeed;
@@ -107,7 +117,13 @@ public class Gun : MonoBehaviourPunCallbacks
     void FireSimple()
     {
         firedBullets.Clear();
-        GameObject _bullet = PhotonNetwork.Instantiate("bullet", pointer.position, Quaternion.identity);
+        GameObject _bullet;
+        if(!player.isSinglePlayer){
+            _bullet = PhotonNetwork.Instantiate("bullet", pointer.position, Quaternion.identity);
+        }else{
+            _bullet =  Instantiate(bullet, pointer.position, Quaternion.identity);
+        }
+       
         firedBullets.Add(_bullet);
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0;

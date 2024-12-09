@@ -305,6 +305,7 @@ GameObject:
   - component: {fileID: -6665614437364660605}
   - component: {fileID: -8267968138609344120}
   - component: {fileID: 2669192163125263673}
+  - component: {fileID: -3587045379059239271}
   m_Layer: 6
   m_Name: PlayerObjMultiplayer
   m_TagString: Player
@@ -435,8 +436,8 @@ MonoBehaviour:
   gunClip: {fileID: 8300000, guid: e6b5c85bc0d3b44d78e5f063c93d7f47, type: 3}
   hitClip: {fileID: 8300000, guid: 30e039c9908c648bda5bec77d936894c, type: 3}
   waterClip: {fileID: 8300000, guid: 4af7a8d079c8c44498eec6eda1aecdc8, type: 3}
-  interactClip: {fileID: 0}
-  deathClip: {fileID: 0}
+  interactClip: {fileID: 8300000, guid: 87876a52f455749168b56fff8002f079, type: 3}
+  deathClip: {fileID: 8300000, guid: 2f74ced2202de4aab819ab767ab9620d, type: 3}
 --- !u!212 &6379909349712740583
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -566,7 +567,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: -8267968138609344120}
   - {fileID: 2669192163125263673}
-  - {fileID: 0}
+  - {fileID: -3587045379059239271}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -607,6 +608,22 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+--- !u!114 &-3587045379059239271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3816929853998941401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e7cb724808c322458aa4d15f5035fa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &4282666247242412982
 GameObject:
   m_ObjectHideFlags: 0

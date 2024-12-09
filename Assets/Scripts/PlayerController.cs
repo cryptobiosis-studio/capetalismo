@@ -41,8 +41,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public AudioClip interactClip;
     public AudioClip deathClip;
 
+    public bool isSinglePlayer;
+
+
     void Start()
-    {
+    {   
+        isSinglePlayer = !PhotonNetwork.IsConnected;
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
@@ -50,38 +54,40 @@ public class PlayerController : MonoBehaviourPunCallbacks
         eyeRelic.SetActive(false);
         invincibility = false;
         life = MaxLife;
-        // SetLifeSlider();
-        // choiceText = GameObject.Find("CurriculumChoice");
-        // choiceText.SetActive(false);
+        if(isSinglePlayer){
+            SetLifeSlider();
+            choiceText = GameObject.Find("CurriculumChoice");
+            choiceText.SetActive(false);
+        }
         fireRateMultiplier = 1f;
         damageMultiplier = 1f;
         gunRelic = false;
+        if (!isSinglePlayer && !photonView.IsMine){
+        this.enabled = false;
+        return;
+        }
     }
 
     void Update()
     {
-        if (!photonView.IsMine)
+        if (!photonView.IsMine && !isSinglePlayer)
             return; // Não executa as ações do jogador se não for o jogador local
 
         // Verifica os inputs
         inputX = Input.GetAxis("Horizontal");
         inputY = Input.GetAxis("Vertical");
 
-        if (inputX != 0 || inputY != 0)
-        {
+        if (inputX != 0 || inputY != 0){
             anim.SetBool("isMoving", true);
         }
-        else
-        {
+        else{
             anim.SetBool("isMoving", false);
         }
 
-        if (inputX < 0)
-        {
+        if (inputX < 0){
             sprite.flipX = true;
         }
-        else if (inputX > 0)
-        {
+        else if (inputX > 0){
             sprite.flipX = false;
         }
 
@@ -90,11 +96,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
         Mathf.Clamp(damageMultiplier, 1f, 3f);
         Mathf.Clamp(fireRateMultiplier, 0.15f, 1f);
 
-        if (invincibility)
-        {
+        if (invincibility){
             invincibilityTime -= Time.deltaTime;
-            if (invincibilityTime <= 0f)
-            {
+            if (invincibilityTime <= 0f){
                 invincibility = false;
                 invincibilityTime = 0f;
             }
@@ -104,11 +108,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     void FixedUpdate()
     {
-        if (!photonView.IsMine)
+        if (!photonView.IsMine && !isSinglePlayer)
             return; // Não move o jogador se não for o jogador local
 
-        if (inputX != 0 && inputY != 0)
-        {
+        if (inputX != 0 && inputY != 0){
             inputX *= 0.7f;
             inputY *= 0.7f;
         }
@@ -116,21 +119,20 @@ public class PlayerController : MonoBehaviourPunCallbacks
         Move(inputX, inputY);
     }
 
-    void Move(float x, float y)
-    {
+    void Move(float x, float y){
         rb.velocity = new UnityEngine.Vector2(x * speed, y * speed);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!photonView.IsMine)
+        if (!photonView.IsMine && !isSinglePlayer)
             return;
 
-        if (other.gameObject.layer == LayerMask.NameToLayer("Room"))
-        {
-            //choiceText.SetActive(false);
-            if (invincibilityTime <= 0f)
-            {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Room")){
+            if(isSinglePlayer){
+                choiceText.SetActive(false);
+            }
+            if (invincibilityTime <= 0f){
                 invincibility = true;
                 invincibilityTime = maxInvincibilityTime;
             }
@@ -138,27 +140,24 @@ public class PlayerController : MonoBehaviourPunCallbacks
             Debug.Log(other.gameObject.name);
             StartCoroutine(FadeAndMoveCamera(other.transform.position));
 
-            // Caso seja multiplayer, ao trocar de sala, todos os jogadores devem ir para a posição do jogador que trocou de sala
-            if (PhotonNetwork.IsConnected)
-            {
+            if (PhotonNetwork.IsConnected){
                 photonView.RPC("MoveToNewRoom", RpcTarget.All, other.transform.position);
+            }else{
+
             }
         }
     }
 
     [PunRPC]
-    void MoveToNewRoom(Vector3 newRoomPosition)
-    {
-        // Sincroniza a posição de todos os jogadores para a nova sala
+    void MoveToNewRoom(Vector3 newRoomPosition){
         transform.position = this.transform.position;
 
-        // Mover a câmera para a nova posição
         Camera.main.transform.position = new Vector3(newRoomPosition.x - 0.5f, newRoomPosition.y +0.07f, -10);
     }
 
     void InteractableArea()
     {
-        if (!photonView.IsMine)
+        if (!photonView.IsMine && !isSinglePlayer)
             return;
 
         bool canInteract = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("Interactable"));
@@ -168,13 +167,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         AudioClip audioClip;
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
+        if (Input.GetKeyDown(KeyCode.E)){
             audioSource.clip = interactClip;
             audioSource.Play();
 
-            if (droppedGun != null)
-            {
+            if (droppedGun != null){
                 audioClip = gunClip;
                 audioSource.clip = audioClip;
                 audioSource.Play();
@@ -183,32 +180,32 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 droppedGun.gun = previousGun;
                 droppedGun.Change();
             }
-            else if (chest != null && chest.isActiveAndEnabled && !chest.opened)
-            {
+            else if (chest != null && chest.isActiveAndEnabled && !chest.opened){
                 chest.openChest();
             }
-            else if (genericInteractable.tag == "Bobona" && life != MaxLife)
-            {
+            else if (genericInteractable.tag == "Bobona" && life != MaxLife){
                 life = MaxLife;
                 audioClip = waterClip;
                 audioSource.clip = audioClip;
                 audioSource.Play();
-                // SetLifeSlider();
+                if(isSinglePlayer){
+                    SetLifeSlider();
+                }
                 genericInteractable.GetComponent<SpriteRenderer>().color = HexToColor("#505050");
                 genericInteractable.tag = "Untagged";
             }
-            else if (genericInteractable.tag == "RH")
-            {
+            else if (genericInteractable.tag == "RH"){
                 HumanResources rh = genericInteractable.GetComponent<HumanResources>();
-                if (rh.enabled)
-                {
-                    // choiceText.SetActive(true);
+                if (rh.enabled){
+                    if(isSinglePlayer){
+                        choiceText.SetActive(true);
+                    }
+                   
                     rh.Interacted();
                 }
                 genericInteractable.tag = "Untagged";
             }
-            else if (genericInteractable.tag == "Relic")
-            {
+            else if (genericInteractable.tag == "Relic"){
                 audioClip = relicClip;
                 DroppedRelic relic = genericInteractable.GetComponent<DroppedRelic>();
                 relic.Pick();
@@ -219,72 +216,78 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
     }
 
-    void ChangeGun(GunObj gun)
-    {
+    void ChangeGun(GunObj gun){
         equippedGun = gun;
         GetComponentInChildren<Gun>().gunSettings = gun;
         GetComponentInChildren<Gun>().Change();
     }
 
-    public void TakeDamage(float damage)
-    {
-        if (!photonView.IsMine)
+    public void TakeDamage(float damage){
+        if (!photonView.IsMine && !isSinglePlayer)
             return;
 
-        if (!invincibility)
-        {
+        if (!invincibility){
             life -= damage;
-            // lifeSlider.value = life;
+            if(isSinglePlayer){
+                lifeSlider.value = life;
+            }
             audioSource.clip = hitClip;
             audioSource.Play();
 
-            if (life <= 0)
-            {
+            if (life <= 0){
                 audioSource.clip = deathClip;
                 audioSource.Play();
-                PhotonNetwork.Destroy(gameObject); // Destroi o jogador local
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reseta a cena
+                if(!isSinglePlayer){
+                     PhotonNetwork.Disconnect();
+                    StartCoroutine(LoadMenuAfterDisconnect()); 
+                }else{
+                    SceneManager.LoadScene("Menu");     
+                }
+                
             }
         }
     }
 
-    IEnumerator FadeAndMoveCamera(UnityEngine.Vector3 newCameraPosition)
-    {
-       // yield return StartCoroutine(FadeImage(false));
 
+    IEnumerator FadeAndMoveCamera(UnityEngine.Vector3 newCameraPosition)
+    {   
+        if(isSinglePlayer){
+            yield return StartCoroutine(FadeImage(true));
+
+        }
+       
         Camera.main.transform.position = new UnityEngine.Vector3(newCameraPosition.x - 0.33f, newCameraPosition.y, -10);
 
        yield break;
     }
+    private IEnumerator LoadMenuAfterDisconnect(){
+        while (PhotonNetwork.IsConnected){
+            yield return null; 
+        }
+        SceneManager.LoadScene("Menu");
+    }
 
-    // IEnumerator FadeImage(bool fadeAway)
-    // {
-    //     if (fadeAway)
-    //     {
-    //         for (float i = 1; i >= 0; i -= Time.deltaTime * 5f)
-    //         {
-    //             fade.color = new Color(0, 0, 0, i * 1.5f);
-    //             yield return null;
-    //         }
-    //     }
-    //     else
-    //     {
-    //         for (float i = 0; i <= 1; i += Time.deltaTime * 5f)
-    //         {
-    //             fade.color = new Color(0, 0, 0, i * 1.5f);
-    //             yield return null;
-    //         }
-    //     }
-    // }
+    IEnumerator FadeImage(bool fadeAway){
+        if (fadeAway){
+            for (float i = 1; i >= 0; i -= Time.deltaTime * 5f){
+                fade.color = new Color(0, 0, 0, i * 1.5f);
+                yield return null;
+            }
+        }
+        else{
+            for (float i = 0; i <= 1; i += Time.deltaTime * 5f){
+                fade.color = new Color(0, 0, 0, i * 1.5f);
+                yield return null;
+            }
+        }
+    }
 
-    // void SetLifeSlider()
-    // {
-    //     lifeSlider.maxValue = MaxLife;
-    //     lifeSlider.value = life;
-    // }
+    void SetLifeSlider(){
+        lifeSlider.maxValue = MaxLife;
+        lifeSlider.value = life;
+    }
 
-    Color HexToColor(string hex)
-    {
+    Color HexToColor(string hex){
         if (hex.Length != 7 || hex[0] != '#')
             return Color.white;
 
@@ -295,52 +298,43 @@ public class PlayerController : MonoBehaviourPunCallbacks
         return new Color32(r, g, b, 255);
     }
 
-    private void HandleRelicPickup(DroppedRelic relic)
-    {
-        if (relic.relic.relicType == relicType.Life)
-        {
+    private void HandleRelicPickup(DroppedRelic relic){
+        if (relic.relic.relicType == relicType.Life){
             MaxLife += 10;
-            if (life == MaxLife - 10)
-            {
+            if (life == MaxLife - 10){
                 life = MaxLife;
             }
-            //SetLifeSlider();
+            if(isSinglePlayer){
+                SetLifeSlider();
+            }
+            
         }
-        else if (relic.relic.relicType == relicType.Speed)
-        {
+        else if (relic.relic.relicType == relicType.Speed){
             speed += 3;
         }
-        else if (relic.relic.relicType == relicType.Damage)
-        {
+        else if (relic.relic.relicType == relicType.Damage){
             damageMultiplier += 1.5f;
         }
-        else if (relic.relic.relicType == relicType.Invincibility)
-        {
+        else if (relic.relic.relicType == relicType.Invincibility){
             maxInvincibilityTime += 0.65f;
             invincibilityTime += 0.65f;
         }
-        else if (relic.relic.relicType == relicType.Firerate)
-        {
+        else if (relic.relic.relicType == relicType.Firerate){
             fireRateMultiplier -= 0.15f;
         }
-        else if (relic.relic.relicType == relicType.Size)
-        {
+        else if (relic.relic.relicType == relicType.Size){
             transform.localScale = new UnityEngine.Vector3(0.60f, 0.60f, 0f);
         }
-        else if (relic.relic.relicType == relicType.Eye)
-        {
+        else if (relic.relic.relicType == relicType.Eye){
             eyeRelic.SetActive(true);
         }
-        else if (relic.relic.relicType == relicType.Gun)
-        {
+        else if (relic.relic.relicType == relicType.Gun){
             GetComponentInChildren<Gun>().gunShootingStyle = shootingStyles.Spread;
             gunRelic = true;
-            if (GetComponentInChildren<Gun>().nBullets == 1)
-            {
+            if (GetComponentInChildren<Gun>().nBullets == 1){
                 GetComponentInChildren<Gun>().nBullets = 3;
             }
-            else
-            {
+            else{
                 GetComponentInChildren<Gun>().nBullets *= 2;
             }
         }
