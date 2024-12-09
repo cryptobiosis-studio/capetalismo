@@ -45,7 +45,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
     void Start()
-    {   
+    {      
+        DontDestroyOnLoad(this.gameObject);
         isSinglePlayer = !PhotonNetwork.IsConnected;
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -69,7 +70,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
     }
 
     void Update()
-    {
+    {   
+        if (!photonView.IsMine){
+            sprite.enabled = true;
+        }
+        else{
+            sprite.enabled = true;
+        }
         if (!photonView.IsMine && !isSinglePlayer)
             return; // Não executa as ações do jogador se não for o jogador local
 
@@ -139,21 +146,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             Debug.Log(other.gameObject.name);
             StartCoroutine(FadeAndMoveCamera(other.transform.position));
-
-            if (PhotonNetwork.IsConnected){
-                photonView.RPC("MoveToNewRoom", RpcTarget.All, other.transform.position);
-            }else{
-
-            }
         }
     }
 
-    [PunRPC]
-    void MoveToNewRoom(Vector3 newRoomPosition){
-        transform.position = this.transform.position;
 
-        Camera.main.transform.position = new Vector3(newRoomPosition.x - 0.5f, newRoomPosition.y +0.07f, -10);
-    }
 
     void InteractableArea()
     {

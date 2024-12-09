@@ -1,25 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class SpawnPlayers : MonoBehaviourPunCallbacks
-{   
-    public GameObject playerPrefab;
-   
-    [PunRPC]
-    void SpawnPlayerRPC(Vector3 position)
-    {
-        PhotonNetwork.Instantiate(playerPrefab.name, position, Quaternion.identity);
-    }
-
-void Start()
 {
-    if (PhotonNetwork.IsMasterClient)
-    {
-        photonView.RPC("SpawnPlayerRPC", RpcTarget.All, transform.position);
-    }
-}
+    public GameObject playerPrefab;
 
-  
+    void Awake() {
+        DontDestroyOnLoad(this.gameObject);
+    }
+
+    void Start()
+    {
+
+        if (PhotonNetwork.IsConnected){
+            PhotonNetwork.Instantiate(playerPrefab.name, transform.position, Quaternion.identity);
+        }
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer){
+        Debug.Log(otherPlayer.NickName + " saiu da sala.");
+    }
 }
