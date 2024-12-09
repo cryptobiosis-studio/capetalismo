@@ -16,7 +16,7 @@ MonoBehaviour:
     AppIdRealtime: aaf12750-f1ff-45fc-a6e8-e813d707d723
     AppIdFusion: 
     AppIdChat: ba63c2fa-2338-4ff8-b258-7d2e1aa0dcf0
-    AppIdVoice: 
+    AppIdVoice: ba63c2fa-2338-4ff8-b258-7d2e1aa0dcf0
     AppVersion: 0.1
     UseNameServer: 1
     FixedRegion: sa
@@ -49,6 +49,9 @@ MonoBehaviour:
   - LoadMapOnJoin
   - SyncDoorState
   - SpawnPlayerRPC
+  - CantHearYou
+  - ChangeColour
+  - HeresWhy
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

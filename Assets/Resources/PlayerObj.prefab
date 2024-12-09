@@ -437,6 +437,7 @@ MonoBehaviour:
   waterClip: {fileID: 8300000, guid: 4af7a8d079c8c44498eec6eda1aecdc8, type: 3}
   interactClip: {fileID: 0}
   deathClip: {fileID: 0}
+  isSinglePlayer: 0
 --- !u!212 &6379909349712740583
 SpriteRenderer:
   m_ObjectHideFlags: 0
