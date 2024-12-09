@@ -56,7 +56,7 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "capetalismo.sln",
+    "dotnet.defaultSolution": "Untitled Project.sln",
     "cSpell.words": [
         "Firerate"
     ]
