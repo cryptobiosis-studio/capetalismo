@@ -24,9 +24,12 @@ public class Gun : MonoBehaviourPunCallbacks
     void Start(){
         sprRen = GetComponent<SpriteRenderer>();
         sprRen.sprite = gunSettings.gunSprite;
-        sprRen.flipX = false; // Manter a orientação da arma
+        if(photonView.IsMine){
+            sprRen.flipX = false; // Manter a orientação da arma
+        }
         player = GetComponentInParent<PlayerController>();
         gunShootingStyle = gunSettings.shootingStyle;
+        pointer = transform.Find("SpawnerC");
         nBullets = gunSettings.numberOfBullets;
     }
 
@@ -36,8 +39,7 @@ public class Gun : MonoBehaviourPunCallbacks
         }
 
         // Verifica se o jogador pressionou o botão de disparo (Mouse0)
-        if (Input.GetKeyDown(KeyCode.Mouse0) && fireTimer <= 0f)
-        {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && fireTimer <= 0f){
             if (player.isSinglePlayer){
                 Fire(); // Execute o método localmente
                 fireTimer = gunSettings.firerate * player.fireRateMultiplier;
@@ -47,14 +49,12 @@ public class Gun : MonoBehaviourPunCallbacks
                 fireTimer = gunSettings.firerate * player.fireRateMultiplier;
             }
         }
-        else
-        {
+        else{
             fireTimer -= Time.deltaTime;
         }
     }
 
-    void RotateGun()
-    {
+    void RotateGun(){
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = 5.23f; // Distância da câmera
 
@@ -68,25 +68,21 @@ public class Gun : MonoBehaviourPunCallbacks
         sprRen.flipY = rotZ < 85 && rotZ > -85;
     }
 
-    [PunRPC]  // Certifique-se de que o método está marcado com [PunRPC]
-    void Fire()
-    {
+    [PunRPC]  
+    void Fire(){
         audioSource.clip = shootSound;
         audioSource.Play();
 
         // Dispara de acordo com o estilo de tiro
-        if (gunShootingStyle == shootingStyles.Spread)
-        {
+        if (gunShootingStyle == shootingStyles.Spread){
             FireSpread();
         }
-        else
-        {
+        else{
             FireSimple();
         }
     }
 
-    void FireSpread()
-    {
+    void FireSpread(){
         firedBullets.Clear();
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 directionToMouse = (mousePosition - pointer.position).normalized;
@@ -97,8 +93,7 @@ public class Gun : MonoBehaviourPunCallbacks
 
         GameObject _bullet;
 
-        for (int i = 0; i < numberOfBullets; i++)
-        {
+        for (int i = 0; i < numberOfBullets; i++){
             float angle = -spreadAngle / 2 + angleIncrement * i;
             Quaternion bulletRotation = Quaternion.Euler(0, 0, Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg - 90 + angle);
             if(!player.isSinglePlayer){
@@ -114,8 +109,7 @@ public class Gun : MonoBehaviourPunCallbacks
         BulletSettings(firedBullets.ToArray());
     }
 
-    void FireSimple()
-    {
+    void FireSimple(){
         firedBullets.Clear();
         GameObject _bullet;
         if(!player.isSinglePlayer){
@@ -133,30 +127,24 @@ public class Gun : MonoBehaviourPunCallbacks
         BulletSettings(firedBullets.ToArray());
     }
 
-    void BulletSettings(GameObject[] bullets)
-    {
-        foreach (GameObject b in bullets)
-        {
+    void BulletSettings(GameObject[] bullets){
+        foreach (GameObject b in bullets){
             Bullet bulScr = b.GetComponent<Bullet>();
             bulScr.bulSprite = gunSettings.bulletSprite;
             bulScr.damage = gunSettings.damage * player.damageMultiplier;
         }
     }
 
-    public void Change()
-    {
+    public void Change(){
         sprRen.sprite = gunSettings.gunSprite;
         nBullets = gunSettings.numberOfBullets;
         gunShootingStyle = gunSettings.shootingStyle;
-        if (player.gunRelic)
-        {
+        if (player.gunRelic){
             gunShootingStyle = shootingStyles.Spread;
-            if (nBullets != 1)
-            {
+            if (nBullets != 1){
                 nBullets = nBullets * 2;
             }
-            else
-            {
+            else{
                 nBullets = 3;
             }
         }
