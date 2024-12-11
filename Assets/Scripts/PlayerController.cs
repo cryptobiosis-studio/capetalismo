@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
@@ -46,8 +47,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     void Start()
     {      
-        DontDestroyOnLoad(this.gameObject);
         isSinglePlayer = !PhotonNetwork.IsConnected;
+        if(GetComponent<PhotonView>() == null){
+            isSinglePlayer = true;
+        }
+        if(!isSinglePlayer){
+            DontDestroyOnLoad(this.gameObject);
+        }
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
@@ -64,8 +70,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         damageMultiplier = 1f;
         gunRelic = false;
         if (!isSinglePlayer && !photonView.IsMine){
-        this.enabled = false;
-        return;
+            this.enabled = false;
+            return;
         }
     }
 
@@ -237,6 +243,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                      PhotonNetwork.Disconnect();
                     StartCoroutine(LoadMenuAfterDisconnect()); 
                 }else{
+                    Destroy(this.gameObject, 2f);
                     SceneManager.LoadScene("Menu");     
                 }
                 

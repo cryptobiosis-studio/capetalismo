@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 6379909349712740583}
   - component: {fileID: 679489900186976632}
   - component: {fileID: 1990602202431209507}
-  - component: {fileID: -4062583065946259818}
+  - component: {fileID: 8364093865286114718}
   m_Layer: 6
   m_Name: PlayerObj
   m_TagString: Player
@@ -435,6 +435,7 @@ MonoBehaviour:
   waterClip: {fileID: 8300000, guid: 4af7a8d079c8c44498eec6eda1aecdc8, type: 3}
   interactClip: {fileID: 0}
   deathClip: {fileID: 0}
+  isSinglePlayer: 0
 --- !u!212 &6379909349712740583
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -543,7 +544,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.74999994
---- !u!114 &-4062583065946259818
+--- !u!114 &8364093865286114718
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

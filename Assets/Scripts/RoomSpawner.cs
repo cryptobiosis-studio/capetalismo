@@ -24,12 +24,13 @@ public class RoomSpawner : MonoBehaviour
     public Transform[] spawners;
     public Transform[] doors;
     public MapManager manager;
-    public int maxRooms;
+    public int maxRooms = 16;
 
     void Start()
     {
         manager = GameObject.Find("MapManager").GetComponent<MapManager>();
-        if (manager.numberOfRooms <= maxRooms){
+        if (manager.numberOfRooms <= maxRooms) // Verifica se ja ultrapassou o numero de salas
+        {
             int spawnDirection = Random.Range(0, 4); // Roda uma direcao aleatoria
             TrySpawnRoom(spawnDirection);
         }
@@ -38,7 +39,8 @@ public class RoomSpawner : MonoBehaviour
     //-----------------------------------------Gera_Salas-------------------------------------------------------------
     void TrySpawnRoom(int direction, int attemptCount = 0) // Adiciona um contador de tentativas
 {
-    if (attemptCount > 3){
+    if (attemptCount > 3) // Limita as tentativas para 3
+    {
         Debug.LogWarning("Limite de tentativas atingido. Não foi possível gerar uma sala.");
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         return;
@@ -46,7 +48,8 @@ public class RoomSpawner : MonoBehaviour
 
     bool canSpawnRoom = this.gameObject.transform.Find(spawnerNames[direction]).gameObject.activeSelf && !ExistRoom(direction);
 
-    if (!canSpawnRoom){
+    if (!canSpawnRoom)
+    {
         TrySpawnRoom(Random.Range(0, 4), attemptCount + 1); // Passa o contador para a próxima tentativa
         return;
     }
@@ -54,7 +57,8 @@ public class RoomSpawner : MonoBehaviour
     spawnRoom(direction); 
 }
 
-    void spawnRoom(int direction){
+    void spawnRoom(int direction) // Gera uma sala
+    {
         GameObject newRoom = Instantiate(room, spawners[direction].position, Quaternion.identity); // Instancia o prefab da sala
         newRoom.name = "Room" + manager.numberOfRooms;
         doors[direction].gameObject.SetActive(false); // Desabilita a porta na direcao da nova sala
@@ -74,7 +78,8 @@ public class RoomSpawner : MonoBehaviour
         }
     }
 
-    void DisableOppositeSpawner(int direction){
+    void DisableOppositeSpawner(int direction) // Desabilita o spawner na direcao
+    {
         int oppositeDirection = (direction + 2) % 4; // Calcula a direcao oposta
         this.gameObject.transform.Find(spawnerNames[oppositeDirection]).gameObject.SetActive(false);
     }
@@ -106,7 +111,9 @@ public class RoomSpawner : MonoBehaviour
             doors[n.Direction].gameObject.SetActive(false);
         }
     }
-    void SetupNeighborRoom(GameObject room, string doorName){   
+    void SetupNeighborRoom(GameObject room, string doorName) // Configura a sala
+    {   
+        // Posiciona as portas
         room.transform.Find(doorName).gameObject.SetActive(false);
     }
 
