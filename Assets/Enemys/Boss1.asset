@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 814f49f4129ff4f6f8eeeb607c26ae3b, type: 3}
-  m_Name: Boss
+  m_Name: Boss1
   m_EditorClassIdentifier: 
-  enemyName: 
+  enemyName: Trompa
   desciption: 
-  enemySprite: {fileID: 21300000, guid: 3ae17cafa014849008a74b9a48935800, type: 3}
-  enemyTypes: 3
+  enemySprite: {fileID: 21300000, guid: 46368d9601bd347639133dd7d230396f, type: 3}
+  enemyTypes: 0
   life: 80
-  damage: 15
-  speed: 5
+  damage: 7
+  speed: 0

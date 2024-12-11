@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 5686908130809981286}
   - component: {fileID: 4706655011158117550}
-  - component: {fileID: 2682003007282122974}
   - component: {fileID: 4405044740139448044}
   - component: {fileID: 5617260112729472847}
   - component: {fileID: 3260930897152357773}
+  - component: {fileID: 7855967223598694306}
+  - component: {fileID: 724529542842544872}
   m_Layer: 3
   m_Name: ElonMosca
   m_TagString: Enemy
@@ -76,10 +77,10 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3ae17cafa014849008a74b9a48935800, type: 3}
+  m_SortingOrder: 20
+  m_Sprite: {fileID: 605949424, guid: 9ddc42653534b4bd0a2125c112955d42, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 1
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 3.2, y: 3.2}
@@ -88,33 +89,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &2682003007282122974
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2167368120791830958}
-  m_BodyType: 0
-  m_Simulated: 0
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!70 &4405044740139448044
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -147,8 +121,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.123491764, y: -0.055571437}
-  m_Size: {x: 1.4711142, y: 2.841874}
+  m_Offset: {x: -0.050144434, y: -0.055571437}
+  m_Size: {x: 2.472074, y: 2.841874}
   m_Direction: 0
 --- !u!114 &5617260112729472847
 MonoBehaviour:
@@ -200,9 +174,42 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.84591913, y: 0}
+  m_Offset: {x: -1.2166414, y: 0}
   serializedVersion: 2
-  m_Radius: 1.173953
+  m_Radius: 1.3994007
+--- !u!95 &7855967223598694306
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2167368120791830958}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 659b427f22be74e19826d4c970ee94c2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &724529542842544872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2167368120791830958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c134c126230aa485ca0b35c06d7e2864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -82,7 +82,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7532040599564764054, guid: f9edf3851aa67477e9be060f01b62ab6, type: 3}
       propertyPath: relics.Array.size
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7532040599564764054, guid: f9edf3851aa67477e9be060f01b62ab6, type: 3}
       propertyPath: relics.Array.data[7]

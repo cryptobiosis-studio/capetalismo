@@ -78,7 +78,7 @@ public class Enemy : MonoBehaviour
                     transform.position = UnityEngine.Vector2.MoveTowards(transform.position, playerPosition.position, enemySettings.speed * Time.deltaTime);
                     canAttack = Physics2D.OverlapCircle(transform.position,3.3f, LayerMask.GetMask("Player")); 
                     if (canAttack){
-                        enemyAnim.Play("Enemy2Atk");
+                        enemyAnim.Play("ElonAtk");
                     }
                     if (playerPosition.position.x < transform.position.x){
                         transform.localScale = new UnityEngine.Vector3(1, 1, 1);
@@ -97,7 +97,7 @@ public class Enemy : MonoBehaviour
             projectile.GetComponent<EnemyBullet>().damage = enemySettings.damage;
             Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
             if (rb != null){
-                rb.velocity = direction * 10;
+                rb.velocity = direction * projectilePrefab.GetComponent<EnemyBullet>().speed;
             }
         }
     }

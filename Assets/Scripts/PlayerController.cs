@@ -240,7 +240,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 audioSource.clip = deathClip;
                 audioSource.Play();
                 if(!isSinglePlayer){
-                     PhotonNetwork.Disconnect();
+                    PhotonNetwork.Disconnect();
                     StartCoroutine(LoadMenuAfterDisconnect()); 
                 }else{
                     Destroy(this.gameObject, 2f);
