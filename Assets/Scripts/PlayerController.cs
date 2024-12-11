@@ -61,13 +61,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
         eyeRelic.SetActive(false);
         invincibility = false;
         life = MaxLife;
+        fireRateMultiplier = 1f;
+        damageMultiplier = 1f;
         if(isSinglePlayer){
             SetLifeSlider();
             choiceText = GameObject.Find("CurriculumChoice");
             choiceText.SetActive(false);
         }
-        fireRateMultiplier = 1f;
-        damageMultiplier = 1f;
         gunRelic = false;
         if (!isSinglePlayer && !photonView.IsMine){
             this.enabled = false;

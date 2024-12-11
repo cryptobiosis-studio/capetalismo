@@ -25,6 +25,7 @@ public class Bullet : MonoBehaviour
     {
         if(other.gameObject.tag == "Enemy"){
             Debug.Log("Enemy shooted!");
+            Debug.Log(other.gameObject.GetComponent<Enemy>());
             other.gameObject.GetComponent<Enemy>().TakeDamage(damage);
             Instantiate(boom, transform.position, Quaternion.identity);
             Destroy(this.gameObject, 0.05f);

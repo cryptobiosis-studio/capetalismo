@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: UZI
   m_EditorClassIdentifier: 
   gunName: UZI
-  desciption: 
+  description: 
   damage: 1
   firerate: 0.1
   bulletSpeed: 30
-  numberOfBullets: 0
+  numberOfBullets: 1
   shootingStyle: 0
   gunSprite: {fileID: 1539428110, guid: fc1ae142f33d1449eb94da71d25b0a2a, type: 3}
   bulletSprite: {fileID: 21300000, guid: aed62541af04945ad854ee393816f1e7, type: 3}

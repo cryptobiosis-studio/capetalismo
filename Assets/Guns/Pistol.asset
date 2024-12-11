@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Pistol
   m_EditorClassIdentifier: 
   gunName: 
-  desciption: 
+  description: 
   damage: 1.5
   firerate: 0.4
   bulletSpeed: 25
-  numberOfBullets: 0
+  numberOfBullets: 1
   shootingStyle: 0
   gunSprite: {fileID: 21300000, guid: 88ec150ddecad974389a6ba98afee400, type: 3}
   bulletSprite: {fileID: 21300000, guid: aed62541af04945ad854ee393816f1e7, type: 3}

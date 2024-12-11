@@ -41,8 +41,7 @@ public class Enemy : MonoBehaviour
         {   
             player = room.player;
             playerPosition = player.gameObject.transform;
-            if (enemySettings.enemyTypes == EnemyTypes.Melee)
-            {
+            if (enemySettings.enemyTypes == EnemyTypes.Melee){
                 if (UnityEngine.Vector3.Distance(transform.position, playerPosition.position) > 0.9f && canWalk)
                 {
                     transform.position = UnityEngine.Vector2.MoveTowards(transform.position, playerPosition.position, enemySettings.speed * Time.deltaTime);
@@ -73,6 +72,21 @@ public class Enemy : MonoBehaviour
                     ShootAtPlayer(direction);
                     lastShotTime = Time.time; 
                 }
+            }if (enemySettings.enemyTypes == EnemyTypes.Boss){
+                if (UnityEngine.Vector3.Distance(transform.position, playerPosition.position) > 3.3f && canWalk)
+                {
+                    transform.position = UnityEngine.Vector2.MoveTowards(transform.position, playerPosition.position, enemySettings.speed * Time.deltaTime);
+                    canAttack = Physics2D.OverlapCircle(transform.position,3.3f, LayerMask.GetMask("Player")); 
+                    if (canAttack){
+                        enemyAnim.Play("Enemy2Atk");
+                    }
+                    if (playerPosition.position.x < transform.position.x){
+                        transform.localScale = new UnityEngine.Vector3(1, 1, 1);
+                    }
+                    else if (playerPosition.position.x > transform.position.x){
+                        transform.localScale = new UnityEngine.Vector3(-1, 1, 1); 
+                    }
+                }
             }
         }
     }
@@ -89,6 +103,8 @@ public class Enemy : MonoBehaviour
     }
     public void TakeDamage(float damage){
         life-=damage;
+        Debug.Log(damage);
+        Debug.Log(life);
         if(life <= 0){
             room.player.audioSource.clip = enemyDestroyClip;
             room.player.audioSource.Play(); 

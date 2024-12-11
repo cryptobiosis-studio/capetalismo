@@ -6,7 +6,8 @@ using UnityEngine;
 public enum EnemyTypes{
     Turret,
     Melee,
-    Ranged
+    Ranged,
+    Boss
 }
 [CreateAssetMenu(fileName = "Enemy", menuName = "Enemy/New Enemy", order = 1)]
 public class EnemyObj : ScriptableObject
