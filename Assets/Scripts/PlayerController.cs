@@ -214,6 +214,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 audioSource.clip = audioClip;
                 audioSource.Play();
                 HandleRelicPickup(relic);
+            }else if(genericInteractable.tag == "Elevator"){
+                transform.position = new Vector3(-501.14f, -3.32f);
             }
         }
     }

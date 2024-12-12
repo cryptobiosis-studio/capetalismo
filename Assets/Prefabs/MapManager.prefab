@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2061546366990831591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2214981051200381106}
+  - component: {fileID: 3012592042319778089}
+  m_Layer: 0
+  m_Name: MapManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2214981051200381106
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061546366990831591}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.719828, y: -3.1678953, z: -0.160978}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3012592042319778089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061546366990831591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 063b92a26f0e047ea8fa86a46e2bbe4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfRooms: 0
+  startRoom: {fileID: 0}
+  roomLayouts:
+  - {fileID: 3538548749346869116, guid: d9efd84679c5d49f48f307b483f29963, type: 3}
+  - {fileID: 7356726927186392641, guid: 7ea97f8855c664c2b8985bc3eb6e961b, type: 3}
+  - {fileID: 3003287534357748324, guid: 6b248b23cf28d46efbf2cd790b198ac8, type: 3}
+  - {fileID: 7869046778300341983, guid: 5ef3d8e05c59f4b018a3ec68fdfa0338, type: 3}
+  - {fileID: 4136730727955953482, guid: 1ae925091f23f477bbc3e00a9fb1e104, type: 3}
+  - {fileID: 5114053813496116858, guid: b4aa08e2d2a92433998f62b75f7cd21c, type: 3}
+  - {fileID: 1755438918923587434, guid: ee60ac44a57b0403a8bbc5b85f1a89ff, type: 3}
+  - {fileID: 438817619055412659, guid: 2c20bc0af6b974629b5ae39dfbd11fba, type: 3}
+  canWork: 1
+  rdIndex: 7
+  waterIndex: 6
+  chestIndex: 5
+  lastRoom: {fileID: 0}
+  lastRoomLayout: {fileID: 7776927895095765571, guid: 644f5dd202206483897723370b64328c, type: 3}

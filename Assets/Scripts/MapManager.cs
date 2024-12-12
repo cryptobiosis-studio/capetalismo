@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
@@ -17,6 +18,8 @@ public class MapManager : MonoBehaviour
     private List<int> generatedRooms;  
 
     public GameObject lastRoom;
+
+    public GameObject lastRoomLayout;
 
 
     void Start(){
@@ -83,6 +86,7 @@ public class MapManager : MonoBehaviour
             }else if(targetRoom != null && roomIndex == startRoom.gameObject.GetComponent<RoomSpawner>().maxRooms){
                 generatedRooms.Add(roomIndex); 
                 lastRoom = targetRoom;
+                Instantiate(lastRoomLayout, lastRoom.transform);
             }
         }
     }
