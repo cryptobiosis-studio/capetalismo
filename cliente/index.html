@@ -23,6 +23,7 @@
         <div id="unity-build-title">Capetalismo</div>
       </div>
     </div>
+    <div id="googleLoginButton" style="display: none;"></div>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
       let googleUserToken = null;
@@ -81,8 +82,35 @@
           initUnity();
       };
   </script>
-  
-  <div id="googleLoginButton"></div> <!-- O botão de login do Google será renderizado aqui -->
+  <script>
+    function displayGoogleLoginButton() {
+        const googleLoginButton = document.getElementById("googleLoginButton");
+        googleLoginButton.style.display = "block"; // Torna o botão visível
+
+        // Renderiza o botão de login do Google
+        google.accounts.id.initialize({
+            client_id: '1083895502867-da72s70b24uaihnk5nmktmimc7d8ht8k.apps.googleusercontent.com',
+            callback: response => onGoogleSignIn(response.credential),
+        });
+        google.accounts.id.renderButton(googleLoginButton, {
+            theme: 'outline',
+            size: 'large',
+        });
+    }
+
+    function onGoogleSignIn(token) {
+        const unityInstance = window.unityInstance;
+        if (unityInstance) {
+            unityInstance.SendMessage("GoogleAuthentication", "GoogleLoginCallback", token);
+        }
+    }
+
+    window.onload = function () {
+        // Inicializa o Unity e o botão está escondido por padrão
+        initUnity();
+    };
+</script>
+
   <div id="unityContainer"></div> <!-- O Unity será carregado aqui -->
   
     <script>

@@ -23,11 +23,21 @@ public class GoogleSignInHandler : MonoBehaviour
     }
 
     // Método chamado quando o botão de login é clicado
+    private void ShowGoogleLoginButton()
+    {
+        #if UNITY_WEBGL && !UNITY_EDITOR
+            Application.ExternalCall("displayGoogleLoginButton");
+        #endif
+    }
+
     public void OnLoginButtonClicked()
     {
         Debug.Log("LoginButton clicado");
-        // O JavaScript gerencia o login agora, nenhuma outra ação necessária aqui.
+
+        // Mostra o botão de login do Google
+        ShowGoogleLoginButton();
     }
+
 
     // Método chamado quando o botão de logout é clicado
     public void OnLogoutButtonClicked()
