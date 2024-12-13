@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using Unity.VisualScripting;
 
 public class GoogleSignInHandler : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class GoogleSignInHandler : MonoBehaviour
         Debug.Log("LoginButton clicado");
 
         // Exibe a área de login (já está ativo)
+        isLoggedIn = false;
         ShowLoginPanel();
 
         // Chama a função de login no JavaScript
@@ -55,6 +57,7 @@ public class GoogleSignInHandler : MonoBehaviour
             // Lidar com o logout do usuário
             googleToken = ""; // Limpa o token de autenticação
             HandleLogout();
+            isLoggedIn = false;
         }
         else{
 
@@ -64,6 +67,7 @@ public class GoogleSignInHandler : MonoBehaviour
             // Valide o token (opcional)
             StartCoroutine(ValidateGoogleToken(token));
         }
+        UpdateUI();
     }
 
     private IEnumerator ValidateGoogleToken(string token){
@@ -105,6 +109,20 @@ public class GoogleSignInHandler : MonoBehaviour
         ProfilePanel.SetActive(true);
     }
 
+    private void UpdateUI()
+    {
+        if (isLoggedIn)
+        {
+            // Exibe painel de perfil e esconde o painel de login
+            ShowProfilePanel();
+        }
+        else
+        {
+            // Exibe painel de login e esconde o painel de perfil
+            ShowLoginPanel();
+        }
+    }
+
     private void OnApplicationQuit(){
     
         // Limpeza adicional quando o jogo é fechado
@@ -113,7 +131,7 @@ public class GoogleSignInHandler : MonoBehaviour
     private void CallJSFunction(string functionName)
     {
         #if UNITY_WEBGL && !UNITY_EDITOR
-            Application.ExternalCall(functionName); // Chama o método JavaScript
+            Application.ExternalCall("initGoogleSignIn", "googleLogout" ); // Chama o método JavaScript
         #endif
     }
 }

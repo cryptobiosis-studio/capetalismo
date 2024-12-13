@@ -25,24 +25,38 @@
     </div>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
-      // Função para iniciar o login do Google
+      // Função chamada para iniciar o login com o Google
       function initGoogleSignIn() {
-          console.log("Iniciando login com Google...");
-          setTimeout(() => {
-              window.UnityWebGL.SendMessage('GoogleAuthentication', 'GoogleLoginCallback');
-          }, 1000); // Simula tempo de resposta
+          console.log("initGoogleSignIn chamada");
+          gapi.load('auth2', function() {
+              gapi.auth2.init({
+                  client_id: '1083895502867-da72s70b24uaihnk5nmktmimc7d8ht8k.apps.googleusercontent.com',
+              }).then(function(auth2) {
+                  const googleSignInButton = document.getElementById('google-login-button');
+                  googleSignInButton.addEventListener('click', function() {
+                      auth2.signIn().then(function(googleUser) {
+                          console.log("Usuário logado: ", googleUser);
+                          var token = googleUser.getAuthResponse().id_token;
+                          // Passa o token de volta para o Unity
+                          unityInstance.SendMessage('GoogleSignInHandler', 'GoogleLoginCallback', token);
+                      }).catch(function(error) {
+                          console.error("Erro ao fazer login: ", error);
+                      });
+                  });
+              });
+          });
       }
   
-      // Função para realizar logout
+      // Função chamada para fazer o logout
       function googleLogout() {
-          console.log("Realizando logout...");
-          setTimeout(() => {
-              window.UnityWebGL.SendMessage('GoogleAuthentication', 'GoogleLoginCallback', '');
-          }, 500); // Simula tempo de resposta
+          console.log("googleLogout chamada");
+          gapi.auth2.getAuthInstance().signOut().then(function() {
+              console.log("Usuário deslogado");
+              unityInstance.SendMessage('GoogleSignInHandler', 'GoogleLoginCallback', ""); // Envia vazio para indicar logout
+          });
       }
   </script>
-  
-    <script>
+    <!-- <script>
         let googleUserToken = null;
     
         function onGoogleSignIn(token) {
@@ -76,7 +90,7 @@
         window.onload = function() {
             initGoogleSignIn();
         };
-    </script>
+    </script> -->
     <script>
 
       var container = document.querySelector("#unity-container");
