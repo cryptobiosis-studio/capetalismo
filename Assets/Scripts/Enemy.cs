@@ -8,6 +8,7 @@ using UnityEditor.Rendering;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit.Forms;
+using UnityEngine.SceneManagement;
 
 public class Enemy : MonoBehaviour
 {
@@ -114,15 +115,12 @@ public class Enemy : MonoBehaviour
                 Destroy(this.gameObject, 0f);
                 }else{
                     PhotonNetwork.Destroy(this.gameObject);
-                    Destroy(this.gameObject);
                 }
             }else{
                 if(!room.player.isSinglePlayer){
-                    if(PhotonNetwork.IsMasterClient){
-                        PhotonNetwork.LoadLevel("GoogleAuth");
-                        PhotonNetwork.Destroy(this.gameObject);
-                        Destroy(this.gameObject);
-                    }
+                    SceneManager.LoadScene("Win");
+                    PhotonNetwork.Destroy(this.gameObject);
+                    Destroy(this.gameObject);
                 }
             }
            

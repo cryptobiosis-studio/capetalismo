@@ -799,11 +799,11 @@ PlayerSettings:
   apiCompatibilityLevel: 3
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: d98b2e48-05d4-41d7-abe0-8cf5a714e313
+  cloudProjectId: 4825f63a-496b-471f-9ef6-649be24893b7
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Capetalismo
-  organizationId: anxp01
+  projectName: Untitled Project
+  organizationId: caputokayk
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

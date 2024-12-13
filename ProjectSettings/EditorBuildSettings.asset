@@ -66,6 +66,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GoogleAuth.unity
     guid: 11d35db37d8a9ea4fa55a7e686712607
+  - enabled: 1
+    path: Assets/Scenes/Win.unity
+    guid: 5ac8aae65f54d42e6a1f4460702a56a5
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 4143e7c1932be45889ddd0f4afd267d4, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: ebdb798437f49424f8f23866e79a5499, type: 2}

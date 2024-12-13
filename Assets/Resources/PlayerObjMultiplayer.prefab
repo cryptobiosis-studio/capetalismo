@@ -429,6 +429,7 @@ MonoBehaviour:
   invincibility: 0
   invincibilityTime: 0
   maxInvincibilityTime: 0.55
+  choiceText: {fileID: 0}
   lifeSlider: {fileID: 0}
   damageMultiplier: 0
   fireRateMultiplier: 0

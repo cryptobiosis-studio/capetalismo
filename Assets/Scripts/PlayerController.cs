@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public float invincibilityTime;
     public float maxInvincibilityTime;
 
-    GameObject choiceText;
+    public GameObject choiceText;
 
     public Slider lifeSlider;
 
@@ -63,12 +63,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
         life = MaxLife;
         fireRateMultiplier = 1f;
         damageMultiplier = 1f;
+        choiceText = GameObject.Find("CurriculumChoice");
+        choiceText.SetActive(false);
+        lifeSlider = GameObject.Find("PlayerLifeSlider").GetComponent<Slider>();
+        SetLifeSlider();
+        gunRelic = false;
         if(isSinglePlayer){
             SetLifeSlider();
             choiceText = GameObject.Find("CurriculumChoice");
             choiceText.SetActive(false);
         }
-        gunRelic = false;
         if (!isSinglePlayer && !photonView.IsMine){
             this.enabled = false;
             return;
@@ -77,6 +81,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     void Update()
     {   
+        if(choiceText == null){
+            choiceText = GameObject.Find("CurriculumChoice");
+        }
+        if(lifeSlider == null){
+            lifeSlider = GameObject.Find("PlayerLifeSlider").GetComponent<Slider>();
+            SetLifeSlider();
+        }
+        
         if (!photonView.IsMine){
             sprite.enabled = true;
         }
@@ -142,9 +154,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             return;
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Room")){
-            if(isSinglePlayer){
-                choiceText.SetActive(false);
-            }
+            choiceText.SetActive(false);
             if (invincibilityTime <= 0f){
                 invincibility = true;
                 invincibilityTime = maxInvincibilityTime;
@@ -190,19 +200,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 audioClip = waterClip;
                 audioSource.clip = audioClip;
                 audioSource.Play();
-                if(isSinglePlayer){
-                    SetLifeSlider();
-                }
+                SetLifeSlider();
                 genericInteractable.GetComponent<SpriteRenderer>().color = HexToColor("#505050");
                 genericInteractable.tag = "Untagged";
             }
             else if (genericInteractable.tag == "RH"){
                 HumanResources rh = genericInteractable.GetComponent<HumanResources>();
                 if (rh.enabled){
-                    if(isSinglePlayer){
-                        choiceText.SetActive(true);
-                    }
-                   
+                    choiceText.SetActive(true);
                     rh.Interacted();
                 }
                 genericInteractable.tag = "Untagged";
@@ -225,7 +230,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
     void ChangeGun(GunObj gun){
         equippedGun = gun;
         GetComponentInChildren<Gun>().gunSettings = gun;
-        GetComponentInChildren<Gun>().Change();
+        if(isSinglePlayer){
+            GetComponentInChildren<Gun>().Change();
+        }else{
+            GetComponentInChildren<Gun>().Change();
+        }
+        
     }
 
     public void TakeDamage(float damage){
@@ -234,9 +244,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         if (!invincibility){
             life -= damage;
-            if(isSinglePlayer){
-                lifeSlider.value = life;
-            }
+            lifeSlider.value = life;
             audioSource.clip = hitClip;
             audioSource.Play();
 
@@ -245,6 +253,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 audioSource.Play();
                 if(!isSinglePlayer){
                     PhotonNetwork.Disconnect();
+                    SceneManager.LoadScene("Menu");
                     StartCoroutine(LoadMenuAfterDisconnect()); 
                 }else{
                     Destroy(this.gameObject, 2f);
@@ -268,10 +277,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
        yield break;
     }
     private IEnumerator LoadMenuAfterDisconnect(){
+        SceneManager.LoadScene("Menu");
         while (PhotonNetwork.IsConnected){
             yield return null; 
         }
-        SceneManager.LoadScene("Menu");
     }
 
     IEnumerator FadeImage(bool fadeAway){
