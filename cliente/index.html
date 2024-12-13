@@ -25,21 +25,57 @@
     </div>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
-      function onGoogleSignIn(token) {
-          // Envia o token para o Unity
-          const unityInstance = UnityLoader.instantiate("unityContainer", "Build/build.json");
-          unityInstance.SendMessage("GoogleAuthentication", "GoogleLoginCallback", token);
-      }
-    
+      // Função para iniciar o login do Google
       function initGoogleSignIn() {
-          google.accounts.id.initialize({
-              client_id: '1083895502867-da72s70b24uaihnk5nmktmimc7d8ht8k.apps.googleusercontent.com',
-              callback: response => onGoogleSignIn(response.credential)
-          });
-          google.accounts.id.prompt(); // Exibe o botão automaticamente ou caixa de diálogo
+          console.log("Iniciando login com Google...");
+          setTimeout(() => {
+              window.UnityWebGL.SendMessage('GoogleAuthentication', 'GoogleLoginCallback');
+          }, 1000); // Simula tempo de resposta
       }
+  
+      // Função para realizar logout
+      function googleLogout() {
+          console.log("Realizando logout...");
+          setTimeout(() => {
+              window.UnityWebGL.SendMessage('GoogleAuthentication', 'GoogleLoginCallback', '');
+          }, 500); // Simula tempo de resposta
+      }
+  </script>
+  
+    <script>
+        let googleUserToken = null;
     
-      window.onload = initGoogleSignIn;
+        function onGoogleSignIn(token) {
+            // Envia o token para o Unity
+            const unityInstance = UnityLoader.instantiate("unityContainer", "Build/build.json");
+            unityInstance.SendMessage("GoogleAuthentication", "GoogleLoginCallback", token);
+    
+            // Armazena o token do usuário
+            googleUserToken = token;
+        }
+    
+        function initGoogleSignIn() {
+            google.accounts.id.initialize({
+                client_id: '1083895502867-da72s70b24uaihnk5nmktmimc7d8ht8k.apps.googleusercontent.com',
+                callback: response => onGoogleSignIn(response.credential)
+            });
+            google.accounts.id.prompt(); // Exibe o botão automaticamente ou caixa de diálogo
+        }
+    
+        function googleLogout() {
+            if (googleUserToken) {
+                // Realiza logout e revoga a autorização do Google
+                google.accounts.id.revoke(googleUserToken, () => {
+                    const unityInstance = UnityLoader.instantiate("unityContainer", "Build/build.json");
+                    unityInstance.SendMessage("GoogleAuthentication", "GoogleLoginCallback", ""); // Envia token vazio para Unity (logout)
+                    googleUserToken = null; // Limpa o token do usuário
+                });
+            }
+        }
+    
+        window.onload = function() {
+            initGoogleSignIn();
+        };
     </script>
     <script>
 

@@ -340,8 +340,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 427654494}
-        m_TargetAssemblyTypeName: GoogleAuthentication, Assembly-CSharp
-        m_MethodName: OnSignOut
+        m_TargetAssemblyTypeName: GoogleSignInHandler, Assembly-CSharp
+        m_MethodName: OnLogoutButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -567,6 +567,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7b47b78980dd93449d65ffefd47becf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LoginPanel: {fileID: 1760658705}
+  ProfilePanel: {fileID: 1160289272}
+  LoginButton: {fileID: 2000800515}
+  LogoutButton: {fileID: 292638762}
 --- !u!1 &483195137
 GameObject:
   m_ObjectHideFlags: 0
@@ -1832,8 +1836,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 427654494}
-        m_TargetAssemblyTypeName: GoogleAuthentication, Assembly-CSharp
-        m_MethodName: OnSignIn
+        m_TargetAssemblyTypeName: GoogleSignInHandler, Assembly-CSharp
+        m_MethodName: OnLoginButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

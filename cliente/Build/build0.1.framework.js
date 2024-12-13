@@ -2078,13 +2078,13 @@ var tempI64;
 // === Body ===
 
 var ASM_CONSTS = {
-  5195872: function() {return Module.webglContextAttributes.premultipliedAlpha;},  
- 5195933: function() {return Module.webglContextAttributes.preserveDrawingBuffer;},  
- 5195997: function() {return Module.webglContextAttributes.powerPreference;},  
- 5196055: function() {Module['emscripten_get_now_backup'] = performance.now;},  
- 5196110: function($0) {performance.now = function() { return $0; };},  
- 5196158: function($0) {performance.now = function() { return $0; };},  
- 5196206: function() {performance.now = Module['emscripten_get_now_backup'];}
+  5196160: function() {return Module.webglContextAttributes.premultipliedAlpha;},  
+ 5196221: function() {return Module.webglContextAttributes.preserveDrawingBuffer;},  
+ 5196285: function() {return Module.webglContextAttributes.powerPreference;},  
+ 5196343: function() {Module['emscripten_get_now_backup'] = performance.now;},  
+ 5196398: function($0) {performance.now = function() { return $0; };},  
+ 5196446: function($0) {performance.now = function() { return $0; };},  
+ 5196494: function() {performance.now = Module['emscripten_get_now_backup'];}
 };
 
 
@@ -2543,6 +2543,18 @@ var ASM_CONSTS = {
   		}
   		return _JS_DOM_UnityCanvasSelector.ptr;
   	}
+
+  function _JS_Eval_EvalJS(ptr)
+  {
+  	var str = UTF8ToString(ptr);
+  	try {
+  		eval (str);
+  	}
+  	catch (exception)
+  	{
+  		console.error(exception);
+  	}
+  }
 
   function _JS_Eval_OpenURL(ptr)
   {
@@ -16619,6 +16631,7 @@ var asmLibraryArg = {
   "JS_Cursor_SetShow": _JS_Cursor_SetShow,
   "JS_DOM_MapViewportCoordinateToElementLocalCoordinate": _JS_DOM_MapViewportCoordinateToElementLocalCoordinate,
   "JS_DOM_UnityCanvasSelector": _JS_DOM_UnityCanvasSelector,
+  "JS_Eval_EvalJS": _JS_Eval_EvalJS,
   "JS_Eval_OpenURL": _JS_Eval_OpenURL,
   "JS_FileSystem_Initialize": _JS_FileSystem_Initialize,
   "JS_FileSystem_Sync": _JS_FileSystem_Sync,
