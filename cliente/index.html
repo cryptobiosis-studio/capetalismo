@@ -23,6 +23,24 @@
         <div id="unity-build-title">Capetalismo</div>
       </div>
     </div>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+      function onGoogleSignIn(token) {
+          // Envia o token para o Unity
+          const unityInstance = UnityLoader.instantiate("unityContainer", "Build/build.json");
+          unityInstance.SendMessage("GoogleAuthentication", "GoogleLoginCallback", token);
+      }
+    
+      function initGoogleSignIn() {
+          google.accounts.id.initialize({
+              client_id: '1083895502867-da72s70b24uaihnk5nmktmimc7d8ht8k.apps.googleusercontent.com',
+              callback: response => onGoogleSignIn(response.credential)
+          });
+          google.accounts.id.prompt(); // Exibe o botão automaticamente ou caixa de diálogo
+      }
+    
+      window.onload = initGoogleSignIn;
+    </script>
     <script>
 
       var container = document.querySelector("#unity-container");
