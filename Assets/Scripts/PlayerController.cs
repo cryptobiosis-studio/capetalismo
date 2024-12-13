@@ -216,6 +216,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 HandleRelicPickup(relic);
             }else if(genericInteractable.tag == "Elevator"){
                 transform.position = new Vector3(-501.14f, -3.32f);
+                Camera.main.orthographicSize = 6.683172f;
+                
             }
         }
     }

@@ -7,6 +7,7 @@ using System.Numerics;
 using UnityEditor.Rendering;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Pun.Demo.Cockpit.Forms;
 
 public class Enemy : MonoBehaviour
 {
@@ -108,11 +109,20 @@ public class Enemy : MonoBehaviour
         if(life <= 0){
             room.player.audioSource.clip = enemyDestroyClip;
             room.player.audioSource.Play(); 
-            if(room.player.isSinglePlayer){
+            if(enemySettings.enemyTypes != EnemyTypes.Boss){
+                if(room.player.isSinglePlayer){
                 Destroy(this.gameObject, 0f);
+                }else{
+                    PhotonNetwork.Destroy(this.gameObject);
+                }
             }else{
-                PhotonNetwork.Destroy(this.gameObject);
+                if(!room.player.isSinglePlayer){
+                    if(PhotonNetwork.IsMasterClient){
+                        PhotonNetwork.LoadLevel("GoogleAuth");
+                    }
+                }
             }
+           
             
         }
     }
