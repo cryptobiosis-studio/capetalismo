@@ -148,18 +148,7 @@ public class Gun : MonoBehaviourPunCallbacks
                 nBullets = 3;
             }
         }
-        if(!player.isSinglePlayer){
-             photonView.RPC("RPC_ChangeGun", RpcTarget.All, gunSettings.gunSprite.name);
-        }
-    }
-    public void RPC_ChangeGun(string spriteName)
-    {
-        Sprite newSprite = Resources.Load<Sprite>("Sprites/" + spriteName);
-
-        if (newSprite != null)
-        {
-            sprRen.sprite = newSprite;
-        }
+       
     }
 
 }

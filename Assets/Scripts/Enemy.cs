@@ -110,6 +110,8 @@ public class Enemy : MonoBehaviour
         if(life <= 0){
             room.player.audioSource.clip = enemyDestroyClip;
             room.player.audioSource.Play(); 
+            PhotonNetwork.Destroy(this.gameObject);
+            Destroy(this.gameObject, 0f);
             if(enemySettings.enemyTypes != EnemyTypes.Boss){
                 if(room.player.isSinglePlayer){
                 Destroy(this.gameObject, 0f);
