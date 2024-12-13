@@ -9,7 +9,6 @@ public class GoogleSignInHandler : MonoBehaviour
     public GameObject ProfilePanel;
     public Button LoginButton;
     public Button LogoutButton;
-
     private string googleToken = "";
 
     void Start()
@@ -17,12 +16,9 @@ public class GoogleSignInHandler : MonoBehaviour
         // Configura os botões
         LoginButton.onClick.AddListener(OnLoginButtonClicked);
         LogoutButton.onClick.AddListener(OnLogoutButtonClicked);
-
-        // Inicializa mostrando o painel de login
         ShowLoginPanel();
     }
 
-    // Método chamado quando o botão de login é clicado
     private void ShowGoogleLoginButton()
     {
         #if UNITY_WEBGL && !UNITY_EDITOR
@@ -37,13 +33,9 @@ public class GoogleSignInHandler : MonoBehaviour
         // Mostra o botão de login do Google
         ShowGoogleLoginButton();
     }
-
-
-    // Método chamado quando o botão de logout é clicado
     public void OnLogoutButtonClicked()
     {
         Debug.Log("LogoutButton clicado");
-        // O JavaScript gerencia o logout agora, nenhuma outra ação necessária aqui.
     }
 
     // Callback chamado pelo JavaScript
@@ -57,14 +49,10 @@ public class GoogleSignInHandler : MonoBehaviour
         else
         {
             Debug.Log("Google Token Recebido: " + token);
-            googleToken = token; // Armazena o token de login
-
-            // Opcional: Valide o token
+            googleToken = token;
             StartCoroutine(ValidateGoogleToken(token));
         }
     }
-
-    // Validação opcional do token
     private IEnumerator ValidateGoogleToken(string token)
     {
         string url = $"https://oauth2.googleapis.com/tokeninfo?id_token={token}";
@@ -88,7 +76,7 @@ public class GoogleSignInHandler : MonoBehaviour
     // Lógica de logout
     private void HandleLogout()
     {
-        googleToken = ""; // Limpa o token armazenado
+        googleToken = "";
         Debug.Log("Logout realizado.");
         ShowLoginPanel();
     }

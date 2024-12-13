@@ -26,93 +26,90 @@
     <div id="googleLoginButton" style="display: none;"></div>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
-      let googleUserToken = null;
-      let unityInstance = null; // Referência global para a instância do Unity
-  
-      // Inicialização do Unity
-      function initUnity() {
-          unityInstance = UnityLoader.instantiate("unityContainer", "Build/build.json");
-      }
-  
-      // Callback de login do Google
-      function onGoogleSignIn(token) {
-          if (unityInstance) {
-              // Envia o token para o Unity
-              unityInstance.SendMessage("GoogleAuthentication", "GoogleLoginCallback", token);
-          } else {
-              console.error("Unity instance not initialized yet.");
+          let googleUserToken = null;
+          let unityInstance = null; // Referência global para a instância do Unity
+      
+          // Inicialização do Unity
+          function initUnity() {
+              unityInstance = UnityLoader.instantiate("unityContainer", "Build/build.json");
           }
-  
-          // Armazena o token do usuário
-          googleUserToken = token;
-      }
-  
-      // Inicializa o Google Sign-In
-      function initGoogleSignIn() {
-          google.accounts.id.initialize({
-              client_id: '1083895502867-da72s70b24uaihnk5nmktmimc7d8ht8k.apps.googleusercontent.com',
-              callback: response => onGoogleSignIn(response.credential),
-          });
-  
-          // Renderiza um botão de login do Google no elemento com ID "googleLoginButton"
-          google.accounts.id.renderButton(
-              document.getElementById("googleLoginButton"),
-              { theme: "outline", size: "large" } // Personalize o botão aqui
-          );
-      }
-  
-      // Função de logout do Google
-      function googleLogout() {
-          if (googleUserToken) {
-              google.accounts.id.revoke(googleUserToken, () => {
-                  if (unityInstance) {
-                      // Envia token vazio para Unity para indicar logout
-                      unityInstance.SendMessage("GoogleAuthentication", "GoogleLoginCallback", "");
-                  } else {
-                      console.error("Unity instance not initialized yet.");
-                  }
-                  googleUserToken = null; // Limpa o token do usuário
+      
+          // Callback de login do Google
+          function onGoogleSignIn(token) {
+              if (unityInstance) {
+                  // Envia o token para o Unity
+                  unityInstance.SendMessage("GoogleAuthentication", "GoogleLoginCallback", token);
+              } else {
+                  console.error("Unity instance not initialized yet.");
+              }
+      
+              // Armazena o token do usuário
+              googleUserToken = token;
+          }
+      
+          // Inicializa o Google Sign-In
+          function initGoogleSignIn() {
+              google.accounts.id.initialize({
+                  client_id: '1083895502867-da72s70b24uaihnk5nmktmimc7d8ht8k.apps.googleusercontent.com',
+                  callback: response => onGoogleSignIn(response.credential),
               });
+      
+              // Renderiza um botão de login do Google no elemento com ID "googleLoginButton"
+              google.accounts.id.renderButton(
+                  document.getElementById("googleLoginButton"),
+                  { theme: "outline", size: "large" }
+              );
           }
-      }
-  
-      // Inicializa Google Sign-In e Unity quando a página é carregada
-      window.onload = function () {
-          initGoogleSignIn();
-          initUnity();
-      };
-  </script>
-  <script>
-    function displayGoogleLoginButton() {
-        const googleLoginButton = document.getElementById("googleLoginButton");
-        googleLoginButton.style.display = "block"; // Torna o botão visível
+      
+          // Função de logout do Google
+          function googleLogout() {
+              if (googleUserToken) {
+                  google.accounts.id.revoke(googleUserToken, () => {
+                      if (unityInstance) {
+                          // Envia token vazio para Unity para indicar logout
+                          unityInstance.SendMessage("GoogleAuthentication", "GoogleLoginCallback", "");
+                      } else {
+                          console.error("Unity instance not initialized yet.");
+                      }
+                      googleUserToken = null;
+                  });
+              }
+          }
+      
+          // Inicializa Google Sign-In e Unity quando a página é carregada
+          window.onload = function () {
+              initGoogleSignIn();
+              initUnity();
+          };
+      </script>
+      <script>
+        function displayGoogleLoginButton() {
+            const googleLoginButton = document.getElementById("googleLoginButton");
+            googleLoginButton.style.display = "block"; // Torna o botão visível
 
-        // Renderiza o botão de login do Google
-        google.accounts.id.initialize({
-            client_id: '1083895502867-da72s70b24uaihnk5nmktmimc7d8ht8k.apps.googleusercontent.com',
-            callback: response => onGoogleSignIn(response.credential),
-        });
-        google.accounts.id.renderButton(googleLoginButton, {
-            theme: 'outline',
-            size: 'large',
-        });
-    }
-
-    function onGoogleSignIn(token) {
-        const unityInstance = window.unityInstance;
-        if (unityInstance) {
-            unityInstance.SendMessage("GoogleAuthentication", "GoogleLoginCallback", token);
+            // Renderiza o botão de login do Google
+            google.accounts.id.initialize({
+                client_id: '1083895502867-da72s70b24uaihnk5nmktmimc7d8ht8k.apps.googleusercontent.com',
+                callback: response => onGoogleSignIn(response.credential),
+            });
+            google.accounts.id.renderButton(googleLoginButton, {
+                theme: 'outline',
+                size: 'large',
+            });
         }
-    }
 
-    window.onload = function () {
-        // Inicializa o Unity e o botão está escondido por padrão
-        initUnity();
-    };
-</script>
+        function onGoogleSignIn(token) {
+            const unityInstance = window.unityInstance;
+            if (unityInstance) {
+                unityInstance.SendMessage("GoogleAuthentication", "GoogleLoginCallback", token);
+            }
+        }
 
-  <div id="unityContainer"></div> <!-- O Unity será carregado aqui -->
-  
+        window.onload = function () {
+            // Inicializa o Unity e o botão está escondido por padrão
+            initUnity();
+        };
+    </script>
     <script>
 
       var container = document.querySelector("#unity-container");
