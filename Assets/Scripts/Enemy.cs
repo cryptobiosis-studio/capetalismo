@@ -114,7 +114,7 @@ public class Enemy : MonoBehaviour
             Destroy(this.gameObject, 0f);
             if(enemySettings.enemyTypes != EnemyTypes.Boss){
                 if(room.player.isSinglePlayer){
-                Destroy(this.gameObject, 0f);
+                    Destroy(this.gameObject, 0f);
                 }else{
                     PhotonNetwork.Destroy(this.gameObject);
                 }
