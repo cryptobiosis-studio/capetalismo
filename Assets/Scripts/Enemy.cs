@@ -114,11 +114,14 @@ public class Enemy : MonoBehaviour
                 Destroy(this.gameObject, 0f);
                 }else{
                     PhotonNetwork.Destroy(this.gameObject);
+                    Destroy(this.gameObject);
                 }
             }else{
                 if(!room.player.isSinglePlayer){
                     if(PhotonNetwork.IsMasterClient){
                         PhotonNetwork.LoadLevel("GoogleAuth");
+                        PhotonNetwork.Destroy(this.gameObject);
+                        Destroy(this.gameObject);
                     }
                 }
             }
