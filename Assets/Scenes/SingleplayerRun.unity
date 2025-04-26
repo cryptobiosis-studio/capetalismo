@@ -1022,12 +1022,12 @@ MonoBehaviour:
   - {fileID: 5114053813496116858, guid: b4aa08e2d2a92433998f62b75f7cd21c, type: 3}
   - {fileID: 1755438918923587434, guid: ee60ac44a57b0403a8bbc5b85f1a89ff, type: 3}
   - {fileID: 438817619055412659, guid: 2c20bc0af6b974629b5ae39dfbd11fba, type: 3}
-  canWork: 1
+  lastRoomLayout: {fileID: 7776927895095765571, guid: 644f5dd202206483897723370b64328c, type: 3}
   rdIndex: 7
   waterIndex: 6
   chestIndex: 5
+  canWork: 1
   lastRoom: {fileID: 0}
-  lastRoomLayout: {fileID: 7776927895095765571, guid: 644f5dd202206483897723370b64328c, type: 3}
 --- !u!4 &704580853
 Transform:
   m_ObjectHideFlags: 0
@@ -1536,6 +1536,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1293492322}
   m_CullTransparentMesh: 1
+--- !u!1001 &1508821169
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6509524445958181659, guid: 20df1f3ecc6144df5b3ccc0a5578316b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -501.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509524445958181659, guid: 20df1f3ecc6144df5b3ccc0a5578316b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509524445958181659, guid: 20df1f3ecc6144df5b3ccc0a5578316b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509524445958181659, guid: 20df1f3ecc6144df5b3ccc0a5578316b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509524445958181659, guid: 20df1f3ecc6144df5b3ccc0a5578316b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509524445958181659, guid: 20df1f3ecc6144df5b3ccc0a5578316b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509524445958181659, guid: 20df1f3ecc6144df5b3ccc0a5578316b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509524445958181659, guid: 20df1f3ecc6144df5b3ccc0a5578316b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509524445958181659, guid: 20df1f3ecc6144df5b3ccc0a5578316b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509524445958181659, guid: 20df1f3ecc6144df5b3ccc0a5578316b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7721838464515410123, guid: 20df1f3ecc6144df5b3ccc0a5578316b, type: 3}
+      propertyPath: m_Name
+      value: BossRoom
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 20df1f3ecc6144df5b3ccc0a5578316b, type: 3}
 --- !u!1 &1671597658
 GameObject:
   m_ObjectHideFlags: 0
@@ -2161,3 +2218,4 @@ SceneRoots:
   - {fileID: 599808910}
   - {fileID: 312869461}
   - {fileID: 131677964}
+  - {fileID: 1508821169}
