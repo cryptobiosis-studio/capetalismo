@@ -1,36 +1,44 @@
-<div style="background-color:rgba(212, 33, 39, 1">
-<img src="./Assets/logo576.png" style="display: block;
-  margin-left: auto;
-  margin-right: auto;"/>
-</div>
-Projeto Semestre Ifsc 2024.2
+# 🎮 Capetalismo
 
-## Premissa
-Capetalismo é um jogo rogue like de ação cooperativa, onde os jogadores que são dois demônios devem escapar do inferno passando através dos sete círculos. Para isso, terão à sua disposição diversas armas e relíquias. Nesses círculos, será necessária uma colaboração entre seu parceiro para enfim matar lúcifer e poder escapar. Conseguiria você chegar ao final desse inferno?
+> **Trabalho de Conclusão de Curso Técnico em Telecomunicações - IFSC 2024.2**  
+> **Status:** 🚧 Em desenvolvimento (Alpha disponível)
 
-## Universo
-O jogo se passa no inferno, onde os demônios possuem péssimas condições de trabalho. Nesse cenário, dois diabretes decidem se rebelar e, para isso, devem atravessar os 7 círculos do inferno para derrotar o CEO (Lúcifer) e acabar com a escala 6x1.
+---
 
-## Personagens
-***+ Ronca e Tussa***:\
-Dois diabretes de baixa patente que trabalham no setor de atendimento ao cliente e se rebelam contra a empresa.\
-***+ Lucifer***:\
-CEO da Hell Corporation, dono do inferno, criador de todo sofrimento (Escala 6x1), com uma peculiar obsessão em torturar seus funcionários (Banco de horas).\
-***+ Demais funcionários***:\
-Apenas funcionários :)
+## 🎯 Objetivo
 
-## Regras do jogo
-- Atire nos inimigos;
-- Não morrer;
-- Escapar do inferno.
-## Fontes de receita
-- Venda do jogo;
-- Anuncios na versão gratuita;
-- Doação
-## Referências:
-- Enter The Gungeon,
-- Divina Comédia,
-- Binding of Isaac,
-- Hades,
-- Cult of The Lamb,
-- Ultrakill.
+**Capetalismo** é um jogo rogue-like de ação cooperativa, onde dois diabretes tentam escapar do inferno atravessando os sete círculos.  
+Com a ajuda de armas e relíquias mágicas, os jogadores precisam trabalhar juntos para derrotar inimigos poderosos e, finalmente, confrontar **Lúcifer**, o CEO da Hell Corporation.
+
+🌍 O universo do jogo retrata o inferno como uma grande corporação, onde demônios sofrem com péssimas condições de trabalho e jornadas abusivas.  
+Neste cenário, nossos protagonistas se rebelam contra a opressão, lutando por sua liberdade em meio ao caos infernal.
+
+---
+
+## 🕹️ Mecânicas principais
+
+- 🤝 Ação cooperativa para dois jogadores;
+- 🔫 Variedade de armas e relíquias mágicas;
+- 🧠 Estratégia e trabalho em equipe;
+- 🏰 Progressão através dos sete círculos infernais;
+- 👹 Batalhas contra chefes poderosos.
+
+---
+
+## 💡 Inspirações
+
+- 🎯 _Enter The Gungeon_
+- 📜 _Divina Comédia_ (Dante Alighieri)
+- 🎮 _Binding of Isaac_
+- 🔥 _Hades_
+- 🐑 _Cult of The Lamb_
+- 🚀 _Ultrakill_
+
+---
+
+## 📢 Aviso
+
+> Esta é uma **versão Alpha** — várias mecânicas e elementos ainda estão sendo desenvolvidos e testados.  
+> Feedbacks são muito bem-vindos para ajudar a melhorar o projeto! 🙌
+
+---
