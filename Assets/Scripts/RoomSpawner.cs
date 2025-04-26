@@ -38,24 +38,24 @@ public class RoomSpawner : MonoBehaviour
 
     //-----------------------------------------Gera_Salas-------------------------------------------------------------
     void TrySpawnRoom(int direction, int attemptCount = 0) // Adiciona um contador de tentativas
-{
-    if (attemptCount > 3) // Limita as tentativas para 3
     {
-        Debug.LogWarning("Limite de tentativas atingido. Não foi possível gerar uma sala.");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        return;
+        if (attemptCount > 3) // Limita as tentativas para 3
+        {
+            Debug.LogWarning("Limite de tentativas atingido. Não foi possível gerar uma sala.");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            return;
+        }
+
+        bool canSpawnRoom = this.gameObject.transform.Find(spawnerNames[direction]).gameObject.activeSelf && !ExistRoom(direction);
+
+        if (!canSpawnRoom)
+        {
+            TrySpawnRoom(Random.Range(0, 4), attemptCount + 1); // Passa o contador para a próxima tentativa
+            return;
+        }
+
+        spawnRoom(direction);
     }
-
-    bool canSpawnRoom = this.gameObject.transform.Find(spawnerNames[direction]).gameObject.activeSelf && !ExistRoom(direction);
-
-    if (!canSpawnRoom)
-    {
-        TrySpawnRoom(Random.Range(0, 4), attemptCount + 1); // Passa o contador para a próxima tentativa
-        return;
-    }
-
-    spawnRoom(direction); 
-}
 
     void spawnRoom(int direction) // Gera uma sala
     {
@@ -68,7 +68,7 @@ public class RoomSpawner : MonoBehaviour
     }
 
     void SetupRoom(GameObject room, string doorName) // Configura a sala
-    {   
+    {
         // Posiciona as portas
         room.transform.Find(doorName).gameObject.SetActive(false);
         foreach (Transform door in room.transform)
@@ -84,18 +84,23 @@ public class RoomSpawner : MonoBehaviour
         this.gameObject.transform.Find(spawnerNames[oppositeDirection]).gameObject.SetActive(false);
     }
 
-    bool ExistRoom(int direction){ // Verifica se já existe uma sala na direcao escolhida
-        return Physics2D.OverlapCircle(spawners[direction].position, 1f, LayerMask.GetMask("Room")); 
+    bool ExistRoom(int direction)
+    { // Verifica se já existe uma sala na direcao escolhida
+        return Physics2D.OverlapCircle(spawners[direction].position, 1f, LayerMask.GetMask("Room"));
     }
     //---------------------------------------Configura_Portas---------------------------------------------------------
-    public NeighborRoom[] NeighborRooms(){ // Verifica a existencia de salas vizinhas
+    public NeighborRoom[] NeighborRooms()
+    { // Verifica a existencia de salas vizinhas
         List<NeighborRoom> neighbors = new List<NeighborRoom>();
-        for(int i = 0; i<=3; i++){
+        for (int i = 0; i <= 3; i++)
+        {
             Transform spawner = spawners[i];
-            if(!spawner.gameObject.activeSelf){
+            if (!spawner.gameObject.activeSelf)
+            {
                 continue;
             }
-            if(!ExistRoom(i)){
+            if (!ExistRoom(i))
+            {
                 continue;
             }
             GameObject roomObj = Physics2D.OverlapCircle(spawner.position, 1f, LayerMask.GetMask("Room")).gameObject;
@@ -105,14 +110,16 @@ public class RoomSpawner : MonoBehaviour
         return neighbors.ToArray();
     }
 
-    public void SetupNeighborDoors(NeighborRoom[] neighborRooms){
-        foreach(NeighborRoom n in neighborRooms){
+    public void SetupNeighborDoors(NeighborRoom[] neighborRooms)
+    {
+        foreach (NeighborRoom n in neighborRooms)
+        {
             SetupNeighborRoom(n.RoomObj, doorNames[n.Direction]);
             doors[n.Direction].gameObject.SetActive(false);
         }
     }
     void SetupNeighborRoom(GameObject room, string doorName) // Configura a sala
-    {   
+    {
         // Posiciona as portas
         room.transform.Find(doorName).gameObject.SetActive(false);
     }

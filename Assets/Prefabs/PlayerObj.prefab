@@ -302,7 +302,6 @@ GameObject:
   - component: {fileID: 6379909349712740583}
   - component: {fileID: 679489900186976632}
   - component: {fileID: 1990602202431209507}
-  - component: {fileID: 8364093865286114718}
   m_Layer: 6
   m_Name: PlayerObj
   m_TagString: Player
@@ -414,16 +413,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 7
-  life: 0
   MaxLife: 25
+  life: 0
+  lifeSlider: {fileID: 0}
   anim: {fileID: 0}
   sprite: {fileID: 0}
   fade: {fileID: 0}
   equippedGun: {fileID: 0}
   invincibility: 0
-  invincibilityTime: 0
   maxInvincibilityTime: 0.55
-  lifeSlider: {fileID: 0}
   damageMultiplier: 0
   fireRateMultiplier: 0
   gunRelic: 0
@@ -435,7 +433,7 @@ MonoBehaviour:
   waterClip: {fileID: 8300000, guid: 4af7a8d079c8c44498eec6eda1aecdc8, type: 3}
   interactClip: {fileID: 0}
   deathClip: {fileID: 0}
-  isSinglePlayer: 0
+  choiceText: {fileID: 0}
 --- !u!212 &6379909349712740583
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -544,28 +542,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.74999994
---- !u!114 &8364093865286114718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3816929853998941401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!1 &4282666247242412982
 GameObject:
   m_ObjectHideFlags: 0

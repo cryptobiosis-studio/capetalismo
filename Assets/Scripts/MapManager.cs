@@ -4,43 +4,48 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
+    [Header("Configuração de salas")]
     public int numberOfRooms;
     public GameObject startRoom;
 
+    [Header("Layouts")]
     public GameObject[] roomLayouts;
+    public GameObject lastRoomLayout;
+
+    [Header("Layouts Obrigatórios (dois de cada)")]
+    public int rdIndex;
+    public int waterIndex;
+    public int chestIndex;
+
+    private HashSet<int> usedRoomIndices;
+    private List<int> generatedRooms;
     public bool canWork;
-
-    public int rdIndex;  
-    public int waterIndex;  
-    public int chestIndex;  
-
-    private HashSet<int> usedRoomIndices;  
-    private List<int> generatedRooms;  
 
     public GameObject lastRoom;
 
-    public GameObject lastRoomLayout;
-
-
-    void Start(){
-        startRoom = GameObject.Find("Room");
-        canWork = true;
+    void Start()
+    {
+        startRoom = GameObject.Find("Room0");
         usedRoomIndices = new HashSet<int>();
-        generatedRooms = new List<int>();  
+        generatedRooms = new List<int>();
+        canWork = true;
     }
 
-    void Update(){
-        if (canWork && numberOfRooms >= startRoom.GetComponent<RoomSpawner>().maxRooms){
+    void Update()
+    {
+        int maxRooms = startRoom.GetComponent<RoomSpawner>().maxRooms;
+        if (canWork && numberOfRooms >= maxRooms)
+        {
             canWork = false;
             GenerateMap();
         }
     }
 
-    void GenerateMap(){
-        List<int> roomOrder = new List<int>();
-        for (int i = 0; i < numberOfRooms; i++){
+    void GenerateMap()
+    {
+        List<int> roomOrder = new List<int>(numberOfRooms);
+        for (int i = 0; i < numberOfRooms; i++)
             roomOrder.Add(i);
-        }
 
         ShuffleList(roomOrder);
 
@@ -50,66 +55,87 @@ public class MapManager : MonoBehaviour
 
         ConfigureDoors();
 
-        Debug.Log("Map Complete!");
+        Debug.Log("Map Complete! Salas geradas: " + generatedRooms.Count);
     }
 
-    void PlaceMandatoryLayouts(List<int> roomOrder){
-        int[] mandatoryLayouts = { rdIndex, waterIndex, chestIndex };
-        foreach (int layoutIndex in mandatoryLayouts){
-            for (int i = 0; i < 2; i++){
-                int randomRoomIndex = roomOrder[Random.Range(0, roomOrder.Count-1)];
-                roomOrder.Remove(randomRoomIndex);  
-                usedRoomIndices.Add(randomRoomIndex);
-                generatedRooms.Add(randomRoomIndex);  
-                GameObject targetRoom = GameObject.Find("Room" + randomRoomIndex);
-                if (targetRoom != null && randomRoomIndex != startRoom.gameObject.GetComponent<RoomSpawner>().maxRooms){
-                    Instantiate(roomLayouts[layoutIndex], targetRoom.transform);
-                }
+    void PlaceMandatoryLayouts(List<int> roomOrder)
+    {
+        int lastIndex = numberOfRooms - 1;
+        int[] mandatory = { rdIndex, waterIndex, chestIndex };
+
+        foreach (int layoutIdx in mandatory)
+        {
+            int placed = 0;
+            while (placed < 2 && roomOrder.Count > 0)
+            {
+                int rndRoom = roomOrder[Random.Range(0, roomOrder.Count)];
+                if (rndRoom == lastIndex)
+                    continue;
+
+                roomOrder.Remove(rndRoom);
+                usedRoomIndices.Add(rndRoom);
+                generatedRooms.Add(rndRoom);
+
+                var target = GameObject.Find("Room" + rndRoom);
+                if (target != null)
+                    Instantiate(roomLayouts[layoutIdx], target.transform);
+
+                placed++;
             }
         }
     }
 
-    void FillRemainingRooms(List<int> roomOrder){
-        foreach (int roomIndex in roomOrder){
+    void FillRemainingRooms(List<int> roomOrder)
+    {
+        int lastIndex = numberOfRooms - 1;
 
-            GameObject targetRoom = GameObject.Find("Room" + roomIndex);
-            if (targetRoom != null && roomIndex != startRoom.gameObject.GetComponent<RoomSpawner>().maxRooms){
-                List<GameObject> nonMandatoryLayouts = new List<GameObject>(roomLayouts);
-                nonMandatoryLayouts.RemoveAt(rdIndex);
-                nonMandatoryLayouts.RemoveAt(waterIndex - (rdIndex < waterIndex ? 1 : 0)); 
-                nonMandatoryLayouts.RemoveAt(chestIndex - (rdIndex < chestIndex ? 1 : 0) - (waterIndex < chestIndex ? 1 : 0));
+        roomOrder.Remove(lastIndex);
 
-                int randomLayout = Random.Range(0, nonMandatoryLayouts.Count);
-                Instantiate(nonMandatoryLayouts[randomLayout], targetRoom.transform);
+        foreach (int idx in roomOrder)
+        {
+            var target = GameObject.Find("Room" + idx);
+            if (target == null) continue;
 
-                generatedRooms.Add(roomIndex); 
-            }else if(targetRoom != null && roomIndex == startRoom.gameObject.GetComponent<RoomSpawner>().maxRooms){
-                generatedRooms.Add(roomIndex); 
-                lastRoom = targetRoom;
-                Instantiate(lastRoomLayout, lastRoom.transform);
-            }
+            List<GameObject> avail = new List<GameObject>(roomLayouts);
+            List<int> mandatory = new List<int> { rdIndex, waterIndex, chestIndex };
+            mandatory.Sort();
+            for (int i = mandatory.Count - 1; i >= 0; i--)
+                avail.RemoveAt(mandatory[i]);
+
+            int pick = Random.Range(0, avail.Count);
+            Instantiate(avail[pick], target.transform);
+            generatedRooms.Add(idx);
+        }
+
+        var lastTarget = GameObject.Find("Room" + lastIndex);
+        if (lastTarget != null)
+        {
+            lastRoom = lastTarget;
+            Instantiate(lastRoomLayout, lastRoom.transform);
+            generatedRooms.Add(lastIndex);
+            Debug.Log("Last room correta: " + lastRoom.name);
         }
     }
 
-    void ConfigureDoors(){
-        for (int i = 0; i < numberOfRooms; i++){
-            GameObject room = GameObject.Find("Room" + i);
-            if (room != null){
-                RoomSpawner roomSpawner = room.GetComponent<RoomSpawner>();
-                if (roomSpawner != null){
-                    roomSpawner.NeighborRooms();
-                    roomSpawner.SetupNeighborDoors(roomSpawner.NeighborRooms());
-                }
-            }
+    void ConfigureDoors()
+    {
+        for (int i = 0; i < numberOfRooms; i++)
+        {
+            var roomObj = GameObject.Find("Room" + i);
+            if (roomObj == null) continue;
+
+            var sp = roomObj.GetComponent<RoomSpawner>();
+            if (sp != null)
+                sp.SetupNeighborDoors(sp.NeighborRooms());
         }
     }
 
-    void ShuffleList(List<int> list){
-        for (int i = list.Count - 1; i > 0; i--){
-            int randomIndex = Random.Range(0, i + 1);
-            int temp = list[i];
-            list[i] = list[randomIndex];
-            list[randomIndex] = temp;
+    void ShuffleList(List<int> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int rnd = Random.Range(0, i + 1);
+            (list[i], list[rnd]) = (list[rnd], list[i]);
         }
     }
 }
