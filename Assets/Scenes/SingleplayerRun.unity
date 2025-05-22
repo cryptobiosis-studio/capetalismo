@@ -1865,6 +1865,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: b63708dc500284b5991472ff7f731213, type: 3}
     - target: {fileID: 1249756205018577489, guid: 970df0fad94524428b743042743de78e, type: 3}
+      propertyPath: choiceText
+      value: 
+      objectReference: {fileID: 354871982}
+    - target: {fileID: 1249756205018577489, guid: 970df0fad94524428b743042743de78e, type: 3}
+      propertyPath: initialGun
+      value: 
+      objectReference: {fileID: 11400000, guid: c8a7e069d03f24389bb3a9b470a7c783, type: 2}
+    - target: {fileID: 1249756205018577489, guid: 970df0fad94524428b743042743de78e, type: 3}
       propertyPath: lifeSlider
       value: 
       objectReference: {fileID: 2058387210}
@@ -2165,6 +2173,10 @@ PrefabInstance:
       propertyPath: maxRooms
       value: 24
       objectReference: {fileID: 0}
+    - target: {fileID: 8000891994872738837, guid: 7ca8f0a7775b243f1ba8f3a62b5596eb, type: 3}
+      propertyPath: roomPrefab
+      value: 
+      objectReference: {fileID: 3768072337175802960, guid: 7ca8f0a7775b243f1ba8f3a62b5596eb, type: 3}
     - target: {fileID: 8336634251112276541, guid: 7ca8f0a7775b243f1ba8f3a62b5596eb, type: 3}
       propertyPath: sceneViewId
       value: 1

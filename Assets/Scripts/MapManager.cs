@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-    [Header("Configuração de salas")]
+    [Header("Room Configuration")]
     public int numberOfRooms;
     public GameObject startRoom;
 
@@ -12,7 +12,7 @@ public class MapManager : MonoBehaviour
     public GameObject[] roomLayouts;
     public GameObject lastRoomLayout;
 
-    [Header("Layouts Obrigatórios (dois de cada)")]
+    [Header("Required Layouts (two of each)")]
     public int rdIndex;
     public int waterIndex;
     public int chestIndex;
@@ -25,7 +25,8 @@ public class MapManager : MonoBehaviour
 
     void Start()
     {
-        startRoom = GameObject.Find("Room0");
+        LoadLayouts();
+        startRoom = GameObject.Find("Room");
         usedRoomIndices = new HashSet<int>();
         generatedRooms = new List<int>();
         canWork = true;
@@ -37,40 +38,58 @@ public class MapManager : MonoBehaviour
         if (canWork && numberOfRooms >= maxRooms)
         {
             canWork = false;
-            GenerateMap();
+            GenerateMapLayout();
         }
     }
 
-    void GenerateMap()
+    void LoadLayouts()
+    {
+        Object[] loaded = Resources.LoadAll("Layouts", typeof(GameObject));
+        List<GameObject> layouts = new List<GameObject>();
+
+        foreach (var obj in loaded)
+        {
+            if (obj.name.StartsWith("Layout"))
+                layouts.Add((GameObject)obj);
+            else if (obj.name == "LastRoomLayout")
+                lastRoomLayout = (GameObject)obj;
+        }
+
+        roomLayouts = layouts.ToArray();
+
+        if (lastRoomLayout == null)
+            Debug.LogError("LastRoomLayout not found in Resources/Layouts");
+
+        if (roomLayouts.Length == 0)
+            Debug.LogError("No layouts found in Resources/Layouts");
+    }
+
+    void GenerateMapLayout()
     {
         List<int> roomOrder = new List<int>(numberOfRooms);
         for (int i = 0; i < numberOfRooms; i++)
             roomOrder.Add(i);
 
         ShuffleList(roomOrder);
+        PlaceRequiredLayouts(roomOrder);
+        PlaceRemainingLayouts(roomOrder);
+        SetupAllNeighborDoors();
 
-        PlaceMandatoryLayouts(roomOrder);
-
-        FillRemainingRooms(roomOrder);
-
-        ConfigureDoors();
-
-        Debug.Log("Map Complete! Salas geradas: " + generatedRooms.Count);
+        Debug.Log("Map Complete! Rooms generated: " + generatedRooms.Count);
     }
 
-    void PlaceMandatoryLayouts(List<int> roomOrder)
+    void PlaceRequiredLayouts(List<int> roomOrder)
     {
         int lastIndex = numberOfRooms - 1;
-        int[] mandatory = { rdIndex, waterIndex, chestIndex };
+        int[] required = { rdIndex, waterIndex, chestIndex };
 
-        foreach (int layoutIdx in mandatory)
+        foreach (int layoutIdx in required)
         {
             int placed = 0;
             while (placed < 2 && roomOrder.Count > 0)
             {
                 int rndRoom = roomOrder[Random.Range(0, roomOrder.Count)];
-                if (rndRoom == lastIndex)
-                    continue;
+                if (rndRoom == lastIndex) continue;
 
                 roomOrder.Remove(rndRoom);
                 usedRoomIndices.Add(rndRoom);
@@ -85,10 +104,9 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    void FillRemainingRooms(List<int> roomOrder)
+    void PlaceRemainingLayouts(List<int> roomOrder)
     {
         int lastIndex = numberOfRooms - 1;
-
         roomOrder.Remove(lastIndex);
 
         foreach (int idx in roomOrder)
@@ -96,14 +114,14 @@ public class MapManager : MonoBehaviour
             var target = GameObject.Find("Room" + idx);
             if (target == null) continue;
 
-            List<GameObject> avail = new List<GameObject>(roomLayouts);
+            List<GameObject> available = new List<GameObject>(roomLayouts);
             List<int> mandatory = new List<int> { rdIndex, waterIndex, chestIndex };
             mandatory.Sort();
             for (int i = mandatory.Count - 1; i >= 0; i--)
-                avail.RemoveAt(mandatory[i]);
+                available.RemoveAt(mandatory[i]);
 
-            int pick = Random.Range(0, avail.Count);
-            Instantiate(avail[pick], target.transform);
+            int pick = Random.Range(0, available.Count);
+            Instantiate(available[pick], target.transform);
             generatedRooms.Add(idx);
         }
 
@@ -113,11 +131,11 @@ public class MapManager : MonoBehaviour
             lastRoom = lastTarget;
             Instantiate(lastRoomLayout, lastRoom.transform);
             generatedRooms.Add(lastIndex);
-            Debug.Log("Last room correta: " + lastRoom.name);
+            Debug.Log("Last room placed: " + lastRoom.name);
         }
     }
 
-    void ConfigureDoors()
+    void SetupAllNeighborDoors()
     {
         for (int i = 0; i < numberOfRooms; i++)
         {
@@ -126,7 +144,7 @@ public class MapManager : MonoBehaviour
 
             var sp = roomObj.GetComponent<RoomSpawner>();
             if (sp != null)
-                sp.SetupNeighborDoors(sp.NeighborRooms());
+                sp.ConfigureNeighborDoors(sp.GetNeighborRooms());
         }
     }
 

@@ -14,9 +14,9 @@ public class Chest : MonoBehaviour
     public Transform itemATrans;
     public Transform itemBTrans;
 
-    GameObject _itemA;    
+    GameObject _itemA;
     GameObject _itemB;
-    
+
 
     Animator chestAnim;
 
@@ -25,12 +25,14 @@ public class Chest : MonoBehaviour
         opened = false;
         chestAnim = transform.GetComponent<Animator>();
     }
-    public void openChest(){
-        
-        if(!opened){
+    public void openChest()
+    {
+
+        if (!opened)
+        {
             itemA = guns[Random.Range(0, guns.Length)];
             itemB = guns[Random.Range(0, guns.Length)];
-            
+
             chestAnim.SetBool("open", true);
             _itemA = Instantiate(DroppedGun, itemATrans.position, Quaternion.identity);
             _itemB = Instantiate(DroppedGun, itemBTrans.position, Quaternion.identity);
@@ -48,12 +50,13 @@ public class Chest : MonoBehaviour
     {
         AnimatorStateInfo stateInfo = chestAnim.GetCurrentAnimatorStateInfo(0);
         Debug.Log("Current Animation State: " + stateInfo.IsName("SafeOpened"));
-        if(chestAnim.GetCurrentAnimatorStateInfo(0).IsName("SafeOpened")){
-                Debug.Log("TargetAnim");
-                _itemA.SetActive(true);
-                _itemB.SetActive(true);
-                GetComponent<Chest>().enabled = false;
+        if (chestAnim.GetCurrentAnimatorStateInfo(0).IsName("SafeOpened"))
+        {
+            Debug.Log("TargetAnim");
+            _itemA.SetActive(true);
+            _itemB.SetActive(true);
+            GetComponent<Chest>().enabled = false;
         }
-            
+
     }
 }
