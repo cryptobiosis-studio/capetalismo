@@ -2171,7 +2171,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8000891994872738837, guid: 7ca8f0a7775b243f1ba8f3a62b5596eb, type: 3}
       propertyPath: maxRooms
-      value: 24
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8000891994872738837, guid: 7ca8f0a7775b243f1ba8f3a62b5596eb, type: 3}
       propertyPath: roomPrefab
