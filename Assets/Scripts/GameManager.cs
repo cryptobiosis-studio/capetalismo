@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     public bool eyeRelicActive;
     public GunObj equippedGun;
 
+    public GunObj initialGun;
+
     [Header("Game Progression")]
     public int floorLevel = 1;
 
@@ -69,7 +71,7 @@ public class GameManager : MonoBehaviour
         fireRateMultiplier = 1f;
         gunRelic = false;
         eyeRelicActive = false;
-        equippedGun = null;
+        equippedGun = initialGun;
         floorLevel = 1;
         Debug.Log("Progress reset, floor level back to 1");
     }

@@ -915,6 +915,8 @@ MonoBehaviour:
   gunRelic: 0
   eyeRelicActive: 0
   equippedGun: {fileID: 0}
+  initialGun: {fileID: 11400000, guid: c8a7e069d03f24389bb3a9b470a7c783, type: 2}
+  floorLevel: 1
 --- !u!1001 &871757487
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -18,14 +18,12 @@ public class Enemy : MonoBehaviour
     public bool canWalk = true;
     private bool canAttack = false;
 
-    [Header("Ranged")]
     [SerializeField] private GameObject gun;
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private Transform shootPoint;
     [SerializeField] private float shootingInterval = 1.5f;
     private float lastShotTime;
 
-    [Header("Áudio")]
     [SerializeField] private AudioClip enemyDestroyClip;
 
     private enum EnemySize { Normal, Big, Small }
@@ -33,65 +31,88 @@ public class Enemy : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
+    private void Awake()
+    {
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+    }
+
     private void Start()
     {
-        float difficultyMultiplier = 1 + (GameManager.Instance != null ? (GameManager.Instance.floorLevel - 1) * 0.2f : 0);
-
         room = GetComponentInParent<Room>();
         enemyAnim = GetComponentInChildren<Animator>();
         atkCol = GetComponent<CircleCollider2D>();
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        InitializeEnemy();
+    }
+
+    private void OnEnable()
+    {
+        ApplySizeVisuals();
+    }
+
+    private void InitializeEnemy()
+    {
+        float baseDamage = enemySettings.damage;
+        float baseSpeed = enemySettings.speed;
+        float baseLife = enemySettings.life;
 
         int chance = UnityEngine.Random.Range(1, 21);
 
         if (chance == 1)
         {
             currentSize = EnemySize.Big;
-            ApplyBigEnemyBuffs(difficultyMultiplier);
+            baseDamage *= 2f;
+            baseSpeed *= 2f;
+            baseLife *= 2f;
         }
         else if (chance == 2)
         {
             currentSize = EnemySize.Small;
-            ApplySmallEnemyBuffs(difficultyMultiplier);
+            baseDamage *= 0.5f;
+            baseSpeed *= 1.5f;
+            baseLife *= 0.5f;
         }
         else
         {
             currentSize = EnemySize.Normal;
-            damage = enemySettings.damage * difficultyMultiplier;
-            speed = enemySettings.speed * difficultyMultiplier;
-            life = enemySettings.life * difficultyMultiplier;
         }
+
+        float difficultyMultiplier = 1 + (GameManager.Instance != null ? (GameManager.Instance.floorLevel - 1) * 0.2f : 0);
+
+        damage = baseDamage * difficultyMultiplier;
+        speed = baseSpeed * difficultyMultiplier;
+        life = baseLife * difficultyMultiplier;
 
         if (enemySettings.enemySprite != null && spriteRenderer != null)
             spriteRenderer.sprite = enemySettings.enemySprite;
 
+        ApplySizeVisuals();
+
         lastShotTime = Time.time;
     }
 
-    private void ApplyBigEnemyBuffs(float difficultyMultiplier)
+    private void ApplySizeVisuals()
     {
-        float multiplier = 2f;
-        life = enemySettings.life * multiplier * difficultyMultiplier;
-        damage *= multiplier * difficultyMultiplier;
-        speed *= multiplier * difficultyMultiplier;
+        switch (currentSize)
+        {
+            case EnemySize.Big:
+                if (spriteRenderer != null)
+                    spriteRenderer.color = Color.red;
+                transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+                break;
 
-        if (spriteRenderer != null)
-            spriteRenderer.color = Color.red;
+            case EnemySize.Small:
+                if (spriteRenderer != null)
+                    spriteRenderer.color = Color.yellow;
+                transform.localScale = new Vector3(0.75f, 0.75f, 1f);
+                break;
 
-        transform.localScale *= 1.5f;
-    }
-
-    private void ApplySmallEnemyBuffs(float difficultyMultiplier)
-    {
-        float multiplier = 0.5f;
-        life = enemySettings.life * multiplier * difficultyMultiplier;
-        damage *= multiplier * difficultyMultiplier;
-        speed *= 1.5f * difficultyMultiplier;
-
-        if (spriteRenderer != null)
-            spriteRenderer.color = Color.yellow;
-
-        transform.localScale *= 0.75f;
+            default:
+                if (spriteRenderer != null)
+                    spriteRenderer.color = Color.white;
+                transform.localScale = new Vector3(1f, 1f, 1f);
+                break;
+        }
     }
 
     private void Update()
@@ -105,9 +126,11 @@ public class Enemy : MonoBehaviour
             case EnemyTypes.Melee:
                 HandleMelee();
                 break;
+
             case EnemyTypes.Turret:
                 HandleTurret();
                 break;
+
             case EnemyTypes.Boss:
                 HandleBoss();
                 break;
@@ -164,14 +187,14 @@ public class Enemy : MonoBehaviour
 
     private void FlipTowards(Vector3 targetPos)
     {
-        transform.localScale = (targetPos.x < transform.position.x) ? Vector3.one : new Vector3(-1, 1, 1);
+        transform.localScale = (targetPos.x < transform.position.x) ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
     }
 
     private void FlipGunTowards(Vector2 direction)
     {
         if (direction.x > 0)
         {
-            transform.localScale = Vector3.one;
+            transform.localScale = new Vector3(1, 1, 1);
             if (gun != null)
                 gun.transform.localScale = new Vector3(0.8f, -0.8f, 1);
         }

@@ -127,7 +127,9 @@ public class PlayerController : MonoBehaviour
         else
             Debug.LogWarning("choiceText não encontrado!");
         if (equippedGun == null)
-            equippedGun = initialGun;
+        {
+            ChangeGun(initialGun);
+        }
 
     }
 
@@ -176,7 +178,6 @@ public class PlayerController : MonoBehaviour
         if (life <= 0f)
         {
             audioSource.PlayOneShot(deathClip);
-            Destroy(gameObject, 2f);
             GameManager.Instance.ResetProgress();
             SceneManager.LoadScene("Menu");
         }
