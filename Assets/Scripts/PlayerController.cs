@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     [Header("Invincibility")]
     public bool invincibility;
     public float maxInvincibilityTime;
-    private float invincibilityTime;
+    public float invincibilityTime;
 
     [Header("Multipliers")]
     public float damageMultiplier = 1f;
@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour
     [Header("Relics")]
     public bool gunRelic;
     public GameObject eyeRelic;
+
+    public bool hasSizeRelic;
 
     [Header("Audio")]
     public AudioSource audioSource;
@@ -58,13 +60,14 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private GunObj initialGun;
 
+    public FloorUIController floorUI;
+
     #endregion
 
     #region Unity Callbacks
 
     void Start()
     {
-        InitializeComponents();
         InitializeComponents();
         if (GameManager.Instance != null && GameManager.Instance.life > 0)
         {
@@ -100,6 +103,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Room"))
+        {
+            Camera.main.transform.position = new Vector3(other.transform.position.x - 0.32f, other.transform.position.y, -10f);
+        }
+    }
+
     #endregion
 
     #region Initialization
@@ -114,23 +125,37 @@ public class PlayerController : MonoBehaviour
 
     void SetupInitialValues()
     {
-        life = MaxLife;
-        SetLifeSlider();
-        life = MaxLife;
-        SetLifeSlider();
-
-        if (eyeRelic != null)
+        if (GameManager.Instance.floorLevel == 1)
+        {
+            life = MaxLife;
             eyeRelic.SetActive(false);
+
+        }
+        else
+        {
+            MaxLife = GameManager.Instance.maxLife;
+            life = GameManager.Instance.life;
+            speed = GameManager.Instance.speed;
+            damageMultiplier = GameManager.Instance.damageMultiplier;
+            fireRateMultiplier = GameManager.Instance.fireRateMultiplier;
+            maxInvincibilityTime = GameManager.Instance.maxInvincibilityTime;
+            invincibilityTime = GameManager.Instance.invincibilityTime;
+            hasSizeRelic = GameManager.Instance.hasSizeRelic;
+            gunRelic = GameManager.Instance.gunRelic;
+
+            eyeRelic.SetActive(GameManager.Instance.hasEyeRelic);
+
+        }
+
+        SetLifeSlider();
 
         if (choiceText != null)
             choiceText.SetActive(false);
-        else
-            Debug.LogWarning("choiceText não encontrado!");
+
         if (equippedGun == null)
         {
             ChangeGun(initialGun);
         }
-
     }
 
     #endregion
@@ -174,6 +199,12 @@ public class PlayerController : MonoBehaviour
         life -= damage;
         SetLifeSlider();
         audioSource.PlayOneShot(hitClip);
+        StartCoroutine(DamageFlash());
+
+        CameraShake.Instance.TriggerShake(0.15f, 0.1f);
+
+        Vector2 knockbackDir = -rb.velocity.normalized;
+        rb.AddForce(knockbackDir * 200f, ForceMode2D.Impulse);
 
         if (life <= 0f)
         {
@@ -181,6 +212,13 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.ResetProgress();
             SceneManager.LoadScene("Menu");
         }
+    }
+
+    IEnumerator DamageFlash()
+    {
+        sprite.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        sprite.color = Color.white;
     }
 
     void SetLifeSlider()
@@ -216,6 +254,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             audioSource.PlayOneShot(interactClip);
+            CameraShake.Instance.TriggerShake(0.05f, 0.02f);
 
             if (obj.TryGetComponent(out DroppedGun droppedGun))
             {
@@ -281,30 +320,50 @@ public class PlayerController : MonoBehaviour
         switch (relic.relic.relicType)
         {
             case relicType.Life:
-                MaxLife += 10;
-                life = MaxLife;
+                GameManager.Instance.maxLife += 10;
+                GameManager.Instance.life = GameManager.Instance.maxLife;
+                MaxLife = GameManager.Instance.maxLife;
+                life = GameManager.Instance.maxLife;
                 SetLifeSlider();
                 break;
+
             case relicType.Speed:
-                speed += 3f;
+                GameManager.Instance.speed += 3f;
+                speed = GameManager.Instance.speed;
                 break;
+
             case relicType.Damage:
-                damageMultiplier += 1.5f;
+                GameManager.Instance.damageMultiplier += 1.5f;
+                damageMultiplier = GameManager.Instance.damageMultiplier;
                 break;
+
             case relicType.Invincibility:
-                maxInvincibilityTime += 0.65f;
-                invincibilityTime += 0.65f;
+                GameManager.Instance.maxInvincibilityTime += 0.65f;
+                GameManager.Instance.invincibilityTime += 0.65f;
+                maxInvincibilityTime = GameManager.Instance.maxInvincibilityTime;
+                invincibilityTime = GameManager.Instance.invincibilityTime;
                 break;
+
             case relicType.Firerate:
-                fireRateMultiplier -= 0.15f;
+                GameManager.Instance.fireRateMultiplier -= 0.15f;
+                fireRateMultiplier = GameManager.Instance.fireRateMultiplier;
                 break;
+
             case relicType.Size:
+                hasSizeRelic = true;
+                GameManager.Instance.hasSizeRelic = true;
                 transform.localScale = new Vector3(0.6f, 0.6f, 1f);
                 break;
+
             case relicType.Eye:
+                GameManager.Instance.hasEyeRelic = true;
                 eyeRelic.SetActive(true);
                 break;
+
             case relicType.Gun:
+                GameManager.Instance.gunRelic = true;
+                damageMultiplier = damageMultiplier - (damageMultiplier * 0.25f);
+                GameManager.Instance.damageMultiplier = GameManager.Instance.damageMultiplier - (GameManager.Instance.damageMultiplier * 0.25f);
                 var gunComp = GetComponentInChildren<Gun>();
                 gunComp.gunShootingStyle = shootingStyles.Spread;
                 gunRelic = true;
@@ -312,6 +371,7 @@ public class PlayerController : MonoBehaviour
                 break;
         }
     }
+
 
     #endregion
 
@@ -363,18 +423,39 @@ public class PlayerController : MonoBehaviour
     IEnumerator FadeAndMoveCamera(Vector3 targetPos)
     {
         yield return StartCoroutine(FadeImage(true));
-        Camera.main.transform.position = new Vector3(targetPos.x - 0.33f, targetPos.y, -10f);
-    }
 
-    IEnumerator FadeImage(bool fadeAway)
-    {
-        float start = fadeAway ? 1f : 0f;
-        float end = fadeAway ? 0f : 1f;
-        for (float t = start; fadeAway ? t >= end : t <= end; t += (fadeAway ? -1 : 1) * Time.deltaTime * 5f)
+        Vector3 startPos = Camera.main.transform.position;
+        Vector3 endPos = new Vector3(targetPos.x - 0.32f, targetPos.y, -10f);
+        float duration = 0.2f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
         {
-            fade.color = new Color(0, 0, 0, t * 1.5f);
+            elapsed += Time.deltaTime;
+            Camera.main.transform.position = Vector3.Lerp(startPos, endPos, elapsed / duration);
             yield return null;
         }
+
+        Camera.main.transform.position = endPos;
+
+        yield return StartCoroutine(FadeImage(false));
+    }
+    IEnumerator FadeImage(bool fadeAway)
+    {
+        float start = fadeAway ? 0f : 1f;
+        float end = fadeAway ? 1f : 0f;
+        float duration = 0.1f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Lerp(start, end, elapsed / duration);
+            fade.color = new Color(0, 0, 0, t);
+            yield return null;
+        }
+
+        fade.color = new Color(0, 0, 0, end);
     }
 
     #endregion

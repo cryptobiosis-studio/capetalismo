@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    public float offset; // Ajuste da rotação da arma
-    public SpriteRenderer sprRen; // Sprite da arma
-    public GunObj gunSettings; // Configurações da arma
-    public GameObject bullet; // Prefab da bala
-    public Transform pointer; // Ponto de saída da bala
+    public float offset;
+    public SpriteRenderer sprRen;
+    public GunObj gunSettings;
+    public GameObject bullet;
+    public Transform pointer;
     private float fireTimer;
     List<GameObject> firedBullets = new List<GameObject>();
 
@@ -34,14 +34,12 @@ public class Gun : MonoBehaviour
     {
         RotateGun();
 
+        fireTimer -= Time.deltaTime;
+
         if (Input.GetKeyDown(KeyCode.Mouse0) && fireTimer <= 0f)
         {
             Fire();
             fireTimer = gunSettings.firerate * player.fireRateMultiplier;
-        }
-        else
-        {
-            fireTimer -= Time.deltaTime;
         }
     }
 
@@ -62,6 +60,7 @@ public class Gun : MonoBehaviour
         audioSource.clip = shootSound;
         audioSource.Play();
 
+        CameraShake.Instance.TriggerShake(0.05f, 0.05f);
         if (gunShootingStyle == shootingStyles.Spread)
             FireSpread();
         else

@@ -1,4 +1,6 @@
 using System;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -22,6 +24,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private Transform shootPoint;
     [SerializeField] private float shootingInterval = 1.5f;
+
+    public GameObject killParticle;
     private float lastShotTime;
 
     [SerializeField] private AudioClip enemyDestroyClip;
@@ -56,7 +60,7 @@ public class Enemy : MonoBehaviour
         float baseSpeed = enemySettings.speed;
         float baseLife = enemySettings.life;
 
-        int chance = UnityEngine.Random.Range(1, 21);
+        int chance = UnityEngine.Random.Range(1, 16);
 
         if (chance == 1)
         {
@@ -232,10 +236,9 @@ public class Enemy : MonoBehaviour
         if (life <= 0)
         {
             PlayDestroySound();
-
-            if (enemySettings.enemyTypes == EnemyTypes.Boss)
-                SceneManager.LoadScene("Win");
-
+            if (CameraShake.Instance != null)
+                CameraShake.Instance.TriggerShake(0.2f, 0.2f);
+            Instantiate(killParticle, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

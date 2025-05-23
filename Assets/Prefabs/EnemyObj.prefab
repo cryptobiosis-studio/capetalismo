@@ -168,13 +168,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemySettings: {fileID: 11400000, guid: 90bda27edb14c4d4eb45c51e899a1afc, type: 2}
-  life: 0
   canWalk: 1
-  atkCol: {fileID: 0}
   gun: {fileID: 0}
   projectilePrefab: {fileID: 0}
   shootPoint: {fileID: 0}
   shootingInterval: 2
+  killParticle: {fileID: 5632699246893292111, guid: 022633c534da338bca0573a50ce535cc, type: 3}
   enemyDestroyClip: {fileID: 8300000, guid: 2f74ced2202de4aab819ab767ab9620d, type: 3}
 --- !u!61 &3514780158582490037
 BoxCollider2D:
